@@ -1,4 +1,10 @@
+import {multiplyData} from '../hooks/downloadData'
+
 export const App = () => {
+
+  const data = ['AAPL.US', 'EUR.FOREX']
+
+  multiplyData(data)
   return (
     <div
       style={{
