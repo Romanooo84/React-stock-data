@@ -4,10 +4,11 @@ import tickers from '../data/ticers'
 
 export const Header=({multiplyList})=>{
 
-    const [list, setList]=useState()
-    const [options, setOptions] = useState([]);
+    const [list, setList] = useState()
+    const [search, setSearch] = useState()
+    const [searchTerm, setSearchTerm]=useState()
+    const [options, setOptions] = useState([{ label: '3', value: 'initial' }]);
 
-    const searchTerm = "Allegro";
 
     useEffect(() => {
         const results = tickers.filter(item => item.Name.includes(searchTerm));
@@ -22,8 +23,11 @@ export const Header=({multiplyList})=>{
     
     const onChange = (event) => {
         console.log('Selected option:', event.value);
-      }
-
+    }
+    
+    const onInputChange = (event) => {
+        setSearch(event)
+    }
 
     useEffect(() => {
         if (multiplyList.length > 0) {
@@ -37,9 +41,19 @@ export const Header=({multiplyList})=>{
         }
     }, [multiplyList]);
 
+    useEffect(() => {
+        if (search && search.length > 2) {
+            setSearchTerm(search)
+        }
+    })
+
+    useEffect(() => {
+        setOptions([{ label: 'write 3 letters', value: 'initial' }]);
+     },[]);
+
     return(
         <header>
-            <Select options={options} onChange={onChange}/>
+            <Select placeholder="write min 3 letters..." options={options} onChange={onChange} onInputChange={onInputChange}/>
             <div>{list}</div>
         </header>
     )
