@@ -1,5 +1,5 @@
 import { multiplyData, getExchanges, getTickers } from '../hooks/downloadData';
-import { Header } from './Header';
+import { Tickers } from './Tickers';
 import { useState, useEffect } from 'react';
 
 export const App = () => {
@@ -17,7 +17,7 @@ export const App = () => {
 
   return (
     <div>
-      <Header multiplyList={multiplyList} />
+      <Tickers multiplyList={multiplyList} />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import Select from 'react-select';
 import tickers from '../data/ticers'
 import { multiplyData } from '../hooks/downloadData';
 
-export const Header=()=>{
+export const Tickers=()=>{
 
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
@@ -11,7 +11,7 @@ export const Header=()=>{
     const [searchTerm, setSearchTerm]=useState()
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
-    const [selectedTicker,setSelectedTicker]=useState('')
+
 
     
     const onChange = (selectedOption, index) => {
@@ -32,11 +32,9 @@ export const Header=()=>{
         setSearch(event)
     }
 
-   /* const handleClick = (index) => {
-        
-        console.log(tickerList[index]);
-        console.log(selectedTicker)
-    };*/
+    const placeholder=(index)=>{
+        return tickerList[index] || 'Select ticker';
+    }
 
     useEffect(() => {
         multiplyData(tickerList)
@@ -57,7 +55,6 @@ export const Header=()=>{
         setOptions(options);
       }, [searchTerm])
 
-    
 
     useEffect(() => {
         if (search && search.length > 2) {
@@ -65,12 +62,14 @@ export const Header=()=>{
         }
     }, [search])
 
+
+
      useEffect(() => {
         if (multiplyList.length > 0) {
             const markup = multiplyList.map((ticker, index) => (
                 <div key={index} name={index}>
-                    <Select name={ticker.code} placeholder="write min 3 letters..." options={options} onChange={onChange} onInputChange={onInputChange}/>
-                    <div>{ticker.code}</div>
+                    <Select name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                    <div>{ticker.close}</div>
                     <div>{ticker.change_p}%</div>
                 </div>
             ));
@@ -84,8 +83,6 @@ export const Header=()=>{
      },[]);
 
     return(
-        <header>
             <div>{list}</div>
-        </header>
     )
 }
