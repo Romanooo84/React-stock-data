@@ -9,22 +9,14 @@ export const Header=()=>{
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
     const [search, setSearch] = useState()
     const [searchTerm, setSearchTerm]=useState()
-    const [options, setOptions] = useState([{ label: '3', value: 'initial' }]);
+    const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
+    const [selectedTicker,setSelectedTicker]=useState('')
 
-    useEffect(() => {
-        const results = tickers.filter(item => item.Name.includes(searchTerm));
     
-        const options = results.map(item => ({
-          value: `${item.Code}.${item.Exchange}`,
-          label: `${item.Code}-${item.Name}`
-        }));
-    
-        setOptions(options);
-      }, [tickers, searchTerm])
-    
-    const onChange = (event) => {
-        console.log('Selected option:', event.value);
+    const onChange = (selectedOption) => {
+        setSelectedTicker(selectedOption.value)
+        console.log('Selected option:', selectedOption.value);
     }
     
     const onInputChange = (event) => {
@@ -33,6 +25,8 @@ export const Header=()=>{
 
     const handleClick = (index) => {
         console.log('Clicked div with name:', index);
+        console.log(tickerList[index]);
+        console.log(selectedTicker)
     };
 
     useEffect(() => {
@@ -45,10 +39,22 @@ export const Header=()=>{
       }, [tickerList]);
 
     useEffect(() => {
+        const results = tickers.filter(item => item.Name.includes(searchTerm));
+        const options = results.map(item => ({
+          value: `${item.Code}.${item.Exchange}`,
+          label: `${item.Code}-${item.Name}`
+        }));
+    
+        setOptions(options);
+      }, [searchTerm])
+
+    
+
+    useEffect(() => {
         if (search && search.length > 2) {
             setSearchTerm(search)
         }
-    })
+    }, [search])
 
      useEffect(() => {
         if (multiplyList.length > 0) {
@@ -63,8 +69,9 @@ export const Header=()=>{
         }
     }, [multiplyList, options]);
 
+    
     useEffect(() => {
-        setOptions([{ label: 'write 3 letters', value: 'initial' }]);
+        setOptions([{ label: '', value: 'initial' }]);
      },[]);
 
     return(
