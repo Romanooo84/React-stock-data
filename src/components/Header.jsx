@@ -6,7 +6,7 @@ import { multiplyData } from '../hooks/downloadData';
 export const Header=()=>{
 
     const [list, setList] = useState()
-    const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX'])
+    const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
     const [search, setSearch] = useState()
     const [searchTerm, setSearchTerm]=useState()
     const [options, setOptions] = useState([{ label: '3', value: 'initial' }]);
@@ -42,7 +42,7 @@ export const Header=()=>{
               setMultiplyList(downloadedData);
             }
           });
-      }, []);
+      }, [tickerList]);
 
     useEffect(() => {
         if (search && search.length > 2) {

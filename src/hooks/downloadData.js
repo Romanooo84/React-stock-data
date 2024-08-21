@@ -6,7 +6,7 @@ export const multiplyData = async (data) => {
     if (i === 0) {
       tickerList = [`${data[i]}?s=`];
     } else {
-      tickerList.push(data[i]);
+      tickerList.push(`, ${data[i]}`);
     }
   }
 
