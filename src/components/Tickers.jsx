@@ -29,7 +29,7 @@ export const Tickers=()=>{
     }
     
     const onInputChange = (event) => {
-        setSearch(event)
+        setSearch(event.toLowerCase())
     }
 
     const placeholder=(index)=>{
@@ -46,7 +46,7 @@ export const Tickers=()=>{
       }, [tickerList]);
 
     useEffect(() => {
-        const results = tickers.filter(item => item.Name.includes(searchTerm));
+        const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));
         const options = results.map(item => ({
           value: `${item.Code}.${item.Exchange}`,
           label: `${item.Code}-${item.Name}`
