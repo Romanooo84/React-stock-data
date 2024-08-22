@@ -37,7 +37,6 @@ export const Tickers=()=>{
     }
 
     const openMenu=(index)=>{
-        console.log(index)
         if (search && search.length > 2 && selectRef.current === index) {
             return true;
         } else if (search && search.length <3||!search) {
@@ -70,9 +69,9 @@ export const Tickers=()=>{
 
     useEffect(() => {
         if (searchTerm&&searchTerm.length>2){
-        const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));
+        const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));    
         const options = results.map(item => ({
-          value: `${item.Code}.${item.Exchange}`,
+          value: item.Country!='US'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
           label: `${item.Code}-${item.Name}`
         }));
     
