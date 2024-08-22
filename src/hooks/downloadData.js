@@ -5,15 +5,17 @@ export const multiplyData = async (data) => {
   for (let i = 0; i < data.length; i++) {
     if (i === 0) {
       tickerList = [`${data[i]}?s=`];
-    } else {
-      tickerList.push(`, ${data[i]}`);
+    } else if (i === 1)  {
+      tickerList.push(`${data[i]}`);
+    }
+    else {
+      tickerList.push(`,${data[i]}`);
     }
   }
-
   const tickers = tickerList.join('');
-
+  const url= `https://eodhd.com/api/real-time/${tickers}&api_token=${token}&fmt=json`
   try {
-    const response = await fetch(`https://eodhd.com/api/real-time/${tickers}&api_token=${token}&fmt=json`);
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
