@@ -12,8 +12,6 @@ export const Tickers=()=>{
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
 
-
-    
     const onChange = (selectedOption, index) => {
         const newTicker = selectedOption.value
         const previousTicker = index.name
