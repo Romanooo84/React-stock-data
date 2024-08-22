@@ -59,6 +59,15 @@ export const Tickers=()=>{
           return () => clearInterval(intervalID);
       }, [tickerList]);
 
+      useEffect(() => {
+            multiplyData(tickerList)
+              .then(downloadedData => {
+                if (downloadedData) {
+                  setMultiplyList(downloadedData);
+                }
+              });
+          }, [tickerList]);
+
     useEffect(() => {
         if (searchTerm&&searchTerm.length>2){
         const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));
