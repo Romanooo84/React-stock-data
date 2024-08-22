@@ -40,7 +40,6 @@ export const Tickers=()=>{
         if (search && search.length > 2 && selectRef.current === index) {
             return true;
         } else if (search && search.length <3||!search) {
-            console.log(search)
             return false;
         }
     }
@@ -90,8 +89,8 @@ export const Tickers=()=>{
             const markup = multiplyList.map((ticker, index) => (
                 <div key={index} name={index}>
                     <Select ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
-                    <div>{ticker.close}</div>
-                    <div>{ticker.change_p}%</div>
+                    <div>{ticker.close!='NA'? ticker.close:'Brak Danych'}</div>
+                    <div>{ticker.change_p!='NA'? `${ticker.change_p}%`:""}</div>
                 </div>
             ));
             setList(markup);
