@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
 import { multiplyData } from '../hooks/downloadData';
 
 export const Tickers=()=>{
-
+    const selectRef = useRef(null);
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
     const [search, setSearch] = useState()
@@ -36,6 +36,16 @@ export const Tickers=()=>{
         return tickerList[index] || 'Select ticker';
     }
 
+    const openMenu=(index)=>{
+        console.log(index)
+        if (search && search.length > 2 && selectRef.current === index) {
+            return true;
+        } else if (search && search.length <3||!search) {
+            console.log(search)
+            return false;
+        }
+    }
+
     useEffect(() => {
         multiplyData(tickerList)
           .then(downloadedData => {
@@ -46,20 +56,19 @@ export const Tickers=()=>{
       }, [tickerList]);
 
     useEffect(() => {
+        if (searchTerm&&searchTerm.length>2){
         const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));
         const options = results.map(item => ({
           value: `${item.Code}.${item.Exchange}`,
           label: `${item.Code}-${item.Name}`
         }));
     
-        setOptions(options);
+        setOptions(options);}
       }, [searchTerm])
 
 
     useEffect(() => {
-        if (search && search.length > 2) {
             setSearchTerm(search)
-        }
     }, [search])
 
 
@@ -68,7 +77,7 @@ export const Tickers=()=>{
         if (multiplyList.length > 0) {
             const markup = multiplyList.map((ticker, index) => (
                 <div key={index} name={index}>
-                    <Select name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                    <Select ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
                     <div>{ticker.close}</div>
                     <div>{ticker.change_p}%</div>
                 </div>
