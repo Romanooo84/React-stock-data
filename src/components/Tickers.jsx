@@ -47,12 +47,16 @@ export const Tickers=()=>{
     }
 
     useEffect(() => {
-        multiplyData(tickerList)
-          .then(downloadedData => {
-            if (downloadedData) {
-              setMultiplyList(downloadedData);
-            }
-          });
+        const intervalID = setInterval(() => {
+            multiplyData(tickerList)
+              .then(downloadedData => {
+                if (downloadedData) {
+                  setMultiplyList(downloadedData);
+                }
+              });
+          }, 2500);
+    
+          return () => clearInterval(intervalID);
       }, [tickerList]);
 
     useEffect(() => {
