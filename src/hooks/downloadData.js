@@ -1,5 +1,37 @@
 import { token } from './data';
 
+export const liveData= async (ticker)=>{
+  const url= `https://eodhd.com/api/real-time/${ticker}?api_token=${token}&fmt=json`
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const downloadedData = await response.json();
+    return downloadedData;
+  } catch (error) {
+    console.error("Data error:", error);
+    return null; 
+  }
+
+}
+
+export const historicalData= async (ticker, startDate, endDate)=>{
+  const url= `https://eodhd.com/api/eod/${ticker}?from=${startDate}&to=${endDate}&period=d&api_token=${token}&fmt=json`
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const downloadedData = await response.json();
+    return downloadedData;
+  } catch (error) {
+    console.error("Data error:", error);
+    return null; 
+  }
+
+}
+
 export const multiplyData = async (data) => {
   let tickerList = [];
   for (let i = 0; i < data.length; i++) {

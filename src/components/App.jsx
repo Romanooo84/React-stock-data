@@ -1,5 +1,6 @@
 import { multiplyData, getExchanges, getTickers } from '../hooks/downloadData';
 import { Tickers } from './Tickers';
+import { Chart } from './Chart';
 import { useState, useEffect } from 'react';
 
 export const App = () => {
@@ -18,6 +19,7 @@ export const App = () => {
   return (
     <div>
       <Tickers multiplyList={multiplyList} />
+      <Chart/>
     </div>
   );
 };
