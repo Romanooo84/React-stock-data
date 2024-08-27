@@ -1,4 +1,5 @@
 import { liveData, historicalData } from "hooks/downloadData";
+import { createDate } from "hooks/createDate";
 import tickers from '../data/ticers'
 import Select from 'react-select';
 import { Datepicker } from '@mobiscroll/react';
@@ -23,16 +24,21 @@ export const Chart = () => {
     const [startDate, setStartDate]=useState()
     const [endDate, setEndDate]=useState()
 
+    useEffect(()=>{
+        setStartDate(new Date()-30)
+        setEndDate(new Date())},[])
+    
 
     const onChange = (selectedOption) => {
-       console.log(selectedOption)
        setTicker(selectedOption.value)   
     }
 
     const onDateChange = (selectedOption) => {
-        console.log(selectedOption)
-         setStartDate(selectedOption.value[0])
-         setStartDate(selectedOption.value[1])
+        console.log(selectedOption.value)
+        const startDate=createDate(selectedOption.value[0])
+        const endDate = createDate(selectedOption.value[1])
+         setStartDate(startDate)
+         setEndDate(endDate )
      }
 
     const onInputChange = (event) => {
@@ -48,6 +54,8 @@ export const Chart = () => {
     }
 
     useEffect(() => {
+        if (startDate&&endDate){
+            
         liveData(ticker)
             .then(data => {
                 if (data) {
@@ -55,13 +63,13 @@ export const Chart = () => {
                 }
             });
 
-        historicalData(ticker, '2020-01-05', '2024-08-01')
+        historicalData(ticker, startDate, endDate)
             .then(data => {
                 if (data) {
                     setDownloadedHistoricalData(data);
                 }
             });
-    }, [ticker]);
+    }}, [ticker, startDate, endDate]);
 
     useEffect(() => {
         if (downloadedHistoricalData && downloadedLiveData ) {
@@ -105,6 +113,7 @@ export const Chart = () => {
 
     useEffect(()=>{
     },[options])
+
 
     const chartOptions = {};
 
