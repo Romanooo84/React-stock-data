@@ -35,9 +35,9 @@ export const Tickers=()=>{
     }
 
     const openMenu=(index)=>{
-        if (search && search.length > 2 && selectRef.current === index) {
+        if ((search && search.length > 2) && selectRef.current === index) {
             return true;
-        } else if (search && search.length <3||!search) {
+        } else if ((search && search.length <3)||!search) {
             return false;
         }
     }
@@ -67,7 +67,6 @@ export const Tickers=()=>{
     useEffect(() => {
         if (searchTerm&&searchTerm.length>2){
         const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));    
-        console.log(results)
         const options = results.map(item => ({
           value: item.Country==='US'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
           label: `${item.Code}-${item.Name}`
@@ -88,8 +87,8 @@ export const Tickers=()=>{
             const markup = multiplyList.map((ticker, index) => (
                 <div key={index} name={index}>
                     <Select ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
-                    <div>{ticker.close!='NA'? ticker.close:'Brak Danych'}</div>
-                    <div>{ticker.change_p!='NA'? `${ticker.change_p}%`:""}</div>
+                    <div>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
+                    <div>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
                 </div>
             ));
             setList(markup);
