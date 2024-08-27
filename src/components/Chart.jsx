@@ -26,8 +26,14 @@ export const Chart = () => {
 
     const onChange = (selectedOption) => {
        console.log(selectedOption)
-        setTicker(selectedOption.valueText)
+       setTicker(selectedOption.value)   
     }
+
+    const onDateChange = (selectedOption) => {
+        console.log(selectedOption)
+         setStartDate(selectedOption.value[0])
+         setStartDate(selectedOption.value[1])
+     }
 
     const onInputChange = (event) => {
         setSearch(event.toLowerCase())
@@ -88,7 +94,6 @@ export const Chart = () => {
 }, [search])
 
     useEffect(() => {
-        console.log(searchTerm)
         if (searchTerm&&searchTerm.length>2){
         const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));    
         const options = results.map(item => ({
@@ -100,26 +105,20 @@ export const Chart = () => {
 
     useEffect(()=>{
     },[options])
+
     const chartOptions = {};
 
     return (
         <div>
             <Select ref={selectRef}  menuIsOpen={openMenu(ticker)} placeholder={ticker} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
             <Datepicker
-                onChange={onChange}
+                onChange={onDateChange}
                 controls={['calendar']}
                 select="range"
                 touchUi={true}
                 inputComponent="input"
                 inputProps={'startDate'}
-            />    
-              <Datepicker
-                controls={['calendar']}
-                select="range"
-                touchUi={true}
-                inputComponent="input"
-                inputProps={'endDate'}
-            />        
+            />     
             {chartData && <Line options={chartOptions} data={chartData} />}
         </div>
     );

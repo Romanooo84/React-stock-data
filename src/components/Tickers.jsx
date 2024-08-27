@@ -68,7 +68,7 @@ export const Tickers=()=>{
         if (searchTerm&&searchTerm.length>2){
         const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));    
         const options = results.map(item => ({
-          value: item.Country==='US'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
+          value: item.Country==='USA'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
           label: `${item.Code}-${item.Name}`
         }));
     
