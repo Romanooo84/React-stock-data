@@ -24,17 +24,9 @@ export const Chart = () => {
     const [endDate, setEndDate]=useState()
 
 
-    const onChange = (selectedOption, index) => {
-        if (index.name==='startDate'){
-            setStartDate(selectedOption)
-        }
-        else if
-        (index.name==='endDate'){
-            setEndDate(selectedOption)
-        }
-        else{
-        setTicker(selectedOption.value)
-        }
+    const onChange = (selectedOption) => {
+       console.log(selectedOption)
+        setTicker(selectedOption.valueText)
     }
 
     const onInputChange = (event) => {
@@ -114,6 +106,7 @@ export const Chart = () => {
         <div>
             <Select ref={selectRef}  menuIsOpen={openMenu(ticker)} placeholder={ticker} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
             <Datepicker
+                onChange={onChange}
                 controls={['calendar']}
                 select="range"
                 touchUi={true}
