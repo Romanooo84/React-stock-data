@@ -3,7 +3,7 @@ import Select from 'react-select';
 import tickers from '../data/ticers'
 import { multiplyData } from '../hooks/downloadData';
 
-export const Tickers=()=>{
+export const Tickers=({setChartTicker, setChartName})=>{
     const selectRef = useRef(null);
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
@@ -41,7 +41,21 @@ export const Tickers=()=>{
             return false;
         }
     }, [search])
-    
+
+    const onClick = useCallback((event) => {
+        const ticker=event.target.name
+        console.log(ticker)
+        const newTicker = ticker.split('.')[0];
+        let country = ticker.split('.')[1];
+        let results = tickers.filter(item => item.Code.includes(newTicker)); 
+        console.log(results)
+        results = results.filter(item => item.Exchange.includes(country)); 
+        setChartTicker(event.target.name);
+        console.log(results)
+        setChartName(results[0].Name)
+        console.log('clicked')
+    }, [setChartTicker]);
+
     useEffect(() => {
         const intervalID = setInterval(() => {
             multiplyData(tickerList)
@@ -89,11 +103,14 @@ export const Tickers=()=>{
                     <Select ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
                     <div>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
                     <div>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
+                    <button name={ticker.code}onClick={onClick}>
+      Create Graph
+    </button>
                 </div>
             ));
             setList(markup);
         }
-    }, [multiplyList, options, onChange, openMenu, placeholder]);
+    }, [multiplyList, options, onChange, openMenu, placeholder, onClick]);
 
     
     useEffect(() => {

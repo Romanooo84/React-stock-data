@@ -10,7 +10,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export const Chart = () => {
+export const Chart = ({chartTicker, chartName}) => {
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
@@ -24,6 +24,7 @@ export const Chart = () => {
     const selectRef = useRef(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+
 
     useEffect(()=>{
         let endDate = new Date();
@@ -57,7 +58,15 @@ export const Chart = () => {
         }
     }
 
+    useEffect(()=>{
+        if (chartTicker&&startDate&&endDate){
+            setTicker(chartTicker)
+            setTickerName(chartName)
+        }}
+    )
+
     useEffect(() => {
+        console.log(ticker)
         if (startDate&&endDate){
         liveData(ticker)
             .then(data => {
