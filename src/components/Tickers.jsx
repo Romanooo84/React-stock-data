@@ -54,7 +54,7 @@ export const Tickers=({setChartTicker, setChartName})=>{
         console.log(results)
         setChartName(results[0].Name)
         console.log('clicked')
-    }, [setChartTicker]);
+    }, [setChartTicker, setChartName]);
 
     useEffect(() => {
         const intervalID = setInterval(() => {

@@ -62,7 +62,7 @@ export const Chart = ({chartTicker, chartName}) => {
         if (chartTicker&&startDate&&endDate){
             setTicker(chartTicker)
             setTickerName(chartName)
-        }}
+        }},[chartTicker, startDate, endDate, chartName]
     )
 
     useEffect(() => {
