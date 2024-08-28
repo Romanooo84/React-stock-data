@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
 import { multiplyData } from '../hooks/downloadData';
@@ -12,7 +12,7 @@ export const Tickers=()=>{
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
 
-    const onChange = (selectedOption, index) => {
+    const onChange = useCallback((selectedOption, index) => {
         const newTicker = selectedOption.value
         const previousTicker = index.name
         const tickerIndex = tickerList.indexOf(previousTicker);
@@ -24,24 +24,24 @@ export const Tickers=()=>{
             }
         })
         setTickerList(newTickerList)
-    }
+    },[tickerList])
     
     const onInputChange = (event) => {
         setSearch(event.toLowerCase())
     }
 
-    const placeholder=(index)=>{
+    const placeholder=useCallback((index)=>{
         return tickerList[index] || 'Select ticker';
-    }
+    },[tickerList])
 
-    const openMenu=(index)=>{
+    const openMenu=useCallback((index)=>{
         if ((search && search.length > 2) && selectRef.current === index) {
             return true;
         } else if ((search && search.length <3)||!search) {
             return false;
         }
-    }
-
+    }, [search])
+    
     useEffect(() => {
         const intervalID = setInterval(() => {
             multiplyData(tickerList)
@@ -93,7 +93,7 @@ export const Tickers=()=>{
             ));
             setList(markup);
         }
-    }, [multiplyList, options]);
+    }, [multiplyList, options, onChange, openMenu, placeholder]);
 
     
     useEffect(() => {

@@ -14,7 +14,7 @@ export const Chart = () => {
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
-    const [downloadedLiveData, setDownloadedLiveData] = useState([]);
+    //const [downloadedLiveData, setDownloadedLiveData] = useState([]);
     const [chartData, setChartData] = useState(null);
     const [ticker, setTicker] = useState('AAPL.US');
     const [tickerName, setTickerName]=useState('Apple INC')
@@ -62,7 +62,7 @@ export const Chart = () => {
         liveData(ticker)
             .then(data => {
                 if (data) {
-                    setDownloadedLiveData(data);
+                    //setDownloadedLiveData(data);
                 }
             });
 
@@ -99,7 +99,7 @@ export const Chart = () => {
             };
             setChartData(tempData);
         }
-    }, [xAxis, yAxis, ticker]);
+    }, [xAxis, yAxis, ticker, tickerName]);
 
     useEffect(() => {
         setSearchTerm(search)
