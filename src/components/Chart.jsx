@@ -16,25 +16,29 @@ export const Chart = () => {
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
     const [downloadedLiveData, setDownloadedLiveData] = useState([]);
     const [chartData, setChartData] = useState(null);
-    const [ticker, setTicker] = useState('AAPL.US')
-    const [search, setSearch] = useState()
-    const [searchTerm, setSearchTerm]=useState()
+    const [ticker, setTicker] = useState('AAPL.US');
+    const [tickerName, setTickerName]=useState('Apple INC')
+    const [search, setSearch] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const [options, setOptions] = useState([]);
     const selectRef = useRef(null);
-    const [startDate, setStartDate]=useState()
-    const [endDate, setEndDate]=useState()
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     useEffect(()=>{
-        setStartDate(new Date()-30)
-        setEndDate(new Date())},[])
+        let endDate = new Date();
+        let startDate = new Date(endDate);
+        startDate.setDate(startDate.getDate() - 30);
+        setStartDate(createDate(startDate))
+        setEndDate(createDate(endDate))},[])
     
 
     const onChange = (selectedOption) => {
        setTicker(selectedOption.value)   
+       setTickerName(selectedOption.label)
     }
 
     const onDateChange = (selectedOption) => {
-        console.log(selectedOption.value)
         const startDate=createDate(selectedOption.value[0])
         const endDate = createDate(selectedOption.value[1])
          setStartDate(startDate)
@@ -55,7 +59,6 @@ export const Chart = () => {
 
     useEffect(() => {
         if (startDate&&endDate){
-            
         liveData(ticker)
             .then(data => {
                 if (data) {
@@ -72,21 +75,22 @@ export const Chart = () => {
     }}, [ticker, startDate, endDate]);
 
     useEffect(() => {
-        if (downloadedHistoricalData && downloadedLiveData ) {
+        
+        if (downloadedHistoricalData) {
             const tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
             const tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             setXAxis(tempXAxis);
             setYAxis(tempYAxis);
         }
-    }, [downloadedHistoricalData, downloadedLiveData]);
+    }, [downloadedHistoricalData]);
 
     useEffect(() => {
-        if (xAxis.length > 0 && yAxis.length > 0) {
+        if (xAxis.length > 0 && yAxis.length > 0 && ticker) {
             const tempData = {
                 labels: xAxis,
                 datasets: [
                     {
-                        label: ticker,
+                        label: tickerName,
                         data: yAxis,
                         borderColor: 'blue',
                         fill: false,
@@ -105,7 +109,7 @@ export const Chart = () => {
         if (searchTerm&&searchTerm.length>2){
         const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));    
         const options = results.map(item => ({
-        value: item.Country==='US'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
+        value: item.Country==='USA'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
         label: `${item.Code}-${item.Name}`
         }));
         setOptions(options);}

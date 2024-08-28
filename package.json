@@ -2,7 +2,7 @@
     "name": "react-homework-template",
     "version": "0.1.0",
     "private": true,
-    "homepage": "https://goitacademy.github.io/react-homework-template/",
+    "homepage": "https://goitacademy.github.io/React-stock-data/",
     "dependencies": {
         "@mobiscroll/react": "npm:@mobiscroll/react-next-trial@^5.31.2",
         "@testing-library/jest-dom": "^5.16.3",

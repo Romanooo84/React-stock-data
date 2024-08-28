@@ -97,7 +97,7 @@ export const Tickers=()=>{
 
     
     useEffect(() => {
-        setOptions([{ label: '', value: 'initial' }]);
+        setOptions([{ label: '3 char', value: 'initial' }]);
      },[]);
 
     return(
