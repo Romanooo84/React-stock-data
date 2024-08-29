@@ -3,7 +3,7 @@ import Select from 'react-select';
 import tickers from '../data/ticers'
 import { multiplyData } from '../hooks/downloadData';
 
-export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker})=>{
+export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker, addChartTicker})=>{
     const selectRef = useRef(null);
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
@@ -58,10 +58,11 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
         results = results.filter(item => item.Code===(newTicker))
         if (event.target.id==='CreateGraph'){
-            setChartName(results[0].Name) }
-            else{setAddChartName(results[0].Name)
-
+            setChartName(results[0].Name) 
         }
+        else {setAddChartName(results[0].Name)
+        }
+        console.log(addChartTicker)
     }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker]);
 
     useEffect(() => {
@@ -112,12 +113,16 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                     <div>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
                     <div>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
                     <button id='CreateGraph' name={ticker.code}onClick={onClick}>Create Graph</button>
-                    <button id='Add to Graph'name={ticker.code}onClick={onClick}>Add to Graph</button>
+                    {ticker.code === addChartTicker ? (
+                    <button id='Remove from Graph' name={ticker.code} onClick={onClick}>Remove from Graph</button>
+                     ) : (
+                    <button id='Add to Graph' name={ticker.code} onClick={onClick}>Add to Graph</button>
+                     )}
                 </div>
             ));
             setList(markup);
         }
-    }, [multiplyList, options, onChange, openMenu, placeholder, onClick]);
+    }, [multiplyList, options, addChartTicker, onChange, openMenu, placeholder, onClick]);
 
     
     useEffect(() => {
