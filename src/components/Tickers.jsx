@@ -44,16 +44,17 @@ export const Tickers=({setChartTicker, setChartName})=>{
 
     const onClick = useCallback((event) => {
         const ticker=event.target.name
-        console.log(ticker)
         const newTicker = ticker.split('.')[0];
         let country = ticker.split('.')[1];
         let results = tickers.filter(item => item.Code.includes(newTicker)); 
-        console.log(results)
+        setChartTicker(event.target.name); 
+        if (country!=='US'){
         results = results.filter(item => item.Exchange.includes(country)); 
-        setChartTicker(event.target.name);
-        console.log(results)
+        } else {
+            results = results.filter(item => item.Country.includes('USA'))
+        }
+        results = results.filter(item => item.Code===(newTicker))
         setChartName(results[0].Name)
-        console.log('clicked')
     }, [setChartTicker, setChartName]);
 
     useEffect(() => {
