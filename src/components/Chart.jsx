@@ -10,11 +10,14 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export const Chart = ({chartTicker, chartName}) => {
+export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) => {
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
+    const [addYAxis, setAddYAxis]= useState([])
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
+    const [addDownloadedHistoricalData, setAddDownloadedHistoricalData] = useState([]);
     //const [downloadedLiveData, setDownloadedLiveData] = useState([]);
+    //const [addDownloadedLiveData, setAddDownloadedLiveData] = useState([]);
     const [chartData, setChartData] = useState(null);
     const [ticker, setTicker] = useState('AAPL.US');
     const [tickerName, setTickerName]=useState('Apple INC')
@@ -24,6 +27,7 @@ export const Chart = ({chartTicker, chartName}) => {
     const selectRef = useRef(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [dataset, setDataset] = useState([])
 
 
     useEffect(()=>{
@@ -31,7 +35,17 @@ export const Chart = ({chartTicker, chartName}) => {
         let startDate = new Date(endDate);
         startDate.setDate(startDate.getDate() - 30);
         setStartDate(createDate(startDate))
-        setEndDate(createDate(endDate))},[])
+        setEndDate(createDate(endDate))
+        setDataset([
+            {
+                label: tickerName,
+                data: yAxis,
+                borderColor: 'blue',
+                fill: false,
+            },
+        ],)
+    
+    },[tickerName,yAxis])
     
 
     const onChange = (selectedOption) => {
@@ -61,17 +75,22 @@ export const Chart = ({chartTicker, chartName}) => {
     useEffect(()=>{
         if (chartTicker&&startDate&&endDate){
             setTicker(chartTicker)
-            setTickerName(chartName)
+            setTickerName(chartName)  
         }},[chartTicker, startDate, endDate, chartName]
     )
 
+    useEffect(()=>{
+        if (addChartTicker&&startDate&&endDate){
+            
+        }},[addChartTicker, startDate, endDate, chartName]
+    )
+
     useEffect(() => {
-        console.log(ticker)
         if (startDate&&endDate){
         liveData(ticker)
             .then(data => {
                 if (data) {
-                    //setDownloadedLiveData(data);
+                    //setAddDownloadedLiveData(data);
                 }
             });
 
@@ -84,6 +103,23 @@ export const Chart = ({chartTicker, chartName}) => {
     }}, [ticker, startDate, endDate]);
 
     useEffect(() => {
+        if (startDate&&endDate){
+        liveData(addChartTicker)
+            .then(data => {
+                if (data) {
+                    //setDownloadedLiveData(data);
+                }
+            });
+
+        historicalData(addChartTicker, startDate, endDate)
+            .then(data => {
+                if (data) {
+                    setAddDownloadedHistoricalData(data);
+                }
+            });
+    }}, [addChartTicker, startDate, endDate]);
+
+    useEffect(() => {
         
         if (downloadedHistoricalData) {
             const tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
@@ -94,21 +130,21 @@ export const Chart = ({chartTicker, chartName}) => {
     }, [downloadedHistoricalData]);
 
     useEffect(() => {
-        if (xAxis.length > 0 && yAxis.length > 0 && ticker) {
+        if (addDownloadedHistoricalData.length>0) {
+            const tempYAxis = addDownloadedHistoricalData.map((axis) => axis.close);
+            setAddYAxis(tempYAxis);
+        }
+    }, [addDownloadedHistoricalData]);
+
+    useEffect(() => {
+        if (xAxis.length > 0 && yAxis.length > 0 && ticker && dataset) {
             const tempData = {
                 labels: xAxis,
-                datasets: [
-                    {
-                        label: tickerName,
-                        data: yAxis,
-                        borderColor: 'blue',
-                        fill: false,
-                    },
-                ],
+                datasets: dataset
             };
             setChartData(tempData);
         }
-    }, [xAxis, yAxis, ticker, tickerName]);
+    }, [xAxis, yAxis, ticker, tickerName, dataset]);
 
     useEffect(() => {
         setSearchTerm(search)
@@ -125,7 +161,20 @@ export const Chart = ({chartTicker, chartName}) => {
     }, [searchTerm])
 
     useEffect(()=>{
-    },[options])
+        if (addYAxis){
+            const tempDataSet=[
+                {
+                    label: addChartName,
+                    data: addYAxis,
+                    borderColor: 'blue',
+                    fill: false,
+                },
+            ]
+            const newDataSet= [...dataset, ...tempDataSet];
+            setDataset(newDataSet)
+            setAddYAxis()
+        }
+    },[addYAxis, dataset, addChartName])
 
 
     const chartOptions = {};

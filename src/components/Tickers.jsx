@@ -3,7 +3,7 @@ import Select from 'react-select';
 import tickers from '../data/ticers'
 import { multiplyData } from '../hooks/downloadData';
 
-export const Tickers=({setChartTicker, setChartName})=>{
+export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker})=>{
     const selectRef = useRef(null);
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
@@ -47,15 +47,22 @@ export const Tickers=({setChartTicker, setChartName})=>{
         const newTicker = ticker.split('.')[0];
         let country = ticker.split('.')[1];
         let results = tickers.filter(item => item.Code.includes(newTicker)); 
-        setChartTicker(event.target.name); 
+        if (event.target.id==='CreateGraph'){
+        setChartTicker(event.target.name); }
+        else{setAddChartTicker(event.target.name);
+        }
         if (country!=='US'){
         results = results.filter(item => item.Exchange.includes(country)); 
         } else {
             results = results.filter(item => item.Country.includes('USA'))
         }
         results = results.filter(item => item.Code===(newTicker))
-        setChartName(results[0].Name)
-    }, [setChartTicker, setChartName]);
+        if (event.target.id==='CreateGraph'){
+            setChartName(results[0].Name) }
+            else{setAddChartName(results[0].Name)
+
+        }
+    }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker]);
 
     useEffect(() => {
         const intervalID = setInterval(() => {
@@ -104,9 +111,8 @@ export const Tickers=({setChartTicker, setChartName})=>{
                     <Select ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
                     <div>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
                     <div>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
-                    <button name={ticker.code}onClick={onClick}>
-      Create Graph
-    </button>
+                    <button id='CreateGraph' name={ticker.code}onClick={onClick}>Create Graph</button>
+                    <button id='Add to Graph'name={ticker.code}onClick={onClick}>Add to Graph</button>
                 </div>
             ));
             setList(markup);
