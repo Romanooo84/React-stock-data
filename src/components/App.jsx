@@ -6,7 +6,7 @@ export const App = () => {
 
   const [chartTicker, setChartTicker] = useState(null);
   const [chartName, setChartName] = useState(null);
-  const [addChartTicker, setAddChartTicker] = useState();
+  const [addChartTicker, setAddChartTicker] = useState(null);
   const [addChartName, setAddChartName] = useState(null);
   return (
     <div>

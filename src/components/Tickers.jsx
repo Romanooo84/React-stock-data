@@ -7,8 +7,8 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     const selectRef = useRef(null);
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
-    const [search, setSearch] = useState()
-    const [searchTerm, setSearchTerm]=useState()
+    const [search, setSearch] = useState(null)
+    const [searchTerm, setSearchTerm]=useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
 

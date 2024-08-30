@@ -214,8 +214,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                 select="range"
                 touchUi={true}
                 inputComponent="input"
-                inputProps={'startDate'}
-            />     
+                inputProps={{ id: 'startDate' }}
+/>   
             {chartData && <Line options={chartOptions} data={chartData} />}
         </div>
     );
