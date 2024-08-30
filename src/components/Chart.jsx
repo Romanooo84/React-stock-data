@@ -86,7 +86,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     )
 
     useEffect(() => {
-        if (startDate&&endDate){
+        if (startDate&&endDate&&ticker){
         liveData(ticker)
             .then(data => {
                 if (data) {
@@ -103,7 +103,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     }}, [ticker, startDate, endDate]);
 
     useEffect(() => {
-        if (startDate&&endDate){
+        if (startDate&&endDate&&addChartTicker!=='none'&&addChartTicker!==undefined){
         liveData(addChartTicker)
             .then(data => {
                 if (data) {
@@ -117,7 +117,20 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                     setAddDownloadedHistoricalData(data);
                 }
             });
-    }}, [addChartTicker, startDate, endDate]);
+        }
+        else if(startDate&&endDate&&addChartTicker==="none"){
+            const tempDataSet=[
+                {
+                    label: tickerName,
+                    data: yAxis,
+                    borderColor: 'blue',
+                    fill: false,
+                },
+            ]
+            setDataset(tempDataSet)
+            setAddYAxis()   
+        }
+    }, [addChartTicker, startDate, endDate, tickerName, yAxis]);
 
     useEffect(() => {
         
@@ -161,12 +174,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     }, [searchTerm])
 
     useEffect(()=>{
-        if (addYAxis){
+        if (addYAxis&&dataset.length===1){
             const tempDataSet=[
                 {
                     label: addChartName,
                     data: addYAxis,
-                    borderColor: 'blue',
+                    borderColor: 'green',
                     fill: false,
                 },
             ]
@@ -174,7 +187,25 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             setDataset(newDataSet)
             setAddYAxis()
         }
-    },[addYAxis, dataset, addChartName])
+        if (addYAxis&&dataset.length>1){
+            const tempDataSet=[
+                {
+                    label: tickerName,
+                    data: yAxis,
+                    borderColor: 'blue',
+                    fill: false,
+                },
+                {
+                    label: addChartName,
+                    data: addYAxis,
+                    borderColor: 'green',
+                    fill: false,
+                },
+            ]
+            setDataset(tempDataSet)
+            setAddYAxis()
+        }
+    },[addYAxis,yAxis, dataset, addChartName, tickerName])
 
 
     const chartOptions = {};

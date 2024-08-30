@@ -43,6 +43,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     }, [search])
 
     const onClick = useCallback((event) => {
+        console.log(event.target)
         const ticker=event.target.name
         const newTicker = ticker.split('.')[0];
         let country = ticker.split('.')[1];
@@ -60,9 +61,14 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         if (event.target.id==='CreateGraph'){
             setChartName(results[0].Name) 
         }
-        else {setAddChartName(results[0].Name)
+        else if(event.target.id==='Add to Graph')
+            {setAddChartName(results[0].Name)
         }
-        console.log(addChartTicker)
+        else if(event.target.id==='Remove from Graph')
+            {setAddChartName('none')
+             setAddChartTicker('none')
+        }
+    
     }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker]);
 
     useEffect(() => {
