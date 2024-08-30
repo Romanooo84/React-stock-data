@@ -43,7 +43,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     }, [search])
 
     const onClick = useCallback((event) => {
-        console.log(event.target)
         const ticker=event.target.name
         const newTicker = ticker.split('.')[0];
         let country = ticker.split('.')[1];

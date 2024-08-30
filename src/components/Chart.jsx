@@ -26,16 +26,17 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     const [options, setOptions] = useState([]);
     const selectRef = useRef(null);
     const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const [endDate, setEndDate] = useState();
     const [dataset, setDataset] = useState([])
 
 
     useEffect(()=>{
-        let endDate = new Date();
-        let startDate = new Date(endDate);
-        startDate.setDate(startDate.getDate() - 30);
-        setStartDate(createDate(startDate))
-        setEndDate(createDate(endDate))
+        if (startDate===null){
+        let beginigEndDate = new Date();
+        let beginigstartDate = new Date(beginigEndDate);
+        beginigstartDate.setDate(beginigstartDate.getDate() - 30);
+        setStartDate(createDate(beginigstartDate))
+        setEndDate(createDate(beginigEndDate))
         setDataset([
             {
                 label: tickerName,
@@ -44,8 +45,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                 fill: false,
             },
         ],)
-    
-    },[tickerName,yAxis])
+    }
+    },[tickerName,yAxis, startDate])
     
 
     const onChange = (selectedOption) => {
@@ -79,18 +80,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
         }},[chartTicker, startDate, endDate, chartName]
     )
 
-    useEffect(()=>{
-        if (addChartTicker&&startDate&&endDate){
-            
-        }},[addChartTicker, startDate, endDate, chartName]
-    )
-
     useEffect(() => {
-        if (startDate&&endDate&&ticker){
+        if (startDate!==null&& endDate && ticker){
         liveData(ticker)
             .then(data => {
                 if (data) {
-                    //setAddDownloadedLiveData(data);
+                    //setDownloadedLiveData(data);
                 }
             });
 
@@ -100,14 +95,14 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                     setDownloadedHistoricalData(data);
                 }
             });
-    }}, [ticker, startDate, endDate]);
+    }}, [ticker, startDate, endDate, addChartTicker]);
 
     useEffect(() => {
-        if (startDate&&endDate&&addChartTicker!=='none'&&addChartTicker!==undefined){
+        if (startDate&&endDate&&addChartTicker!=='none'&&addChartTicker!==undefined&&addChartTicker!==null){
         liveData(addChartTicker)
             .then(data => {
                 if (data) {
-                    //setDownloadedLiveData(data);
+                    //setAddDownloadedLiveData(data);
                 }
             });
 
@@ -118,7 +113,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                 }
             });
         }
-        else if(startDate&&endDate&&addChartTicker==="none"){
+        else if(startDate&&endDate){
             const tempDataSet=[
                 {
                     label: tickerName,
@@ -174,7 +169,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     }, [searchTerm])
 
     useEffect(()=>{
-        if (addYAxis&&dataset.length===1){
+        if (addYAxis&&dataset.length===1&&addChartName!==null){
             const tempDataSet=[
                 {
                     label: addChartName,
