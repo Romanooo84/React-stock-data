@@ -68,10 +68,10 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     const onClick=(e)=>{
         if(e.target.id==='addRegression'){
             setIsRegression(true)
-            const regYAxis=linearRegression(yAxis)
+            const tempRegYAxis=linearRegression(yAxis)
             const tempDataSet=[ {
                 label: `Regression ${tickerName}`,
-                data: regYAxis,
+                data: tempRegYAxis,
                 borderColor: 'red',
                 fill: false,
             },]
@@ -151,13 +151,20 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
 
     useEffect(() => {
         
-        if (downloadedHistoricalData.length>0) {
-            const tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
-            const tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
+        if (downloadedHistoricalData.length > 0 && downloadedLiveData.code) {
+            let tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
+            let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
+            const tempDate = new Date(downloadedLiveData.timestamp * 1000);
+            const formattedDate = tempDate.toISOString().split('T')[0];  
+            if(formattedDate===endDate){
+                    const close = downloadedLiveData.close
+                    tempXAxis.push(formattedDate)
+                    tempYAxis.push(close)
+                }
             setXAxis(tempXAxis);
             setYAxis(tempYAxis);
         }
-    }, [downloadedHistoricalData]);
+    }, [downloadedHistoricalData, downloadedLiveData, endDate]);
 
     useEffect(() => {
         if (addDownloadedHistoricalData.length>0) {
@@ -168,13 +175,19 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
 
     useEffect(() => {
         if (xAxis.length > 0 && yAxis.length > 0 && ticker && dataset) {
-            const tempData = {
-                labels: xAxis,
-                datasets: dataset
-            };
+            console.log('render xAxis')
+            if (isRegression === false){
+                const tempData = {
+                    labels: xAxis,
+                    datasets: dataset
+                };
             setChartData(tempData);
+            }
+            else {
+                
+            }
         }
-    }, [xAxis, yAxis, ticker, tickerName, dataset]);
+    }, [xAxis, yAxis, ticker, tickerName, dataset, isRegression]);
 
     useEffect(() => {
         setSearchTerm(search)
@@ -226,7 +239,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                 (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
                 (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
             }
-            <TickerData downloadedHistoricalData={downloadedHistoricalData}/>
+            <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={endDate} />
             {chartData && <Line options={chartOptions} data={chartData} />}
         </div>
     );
