@@ -5,7 +5,7 @@ import tickers from '../data/ticers'
 import Select from 'react-select';
 import { Datepicker } from '@mobiscroll/react';
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 
@@ -29,33 +29,16 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState();
     const [dataset, setDataset] = useState([])
-    const [regYAxis, setRegYAxis] = useState([])
+    const [isRegression, setIsRegression] = useState(false)
 
-
-    useEffect(()=>{
-        if (startDate===null){
-        let beginigEndDate = new Date();
-        let beginigstartDate = new Date(beginigEndDate);
-        beginigstartDate.setDate(beginigstartDate.getDate() - 30);
-        setStartDate(createDate(beginigstartDate))
-        setEndDate(createDate(beginigEndDate))
-        setDataset([
-            {
-                label: tickerName,
-                data: yAxis,
-                borderColor: 'blue',
-                fill: false,
-            },
-            {
-                label: `regression ${tickerName}`,
-                data: regYAxis,
-                borderColor: 'red',
-                fill: false,
-            },
-        ],)
-    }
-    },[tickerName,yAxis,regYAxis, startDate])
-    
+    const startData = useMemo(() => [
+        {
+          label: tickerName,
+          data: yAxis,
+          borderColor: 'blue',
+          fill: false,
+        },
+      ], [tickerName, yAxis]);
 
     const onChange = (selectedOption) => {
        setTicker(selectedOption.value)   
@@ -80,6 +63,37 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             return false;
         }
     }
+
+    const onClick=(e)=>{
+        if(e.target.id==='addRegression'){
+            console.log(e.target.id)
+            setIsRegression(true)
+            const regYAxis=linearRegression(yAxis)
+            const tempDataSet=[ {
+                label: `Regression ${tickerName}`,
+                data: regYAxis,
+                borderColor: 'red',
+                fill: false,
+            },]
+          const newDataSet= [...dataset, ...tempDataSet]
+          setDataset(newDataSet)
+        }
+        else{
+            setIsRegression(false)
+            const tempDataset = dataset.filter(item => !item.label.toLowerCase().includes('regression'));
+            setDataset(tempDataset)
+        }
+    }
+
+    useEffect(()=>{
+        if (startDate===null){
+        let beginigEndDate = new Date();
+        let beginigstartDate = new Date(beginigEndDate);
+        beginigstartDate.setDate(beginigstartDate.getDate() - 30);
+        setStartDate(createDate(beginigstartDate))
+        setEndDate(createDate(beginigEndDate))
+    }
+    },[tickerName, startDate])
 
     useEffect(()=>{
         if (chartTicker&&startDate&&endDate){
@@ -122,24 +136,10 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             });
         }
         else if(startDate&&endDate){
-            const tempDataSet=[
-                {
-                    label: tickerName,
-                    data: yAxis,
-                    borderColor: 'blue',
-                    fill: false,
-                },
-                {
-                    label: `regression ${tickerName}`,
-                    data: regYAxis,
-                    borderColor: 'red',
-                    fill: false,
-                },
-            ]
-            setDataset(tempDataSet)
+            setDataset(startData)
             setAddYAxis()   
         }
-    }, [addChartTicker, startDate, endDate, tickerName, yAxis, regYAxis]);
+    }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData]);
 
     useEffect(() => {
         
@@ -148,8 +148,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             const tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             setXAxis(tempXAxis);
             setYAxis(tempYAxis);
-            const tempLinerarRegression=linearRegression(tempYAxis)
-            setRegYAxis(tempLinerarRegression)
         }
     }, [downloadedHistoricalData]);
 
@@ -186,49 +184,24 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
 
     useEffect(()=>{
         if (addYAxis&&dataset.length===1&&addChartName!==null){
-            const tempDataSet=[
-                {
-                    label: addChartName,
-                    data: addYAxis,
-                    borderColor: 'green',
-                    fill: false,
-                },
-                {
-                    label: `regression ${tickerName}`,
-                    data: regYAxis,
-                    borderColor: 'red',
-                    fill: false,
-                },
-            ]
-            const newDataSet= [...dataset, ...tempDataSet];
+            const newDataSet= [...dataset, ...startData];
             setDataset(newDataSet)
             setAddYAxis()
         }
         if (addYAxis&&dataset.length>1){
             const tempDataSet=[
                 {
-                    label: tickerName,
-                    data: yAxis,
-                    borderColor: 'blue',
-                    fill: false,
-                },
-                {
-                    label: `regression ${tickerName}`,
-                    data: regYAxis,
-                    borderColor: 'red',
-                    fill: false,
-                },
-                {
                     label: addChartName,
                     data: addYAxis,
                     borderColor: 'green',
                     fill: false,
                 },
             ]
-            setDataset(tempDataSet)
+            const newDataSet= [...startData, ...tempDataSet]
+            setDataset(newDataSet)
             setAddYAxis()
         }
-    },[addYAxis, yAxis, regYAxis, dataset, addChartName, tickerName])
+    },[addYAxis, yAxis, dataset, addChartName, tickerName, startData])
 
 
     const chartOptions = {};
@@ -242,8 +215,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                 select="range"
                 touchUi={true}
                 inputComponent="input"
-                inputProps={{ id: 'startDate' }}
-/>   
+                inputProps={{ id: 'startDate' }}/>   
+            {isRegression!==true?
+            (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
+            (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
+            }
+            
             {chartData && <Line options={chartOptions} data={chartData} />}
         </div>
     );
