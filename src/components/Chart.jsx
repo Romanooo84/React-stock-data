@@ -25,11 +25,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     const [search, setSearch] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [options, setOptions] = useState([]);
-    const selectRef = useRef(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState();
     const [dataset, setDataset] = useState([])
     const [isRegression, setIsRegression] = useState(false)
+    const [datepickerOpen, setDatepickerOpen] = useState(false);
+    const selectRef = useRef(null);
 
     const startData = useMemo(() => [
         {
@@ -123,14 +124,15 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
         const intervalID = setInterval(() => {
             liveData(ticker)
             .then(data => {
-                if (data) {
-                    setDownloadedLiveData(data);
+                if (data && !datepickerOpen) {
+                    setDownloadedLiveData(data)
                 }
             });
-          }, 2500);
+        }, 2500);
     
-          return () => clearInterval(intervalID);
-      }, [ticker]);
+        return () => clearInterval(intervalID);
+    }, [ticker, datepickerOpen]);
+    
 
     useEffect(() => {
         if (startDate&&endDate&&addChartTicker!=='none'&&addChartTicker!==undefined&&addChartTicker!==null){
@@ -219,7 +221,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                 <p>Change: {downloadedLiveData.change_p}%</p>
                 <p>Close: {downloadedLiveData.close}</p>
             </div>
-            <Datepicker onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
+            <Datepicker onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)}  onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
             {isRegression!==true?
                 (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
                 (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
