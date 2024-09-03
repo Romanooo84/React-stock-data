@@ -6,7 +6,7 @@ import { multiplyData } from '../hooks/downloadData';
 export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker, addChartTicker})=>{
     const selectRef = useRef(null);
     const [list, setList] = useState()
-    const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','AAAU.US'])
+    const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','GSPC.INDX'])
     const [search, setSearch] = useState(null)
     const [searchTerm, setSearchTerm]=useState(null)
     const [options, setOptions] = useState([]);
@@ -53,7 +53,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
         if (country!=='US'){
         results = results.filter(item => item.Exchange.includes(country)); 
-        } else {
+        } else  {
             results = results.filter(item => item.Country.includes('USA'))
         }
         results = results.filter(item => item.Code===(newTicker))
