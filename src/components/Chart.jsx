@@ -1,6 +1,7 @@
 import { liveData, historicalData } from "hooks/downloadData";
 import { linearRegression } from "hooks/math";
 import { createDate } from "hooks/createDate";
+import { TickerData } from "./TickerData";
 import tickers from '../data/ticers'
 import Select from 'react-select';
 import { Datepicker } from '@mobiscroll/react';
@@ -65,8 +66,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     }
 
     const onClick=(e)=>{
+        console.log(downloadedHistoricalData)
         if(e.target.id==='addRegression'){
-            console.log(e.target.id)
             setIsRegression(true)
             const regYAxis=linearRegression(yAxis)
             const tempDataSet=[ {
@@ -143,7 +144,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
 
     useEffect(() => {
         
-        if (downloadedHistoricalData) {
+        if (downloadedHistoricalData.length>0) {
             const tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
             const tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             setXAxis(tempXAxis);
@@ -220,6 +221,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
             (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
             }
+            <TickerData downloadedHistoricalData={downloadedHistoricalData}/>
             
             {chartData && <Line options={chartOptions} data={chartData} />}
         </div>
