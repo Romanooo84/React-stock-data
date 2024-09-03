@@ -90,3 +90,18 @@ export const getTickers = async (data) => {
   return(ticerList)
 };
 
+export const newsData = async (ticker)=>{
+  const url= `https://eodhd.com/api/news?${ticker}S&offset=0&limit=10&api_token=${token}&fmt=json`
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const downloadedData = await response.json();
+    return downloadedData;
+  } catch (error) {
+    console.error("Data error:", error);
+    return null; 
+  }
+
+}

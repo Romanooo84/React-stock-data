@@ -1,5 +1,6 @@
 import { Tickers } from './Tickers';
 import { Chart } from './Chart';
+import { News } from './news';
 import React,{ useState } from 'react';
 
 export const App = () => {
@@ -12,6 +13,7 @@ export const App = () => {
     <div>
       <Tickers setChartTicker={setChartTicker} setChartName={setChartName} setAddChartTicker={setAddChartTicker} setAddChartName={setAddChartName} addChartTicker={addChartTicker}/>
       <Chart chartTicker ={chartTicker} chartName={chartName} addChartTicker={addChartTicker} addChartName={addChartName}/>
+      <News chartTicker ={chartTicker}/>
     </div>
   );
 };

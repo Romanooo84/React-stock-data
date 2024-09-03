@@ -18,8 +18,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     const [addYAxis, setAddYAxis]= useState([])
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
     const [addDownloadedHistoricalData, setAddDownloadedHistoricalData] = useState([]);
-    //const [downloadedLiveData, setDownloadedLiveData] = useState([]);
-    //const [addDownloadedLiveData, setAddDownloadedLiveData] = useState([]);
+    const [downloadedLiveData, setDownloadedLiveData] = useState([]);
     const [chartData, setChartData] = useState(null);
     const [ticker, setTicker] = useState('AAPL.US');
     const [tickerName, setTickerName]=useState('Apple INC')
@@ -66,7 +65,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     }
 
     const onClick=(e)=>{
-        console.log(downloadedHistoricalData)
         if(e.target.id==='addRegression'){
             setIsRegression(true)
             const regYAxis=linearRegression(yAxis)
@@ -108,7 +106,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
         liveData(ticker)
             .then(data => {
                 if (data) {
-                    //setDownloadedLiveData(data);
+                    setDownloadedLiveData(data);
                 }
             });
 
@@ -120,15 +118,22 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             });
     }}, [ticker, startDate, endDate, addChartTicker]);
 
+
     useEffect(() => {
-        if (startDate&&endDate&&addChartTicker!=='none'&&addChartTicker!==undefined&&addChartTicker!==null){
-        liveData(addChartTicker)
+        const intervalID = setInterval(() => {
+            liveData(ticker)
             .then(data => {
                 if (data) {
-                    //setAddDownloadedLiveData(data);
+                    setDownloadedLiveData(data);
                 }
             });
+          }, 2500);
+    
+          return () => clearInterval(intervalID);
+      }, [ticker]);
 
+    useEffect(() => {
+        if (startDate&&endDate&&addChartTicker!=='none'&&addChartTicker!==undefined&&addChartTicker!==null){
         historicalData(addChartTicker, startDate, endDate)
             .then(data => {
                 if (data) {
@@ -210,19 +215,16 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     return (
         <div>
             <Select ref={selectRef}  menuIsOpen={openMenu(ticker)} placeholder={ticker} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
-            <Datepicker
-                onChange={onDateChange}
-                controls={['calendar']}
-                select="range"
-                touchUi={true}
-                inputComponent="input"
-                inputProps={{ id: 'startDate' }}/>   
+            <div>
+                <p>Change: {downloadedLiveData.change_p}%</p>
+                <p>Close: {downloadedLiveData.close}</p>
+            </div>
+            <Datepicker onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
             {isRegression!==true?
-            (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
-            (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
+                (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
+                (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
             }
             <TickerData downloadedHistoricalData={downloadedHistoricalData}/>
-            
             {chartData && <Line options={chartOptions} data={chartData} />}
         </div>
     );
