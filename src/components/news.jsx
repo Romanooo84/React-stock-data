@@ -7,8 +7,8 @@ export const News = ({ chartTicker }) => {
     useEffect(() => {
         newsData(chartTicker)
             .then(data => {
-                const markup = data.map(news => (
-                    <div key={news.title}> {/* Dodaj klucz dla każdego elementu */}
+                const markup = data.map((news, index) => (
+                    <div key={index}>
                         <p>{news.title}</p>
                         <p>{news.date}</p>
                         <p>{news.content}</p>
