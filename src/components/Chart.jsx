@@ -1,4 +1,5 @@
 import { liveData, historicalData } from "hooks/downloadData";
+import { linearRegression } from "hooks/math";
 import { createDate } from "hooks/createDate";
 import tickers from '../data/ticers'
 import Select from 'react-select';
@@ -28,6 +29,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState();
     const [dataset, setDataset] = useState([])
+    const [regYAxis, setRegYAxis] = useState([])
 
 
     useEffect(()=>{
@@ -44,9 +46,15 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                 borderColor: 'blue',
                 fill: false,
             },
+            {
+                label: `regression ${tickerName}`,
+                data: regYAxis,
+                borderColor: 'red',
+                fill: false,
+            },
         ],)
     }
-    },[tickerName,yAxis, startDate])
+    },[tickerName,yAxis,regYAxis, startDate])
     
 
     const onChange = (selectedOption) => {
@@ -121,11 +129,17 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                     borderColor: 'blue',
                     fill: false,
                 },
+                {
+                    label: `regression ${tickerName}`,
+                    data: regYAxis,
+                    borderColor: 'red',
+                    fill: false,
+                },
             ]
             setDataset(tempDataSet)
             setAddYAxis()   
         }
-    }, [addChartTicker, startDate, endDate, tickerName, yAxis]);
+    }, [addChartTicker, startDate, endDate, tickerName, yAxis, regYAxis]);
 
     useEffect(() => {
         
@@ -134,6 +148,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             const tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             setXAxis(tempXAxis);
             setYAxis(tempYAxis);
+            const tempLinerarRegression=linearRegression(tempYAxis)
+            setRegYAxis(tempLinerarRegression)
         }
     }, [downloadedHistoricalData]);
 
@@ -177,6 +193,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                     borderColor: 'green',
                     fill: false,
                 },
+                {
+                    label: `regression ${tickerName}`,
+                    data: regYAxis,
+                    borderColor: 'red',
+                    fill: false,
+                },
             ]
             const newDataSet= [...dataset, ...tempDataSet];
             setDataset(newDataSet)
@@ -191,6 +213,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                     fill: false,
                 },
                 {
+                    label: `regression ${tickerName}`,
+                    data: regYAxis,
+                    borderColor: 'red',
+                    fill: false,
+                },
+                {
                     label: addChartName,
                     data: addYAxis,
                     borderColor: 'green',
@@ -200,7 +228,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             setDataset(tempDataSet)
             setAddYAxis()
         }
-    },[addYAxis,yAxis, dataset, addChartName, tickerName])
+    },[addYAxis, yAxis, regYAxis, dataset, addChartName, tickerName])
 
 
     const chartOptions = {};
