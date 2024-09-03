@@ -94,7 +94,13 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
 
     useEffect(() => {
         if (searchTerm&&searchTerm.length>2){
-        const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));    
+            const results = tickers.filter(item => 
+                item.Name.toLowerCase().includes(searchTerm) &&
+                item.Type !== 'ETF' && 
+                item.Type !== 'FUND' &&
+                item.Type !== 'BOND' &&
+                item.Type !== 'Mutual Fund'
+            );
         const options = results.map(item => ({
           value: item.Country==='USA'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
           label: `${item.Code}-${item.Name}`
