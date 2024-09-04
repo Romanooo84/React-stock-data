@@ -150,9 +150,11 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 setAddYAxis()  
             }
             else if(isRegression&&chartTicker){
+                console.log(chartTicker)
                 setDataset(startData)
                 setAddYAxis()  
                 setIsRegression(false)
+                setChartTicker(null)
             }
             else if(isRegression&&!chartTicker){
                 const tempRegYAxis=linearRegression(yAxis)
@@ -166,11 +168,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
           setDataset(newDataSet)
           setAddYAxis()  
             }
-                
-            
-            
         }
-    }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData, isRegression, chartTicker]);
+    }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData, isRegression, chartTicker,setChartTicker]);
 
     useEffect(() => {
         
