@@ -59,13 +59,15 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         results = results.filter(item => item.Code===(newTicker))
         if (event.target.id==='CreateGraph'){
             setChartName(results[0].Name) 
+            setAddChartName(null)
+            setAddChartTicker(null)
         }
         else if(event.target.id==='Add to Graph')
             {setAddChartName(results[0].Name)
         }
         else if(event.target.id==='Remove from Graph')
-            {setAddChartName('none')
-             setAddChartTicker('none')
+            {setAddChartName(null)
+             setAddChartTicker(null)
         }
     
     }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker]);

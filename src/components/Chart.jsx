@@ -12,10 +12,11 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) => {
+export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, setChartTicker}) => {
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
     const [addYAxis, setAddYAxis]= useState([])
+    const [regYAxis, setRegYAxis]=useState([])
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
     const [addDownloadedHistoricalData, setAddDownloadedHistoricalData] = useState([]);
     const [downloadedLiveData, setDownloadedLiveData] = useState([]);
@@ -69,6 +70,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
         if(e.target.id==='addRegression'){
             setIsRegression(true)
             const tempRegYAxis=linearRegression(yAxis)
+            setRegYAxis(tempRegYAxis)
             const tempDataSet=[ {
                 label: `Regression ${tickerName}`,
                 data: tempRegYAxis,
@@ -76,6 +78,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                 fill: false,
             },]
           const newDataSet= [...dataset, ...tempDataSet]
+          console.log(dataset)
           setDataset(newDataSet)
         }
         else{
@@ -144,10 +147,34 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
             });
         }
         else if(startDate&&endDate){
-            setDataset(startData)
-            setAddYAxis()   
+            console.log(chartTicker)
+            if(!isRegression){
+                setDataset(startData)
+                setAddYAxis()  
+            }
+            else if(isRegression&&chartTicker){
+                setDataset(startData)
+                setAddYAxis()  
+                setIsRegression(false)
+            }
+            else if(isRegression&&!chartTicker){
+                const tempRegYAxis=linearRegression(yAxis)
+                setRegYAxis(tempRegYAxis)
+                const tempDataSet=[ {
+                label: `Regression ${tickerName}`,
+                data: tempRegYAxis,
+                borderColor: 'red',
+                fill: false,
+            },]
+          const newDataSet= [...startData, ...tempDataSet]
+          setDataset(newDataSet)
+          setAddYAxis()  
+            }
+                
+            
+            
         }
-    }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData]);
+    }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData, isRegression, chartTicker]);
 
     useEffect(() => {
         
@@ -175,18 +202,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
 
     useEffect(() => {
         if (xAxis.length > 0 && yAxis.length > 0 && ticker && dataset) {
-            console.log('render xAxis')
-            if (isRegression === false){
                 const tempData = {
                     labels: xAxis,
                     datasets: dataset
                 };
             setChartData(tempData);
             }
-            else {
-                
-            }
-        }
     }, [xAxis, yAxis, ticker, tickerName, dataset, isRegression]);
 
     useEffect(() => {
@@ -204,10 +225,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
     }, [searchTerm])
 
     useEffect(()=>{
+        
         if (addYAxis&&dataset.length===1&&addChartName!==null){
             const newDataSet= [...dataset, ...startData];
             setDataset(newDataSet)
             setAddYAxis()
+            
         }
         if (addYAxis&&dataset.length>1){
             const tempDataSet=[
@@ -218,11 +241,30 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName}) =>
                     fill: false,
                 },
             ]
+            if (!isRegression){
             const newDataSet= [...startData, ...tempDataSet]
             setDataset(newDataSet)
             setAddYAxis()
+            }
+            else if (isRegression&&dataset.length<3&&!chartTicker){
+            const newDataSet= [...dataset, ...tempDataSet]
+            setDataset(newDataSet)
+            setAddYAxis()
+            } 
+            else if (isRegression&&dataset.length===3&&!chartTicker){
+                const filtredDataSet = dataset.filter(item => item.borderColor !== 'green');
+                const newDataSet= [...filtredDataSet, ...tempDataSet]
+                setDataset(newDataSet)
+                setAddYAxis()
+                } 
+            else if (isRegression&&chartTicker){
+                setChartTicker(null)   
+                setDataset(startData)
+                setAddYAxis()
+                
+                } 
         }
-    },[addYAxis, yAxis, dataset, addChartName, tickerName, startData])
+    },[addYAxis, yAxis, dataset, addChartName, tickerName, startData, chartTicker, isRegression, setChartTicker])
 
 
     const chartOptions = {};

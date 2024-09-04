@@ -12,7 +12,7 @@ export const App = () => {
   return (
     <div>
       <Tickers setChartTicker={setChartTicker} setChartName={setChartName} setAddChartTicker={setAddChartTicker} setAddChartName={setAddChartName} addChartTicker={addChartTicker}/>
-      <Chart chartTicker ={chartTicker} chartName={chartName} addChartTicker={addChartTicker} addChartName={addChartName}/>
+      <Chart chartTicker ={chartTicker} chartName={chartName} addChartTicker={addChartTicker} addChartName={addChartName} setChartTicker={setChartTicker}/>
       <News chartTicker ={chartTicker}/>
     </div>
   );
