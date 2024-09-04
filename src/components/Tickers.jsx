@@ -48,7 +48,10 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         let country = ticker.split('.')[1];
         let results = tickers.filter(item => item.Code.includes(newTicker)); 
         if (event.target.id==='CreateGraph'){
-        setChartTicker(event.target.name); }
+        setChartTicker(event.target.name)
+        setAddChartName(null)
+        setAddChartTicker(null) 
+        }
         else{setAddChartTicker(event.target.name);
         }
         if (country!=='US'){
