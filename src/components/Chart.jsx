@@ -16,7 +16,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
     const [addYAxis, setAddYAxis]= useState([])
-    const [regYAxis, setRegYAxis]=useState([])
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
     const [addDownloadedHistoricalData, setAddDownloadedHistoricalData] = useState([]);
     const [downloadedLiveData, setDownloadedLiveData] = useState([]);
@@ -70,7 +69,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
         if(e.target.id==='addRegression'){
             setIsRegression(true)
             const tempRegYAxis=linearRegression(yAxis)
-            setRegYAxis(tempRegYAxis)
             const tempDataSet=[ {
                 label: `Regression ${tickerName}`,
                 data: tempRegYAxis,
@@ -147,7 +145,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             });
         }
         else if(startDate&&endDate){
-            console.log(chartTicker)
             if(!isRegression){
                 setDataset(startData)
                 setAddYAxis()  
@@ -159,7 +156,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             }
             else if(isRegression&&!chartTicker){
                 const tempRegYAxis=linearRegression(yAxis)
-                setRegYAxis(tempRegYAxis)
                 const tempDataSet=[ {
                 label: `Regression ${tickerName}`,
                 data: tempRegYAxis,
