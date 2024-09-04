@@ -30,10 +30,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         setSearch(event.toLowerCase())
     }
 
-    const placeholder=useCallback((index)=>{
-        return tickerList[index] || 'Select ticker';
-    },[tickerList])
-
     const openMenu=useCallback((index)=>{
         if ((search && search.length > 2) && selectRef.current === index) {
             return true;
@@ -80,7 +76,21 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             multiplyData(tickerList)
               .then(downloadedData => {
                 if (downloadedData) {
-                  setMultiplyList(downloadedData);
+                  const markup = downloadedData.map(data => {
+                        const newTicker = data.code.split('.')[0];
+                        let country = data.code.split('.')[1];
+                        let results = tickers.filter(item => item.Code.includes(newTicker))
+                        if (country!=='US'){
+                            results = results.filter(item => item.Exchange.includes(country)); 
+                        } else  {
+                            results = results.filter(item => item.Country.includes('USA'))
+                        }
+                        results = results.filter(item => item.Code===(newTicker))
+                        data.Name = (results[0].Name)
+                        return data
+                    })
+                    console.log(markup)
+                    setMultiplyList(markup);
                 }
               });
           }, 2500);
@@ -92,7 +102,21 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             multiplyData(tickerList)
               .then(downloadedData => {
                 if (downloadedData) {
-                  setMultiplyList(downloadedData);
+                    const markup = downloadedData.map(data => {
+                        const newTicker = data.code.split('.')[0];
+                        let country = data.code.split('.')[1];
+                        let results = tickers.filter(item => item.Code.includes(newTicker))
+                        if (country!=='US'){
+                            results = results.filter(item => item.Exchange.includes(country)); 
+                        } else  {
+                            results = results.filter(item => item.Country.includes('USA'))
+                        }
+                        results = results.filter(item => item.Code===(newTicker))
+                        data.Name = (results[0].Name)
+                        return data
+                    })
+                    console.log(markup)
+                    setMultiplyList(markup);
                 }
               });
           }, [tickerList]);
@@ -122,10 +146,10 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
 
 
      useEffect(() => {
-        if (multiplyList.length > 0) {
+         if (multiplyList.length > 0) {
             const markup = multiplyList.map((ticker, index) => (
                 <div key={index} name={index}>
-                    <Select ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                    <Select ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
                     <div>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
                     <div>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
                     <button id='CreateGraph' name={ticker.code}onClick={onClick}>Create Graph</button>
@@ -138,7 +162,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             ));
             setList(markup);
         }
-    }, [multiplyList, options, addChartTicker, onChange, openMenu, placeholder, onClick]);
+    }, [multiplyList, options, addChartTicker, onChange, openMenu, onClick]);
 
     
     useEffect(() => {

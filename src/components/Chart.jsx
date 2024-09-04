@@ -34,15 +34,16 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     const startData = useMemo(() => [
         {
-          label: tickerName,
+          label: `${ticker} - ${tickerName}`,
           data: yAxis,
           borderColor: 'blue',
           fill: false,
         },
-      ], [tickerName, yAxis]);
+      ], [ticker, tickerName, yAxis]);
 
     const onChange = (selectedOption) => {
-       setTicker(selectedOption.value)   
+        setTicker(selectedOption.value)   
+        console.log(selectedOption.label)
        setTickerName(selectedOption.label)
     }
 
@@ -76,7 +77,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 fill: false,
             },]
           const newDataSet= [...dataset, ...tempDataSet]
-          console.log(dataset)
           setDataset(newDataSet)
         }
         else{
@@ -94,13 +94,13 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
         setStartDate(createDate(beginigstartDate))
         setEndDate(createDate(beginigEndDate))
     }
-    },[tickerName, startDate])
+    },[startDate])
 
-    useEffect(()=>{
-        if (chartTicker&&startDate&&endDate){
+    useEffect(() => {
+        if (chartTicker && startDate && endDate) {
             setTicker(chartTicker)
             setTickerName(chartName)  
-        }},[chartTicker, startDate, endDate, chartName]
+        }},[chartTicker, startDate, endDate, chartName, setChartTicker]
     )
 
     useEffect(() => {
@@ -118,7 +118,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                     setDownloadedHistoricalData(data);
                 }
             });
-    }}, [ticker, startDate, endDate, addChartTicker]);
+    }}, [ticker, startDate, endDate, addChartTicker, chartTicker]);
 
 
     useEffect(() => {
@@ -150,7 +150,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 setAddYAxis()  
             }
             else if(isRegression&&chartTicker){
-                console.log(chartTicker)
                 setDataset(startData)
                 setAddYAxis()  
                 setIsRegression(false)
@@ -203,7 +202,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 };
             setChartData(tempData);
             }
-    }, [xAxis, yAxis, ticker, tickerName, dataset, isRegression]);
+    }, [xAxis, yAxis, ticker, dataset, isRegression]);
 
     useEffect(() => {
         setSearchTerm(search)
@@ -214,7 +213,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
         const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));    
         const options = results.map(item => ({
         value: item.Country==='USA'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
-        label: `${item.Code}-${item.Name}`
+        label: `${item.Name}`
         }));
         setOptions(options);}
     }, [searchTerm])
@@ -230,7 +229,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
         if (addYAxis&&dataset.length>1){
             const tempDataSet=[
                 {
-                    label: addChartName,
+                    label: `${addChartTicker} - ${addChartName}$`,
                     data: addYAxis,
                     borderColor: 'green',
                     fill: false,
@@ -259,14 +258,14 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 
                 } 
         }
-    },[addYAxis, yAxis, dataset, addChartName, tickerName, startData, chartTicker, isRegression, setChartTicker])
+    },[addYAxis, yAxis, dataset, addChartName, addChartTicker, startData, chartTicker, isRegression, setChartTicker])
 
 
     const chartOptions = {};
 
     return (
         <div>
-            <Select ref={selectRef}  menuIsOpen={openMenu(ticker)} placeholder={ticker} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
+            <Select ref={selectRef} menuIsOpen={openMenu(ticker)} placeholder={ticker} value={{ label: `${ticker} - ${tickerName}`, value: ticker }} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
             <div>
                 <p>Change: {downloadedLiveData.change_p}%</p>
                 <p>Close: {downloadedLiveData.close}</p>
