@@ -164,11 +164,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
     }, [multiplyList, options, addChartTicker, onChange, openMenu, onClick]);
 
-    
-    useEffect(() => {
-        setOptions([{ label: '3 char', value: 'initial' }]);
-     },[]);
-
     return(
             <div>{list}</div>
     )
