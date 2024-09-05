@@ -180,7 +180,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             const markup = multiplyList.map((ticker, index) => (
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
-                            <div className={css.slectDiv} tabindex='-1'>
+                            <div className={css.slectDiv}>
                             <Select className={css.selectTicker} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
                             </div>
                             <div className={css.buttonsDiv}>
@@ -203,6 +203,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     }, [multiplyList, options, addChartTicker, onChange, openMenu, onClick, customStyles]);
 
     return(
-            <div>{list}</div>
+            <div className={css.mainDiv}>{list}</div>
     )
 }

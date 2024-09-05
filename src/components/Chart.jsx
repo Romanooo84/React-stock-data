@@ -290,17 +290,21 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     return (
         <div className={css.mainDiv}>
-            <Select className={css.slectDiv} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker)} placeholder={ticker} value={{ label: `${ticker} - ${tickerName}`, value: ticker }} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
-            <div>
-                <p>Change: {downloadedLiveData.change_p}%</p>
-                <p>Close: {downloadedLiveData.close}</p>
+            <div className={css.slectDiv}>
+                <Select className={css.slect} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker)} placeholder={ticker} value={{ label: `${ticker} - ${tickerName}`, value: ticker }} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
+                <div className={css.dataDiv}>
+                        <p>{downloadedLiveData.change_p}%</p>
+                        <p>{downloadedLiveData.close}</p>
+                </div>
             </div>
-            <Datepicker onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)}  onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
-            {isRegression!==true?
-                (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
-                (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
-            }
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={endDate} />
+            <div className={css.datepickerDiv}>
+                <Datepicker className={css.datepicker} onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)} placeholder={'select date'} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
+                {isRegression!==true?
+                    (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
+                    (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
+                    }
+            </div>
             {chartData && <Line options={chartOptions} data={chartData} />}
         </div>
     );

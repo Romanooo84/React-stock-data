@@ -1,0 +1,23 @@
+@media screen and (min-width: 320px) {
+
+}
+
+@media screen and (max-width: 480px) {
+
+    .mainDiv{
+        padding-top: 10px;
+        display: flex;
+        justify-content: space-around
+    }
+
+        .paragraphDate {
+            font-family: Oswald;
+            font-size: 17px;
+            padding-bottom: 5px;
+        }
+
+    .paragraph{
+        font-family: Oswald;
+        font-size: 13px;
+    }
+}
