@@ -3,6 +3,7 @@ import { linearRegression } from "hooks/math";
 import { createDate } from "hooks/createDate";
 import { TickerData } from "./TickerData";
 import tickers from '../data/ticers'
+import css from '../styles/Chart.module.css'
 import Select from 'react-select';
 import { Datepicker } from '@mobiscroll/react';
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
@@ -31,6 +32,28 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     const [isRegression, setIsRegression] = useState(false)
     const [datepickerOpen, setDatepickerOpen] = useState(false);
     const selectRef = useRef(null);
+
+    const customStyles = useMemo(() => ({
+        control: (provided, state) => ({
+            ...provided,
+            borderTop: 'none',
+            borderBottom: 'none',
+            borderLeft: '0px solid transparent',
+            borderRight: '0px solid transparent',
+            boxShadow: state.isFocused ? 'none' : 'none', // Brak cienia w focusie
+            '&:hover': {
+                borderBottom: '2px solid blue', // Efekt hover na dolnej krawędzi
+            },
+        }),
+        dropdownIndicator: (provided) => ({
+            ...provided,
+            display: 'none' // Ukrywa strzałkę rozwijaną
+        }),
+        indicatorSeparator: (provided) => ({
+            ...provided,
+            display: 'none' // Ukrywa separator
+        })
+    }), []);
 
     const startData = useMemo(() => [
         {
@@ -266,8 +289,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     const chartOptions = {};
 
     return (
-        <div>
-            <Select ref={selectRef} menuIsOpen={openMenu(ticker)} placeholder={ticker} value={{ label: `${ticker} - ${tickerName}`, value: ticker }} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
+        <div className={css.mainDiv}>
+            <Select className={css.slectDiv} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker)} placeholder={ticker} value={{ label: `${ticker} - ${tickerName}`, value: ticker }} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
             <div>
                 <p>Change: {downloadedLiveData.change_p}%</p>
                 <p>Close: {downloadedLiveData.close}</p>
