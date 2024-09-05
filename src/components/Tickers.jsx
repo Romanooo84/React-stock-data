@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
 import { multiplyData } from '../hooks/downloadData';
-import { GiChart } from "react-icons/gi";
-import { TbChartSankey } from "react-icons/tb";
+import { BiLineChart } from "react-icons/bi";
+import { BiSolidAddToQueue } from "react-icons/bi";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 import css from '../styles/Tickers.module.css'
 
@@ -16,19 +16,27 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
 
-    const dropdownIndicatorStyles = (base, state) => {
-        let changes = {
-          display: 'none'
-        };
-        return Object.assign(base, changes);
-      };
-
-      const indicatorSeparatorStyles = (base, state) => {
-        let changes = {
-          display: 'none'
-        };
-        return Object.assign(base, changes);
-      };
+    const customStyles = useMemo(() => ({
+        control: (provided, state) => ({
+            ...provided,
+            borderTop: 'none',
+            borderBottom: 'none',
+            borderLeft: '0px solid transparent',
+            borderRight: '0px solid transparent',
+            boxShadow: state.isFocused ? 'none' : 'none', // Brak cienia w focusie
+            '&:hover': {
+                borderBottom: '2px solid blue', // Efekt hover na dolnej krawędzi
+            },
+        }),
+        dropdownIndicator: (provided) => ({
+            ...provided,
+            display: 'none' // Ukrywa strzałkę rozwijaną
+        }),
+        indicatorSeparator: (provided) => ({
+            ...provided,
+            display: 'none' // Ukrywa separator
+        })
+    }), []);
 
     const onChange = useCallback((selectedOption, index) => {
         const newTicker = selectedOption.value
@@ -58,11 +66,11 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
 
     const onClick = useCallback((event) => {
         const ticker=event.target.name
-        console.log(ticker)
+        const id = event.target.id
         const newTicker = ticker.split('.')[0];
         let country = ticker.split('.')[1];
         let results = tickers.filter(item => item.Code.includes(newTicker)); 
-        if (event.target.id==='CreateGraph'){
+        if (id==='CreateGraph'){
         setChartTicker(event.target.name)
         setAddChartName(null)
         setAddChartTicker(null) 
@@ -75,15 +83,18 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             results = results.filter(item => item.Country.includes('USA'))
         }
         results = results.filter(item => item.Code===(newTicker))
-        if (event.target.id==='CreateGraph'){
+        if (id==='CreateGraph'){
+            console.log(results[0])
             setChartName(results[0].Name) 
+            setChartTicker(ticker) 
             setAddChartName(null)
             setAddChartTicker(null)
         }
-        else if(event.target.id==='Add to Graph')
+        else if(id==='Add to Graph')
             {setAddChartName(results[0].Name)
+            setAddChartTicker(ticker) 
         }
-        else if(event.target.id==='Remove from Graph')
+        else if(id==='Remove from Graph')
             {setAddChartName(null)
              setAddChartTicker(null)
         }
@@ -169,13 +180,15 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             const markup = multiplyList.map((ticker, index) => (
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
-                            <Select className={css.selectTicker} styles={{dropdownIndicator: dropdownIndicatorStyles, indicatorSeparator: indicatorSeparatorStyles}} ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                            <div className={css.slectDiv} tabindex='-1'>
+                            <Select className={css.selectTicker} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                            </div>
                             <div className={css.buttonsDiv}>
-                                <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><GiChart  size={27} /></button>
+                                <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><BiLineChart className={`${css.icon} ${css.iconCreate}`}/></button>
                                 {ticker.code === addChartTicker ? (
-                                <button className={css.button} id='Remove from Graph' name={ticker.code} onClick={onClick}><RiDeleteBack2Fill size={27}/></button>
+                                <button className={css.button} id='Remove from Graph' name={ticker.code} onClick={onClick}><RiDeleteBack2Fill className={`${css.icon} ${css.iconRemove}`}/></button>
                                 ) : (
-                            <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><TbChartSankey size={27}/></button>
+                            <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><BiSolidAddToQueue className={`${css.icon} ${css.iconAdd}`} /></button>
                             )}
                             </div>
                         </div>
@@ -187,7 +200,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             ));
             setList(markup);
         }
-    }, [multiplyList, options, addChartTicker, onChange, openMenu, onClick]);
+    }, [multiplyList, options, addChartTicker, onChange, openMenu, onClick, customStyles]);
 
     return(
             <div>{list}</div>

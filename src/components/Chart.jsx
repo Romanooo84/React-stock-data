@@ -98,6 +98,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (chartTicker && startDate && endDate) {
+            console.log(chartName)
             setTicker(chartTicker)
             setTickerName(chartName)  
         }},[chartTicker, startDate, endDate, chartName, setChartTicker]
@@ -105,6 +106,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (startDate!==null&& endDate && ticker){
+            console.log(ticker)
         liveData(ticker)
             .then(data => {
                 if (data) {
