@@ -2,6 +2,10 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
 import { multiplyData } from '../hooks/downloadData';
+import { GiChart } from "react-icons/gi";
+import { TbChartSankey } from "react-icons/tb";
+import { RiDeleteBack2Fill } from "react-icons/ri";
+import css from '../styles/Tickers.module.css'
 
 export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker, addChartTicker})=>{
     const selectRef = useRef(null);
@@ -11,6 +15,20 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     const [searchTerm, setSearchTerm]=useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
+
+    const dropdownIndicatorStyles = (base, state) => {
+        let changes = {
+          display: 'none'
+        };
+        return Object.assign(base, changes);
+      };
+
+      const indicatorSeparatorStyles = (base, state) => {
+        let changes = {
+          display: 'none'
+        };
+        return Object.assign(base, changes);
+      };
 
     const onChange = useCallback((selectedOption, index) => {
         const newTicker = selectedOption.value
@@ -40,6 +58,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
 
     const onClick = useCallback((event) => {
         const ticker=event.target.name
+        console.log(ticker)
         const newTicker = ticker.split('.')[0];
         let country = ticker.split('.')[1];
         let results = tickers.filter(item => item.Code.includes(newTicker)); 
@@ -148,16 +167,22 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
      useEffect(() => {
          if (multiplyList.length > 0) {
             const markup = multiplyList.map((ticker, index) => (
-                <div key={index} name={index}>
-                    <Select ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
-                    <div>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
-                    <div>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
-                    <button id='CreateGraph' name={ticker.code}onClick={onClick}>Create Graph</button>
-                    {ticker.code === addChartTicker ? (
-                    <button id='Remove from Graph' name={ticker.code} onClick={onClick}>Remove from Graph</button>
-                     ) : (
-                    <button id='Add to Graph' name={ticker.code} onClick={onClick}>Add to Graph</button>
-                     )}
+                <div className={css.tickersDiv} key={index} name={index}>
+                        <div className={css.inputDataDiv}>
+                            <Select className={css.selectTicker} styles={{dropdownIndicator: dropdownIndicatorStyles, indicatorSeparator: indicatorSeparatorStyles}} ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} placeholder={placeholder(index)} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                            <div className={css.buttonsDiv}>
+                                <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><GiChart  size={27} /></button>
+                                {ticker.code === addChartTicker ? (
+                                <button className={css.button} id='Remove from Graph' name={ticker.code} onClick={onClick}><RiDeleteBack2Fill size={27}/></button>
+                                ) : (
+                            <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><TbChartSankey size={27}/></button>
+                            )}
+                            </div>
+                        </div>
+                        <div className={css.dataDiv}>
+                            <div className={css.simpleDatadiv}>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
+                            <div className={css.simpleDatadiv}>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
+                        </div>
                 </div>
             ));
             setList(markup);

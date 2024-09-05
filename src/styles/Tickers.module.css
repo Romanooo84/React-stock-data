@@ -1,0 +1,48 @@
+
+@media screen and (min-width: 320px) {
+}
+
+@media screen and (max-width: 767px) {
+
+.inputDataDiv{
+    padding-top: 10px;
+    display: flex ;
+    justify-content: space-between;
+}
+
+.tickersDiv{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    
+}
+
+.selectTicker{
+    min-width: 200px;
+}
+
+.buttonsDiv{
+    display: flex;
+    gap: 10px
+}
+
+.button{
+    width: 40px;
+}
+
+.dataDiv{
+    display: flex;
+    padding-top: 5px;
+    gap: 10px;
+}
+
+.simpleDatadiv{
+    width: 70px;
+}
+
+.FaChartLine{
+    width: 35px;
+    height: 35px;
+}
+
+}
