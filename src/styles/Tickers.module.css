@@ -16,7 +16,7 @@
     .inputDataDiv{
         padding-top: 15px;
         display: flex ;
-        justify-content: space-between;
+        justify-content: space-between
     }
 
     .tickersDiv{
@@ -24,6 +24,7 @@
         justify-content: space-around;
         flex-direction: column;
         border-bottom: 2px solid blue;
+        padding-bottom: 10px;
         
     }
     .slectDiv{
@@ -38,7 +39,7 @@
 
 
     .selectTicker{
-        width: 200px;
+        width: 150px;
         height: 100%;
         
     }
@@ -46,11 +47,12 @@
 
     .buttonsDiv{
         display: flex;
-        gap: 10px
+        gap: 5px
     }
 
     .button{
-        width: 35px;
+        width: 25px;
+        height: 25px;
         padding: 0;
         border: 0;
         background-color: transparent;
@@ -60,18 +62,19 @@
 
     .dataDiv{
         display: flex;
-        padding-top: 20px;
+        padding-top: 5px;
         padding-bottom: 5px;
         gap: 10px;
-        justify-content: space-around;
-        width: 200px
+        justify-content: space-evenly;
+        width: 100px;
+        align-items: center
         
     }
 
     .simpleDatadiv{
         width: 70px;
         font-family: Oswald;
-        font-size: large;
+        font-size: 12px;
     }
 
     .icon{
@@ -91,5 +94,7 @@
     .iconRemove{
         color: red;
     }
+
+  
 
 }

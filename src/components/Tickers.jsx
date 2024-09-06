@@ -19,6 +19,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
             ...provided,
+            minHeight: 10,
             borderTop: 'none',
             borderBottom: 'none',
             borderLeft: '0px solid transparent',
@@ -183,6 +184,10 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                             <div className={css.slectDiv}>
                             <Select className={css.selectTicker} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
                             </div>
+                            <div className={css.dataDiv}>
+                                <div className={css.simpleDatadiv}>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
+                                <div className={css.simpleDatadiv}>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
+                            </div>
                             <div className={css.buttonsDiv}>
                                 <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><BiLineChart className={`${css.icon} ${css.iconCreate}`}/></button>
                                 {ticker.code === addChartTicker ? (
@@ -192,10 +197,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                             )}
                             </div>
                         </div>
-                        <div className={css.dataDiv}>
-                            <div className={css.simpleDatadiv}>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
-                            <div className={css.simpleDatadiv}>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
-                        </div>
+            
                 </div>
             ));
             setList(markup);
