@@ -10,7 +10,7 @@
 
     .mainDiv .tickersDiv:last-child {
             padding-bottom: 20px;
-            border-bottom: 2px solid red;
+            border-bottom: 4px solid red;
         }
 
     .inputDataDiv{
