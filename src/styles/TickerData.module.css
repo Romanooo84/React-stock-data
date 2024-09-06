@@ -7,17 +7,19 @@
     .mainDiv{
         padding-top: 10px;
         display: flex;
-        justify-content: space-around
+        flex-wrap: wrap;
     }
 
     .partDiv{
-        flex-basis: calc((100% - 24px)/42);
+        display: flex;
     }
 
     .paragraphDate {
-            font-family: Oswald;
-            font-size: 17px;
-            padding-bottom: 5px;
+        display: flex;
+        font-family: Oswald;
+        font-size: 17px;
+        width: 120px;
+        align-items: center;
         }
 
     .paragraph{

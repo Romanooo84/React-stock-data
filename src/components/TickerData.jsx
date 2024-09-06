@@ -20,7 +20,7 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
             {actualDate && downloadedHistoricalData.length>0 ? (    
                 <div className={css.mainDiv}>
                     <div className={css.partDiv}>
-                        <p className={css.paragraphDate}>Date: {downloadedHistoricalData[0].date}</p>
+                        <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>
                         <p className={css.paragraph}>Open: {downloadedHistoricalData[0].open}</p>
                         <p className={css.paragraph}>Close: {downloadedHistoricalData[0].close}</p>
                         <p className={css.paragraph}>High: {downloadedHistoricalData[0].high}</p>
@@ -28,7 +28,7 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
                         <p className={css.paragraph}>Volume: {downloadedHistoricalData[0].volume}</p>
                     </div>
                     <div className={css.partDiv}>
-                        <p className={css.paragraphDate}>Date: {endDate}</p>
+                        <p className={css.paragraphDate}>{endDate}</p>
                         <p className={css.paragraph}>Open: {downloadedLiveData.open}</p>
                         <p className={css.paragraph}>Close: {downloadedLiveData.close}</p>
                         <p className={css.paragraph}>High: {downloadedLiveData.high}</p>
@@ -41,7 +41,7 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
                 downloadedHistoricalData.length > 0 && (
                     <div className={css.mainDiv}>
                         <div className={css.partDiv}>
-                            <p className={css.paragraphDate}>Date: {downloadedHistoricalData[0].date}</p>
+                            <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>
                             <p className={css.paragraph}>Open: {downloadedHistoricalData[0].open}</p>
                             <p className={css.paragraph}>Close: {downloadedHistoricalData[0].close}</p>
                             <p className={css.paragraph}>High: {downloadedHistoricalData[0].high}</p>
@@ -49,7 +49,7 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
                             <p className={css.paragraph}>Volume: {downloadedHistoricalData[0].volume}</p>
                         </div>
                         <div className={css.partDiv}>
-                            <p className={css.paragraphDate}>Date: {downloadedHistoricalData[downloadedHistoricalData.length - 1].date}</p>
+                            <p className={css.paragraphDate}>{downloadedHistoricalData[downloadedHistoricalData.length - 1].date}</p>
                             <p className={css.paragraph}>Open: {downloadedHistoricalData[downloadedHistoricalData.length - 1].open}</p>
                             <p className={css.paragraph}>Close: {downloadedHistoricalData[downloadedHistoricalData.length - 1].close}</p>
                             <p className={css.paragraph}>High: {downloadedHistoricalData[downloadedHistoricalData.length - 1].high}</p>
