@@ -62,6 +62,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
           data: yAxis,
           borderColor: 'blue',
           fill: false,
+          borderWidth: 2,
+          pointRadius: 0,
         },
       ], [ticker, tickerName, yAxis]);
 
@@ -98,6 +100,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 data: tempRegYAxis,
                 borderColor: 'red',
                 fill: false,
+                borderWidth: 2,
+                pointRadius: 0,
             },]
           const newDataSet= [...dataset, ...tempDataSet]
           setDataset(newDataSet)
@@ -187,6 +191,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 data: tempRegYAxis,
                 borderColor: 'red',
                 fill: false,
+                borderWidth: 2,
+                pointRadius: 0,
             },]
           const newDataSet= [...startData, ...tempDataSet]
           setDataset(newDataSet)
@@ -265,6 +271,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                     data: addYAxis,
                     borderColor: 'green',
                     fill: false,
+                    borderWidth: 2,
+                    pointRadius: 0,
                 },
             ]
             if (!isRegression){
