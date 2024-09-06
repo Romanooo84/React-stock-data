@@ -52,8 +52,9 @@
         padding-bottom: 20px;
         display: flex;
         justify-content: space-around;
-        
-
     }
 
+    .chart{
+        height: 700px;
+    }
 }

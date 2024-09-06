@@ -286,7 +286,11 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     },[addYAxis, yAxis, dataset, addChartName, addChartTicker, startData, chartTicker, isRegression, setChartTicker])
 
 
-    const chartOptions = {};
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 1,
+    };
 
     return (
         <div className={css.mainDiv}>
@@ -304,7 +308,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                     (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
                     }
             </div>
-            {chartData && <Line options={chartOptions} data={chartData} />}
+            {chartData && <Line className={css.chart}  options={chartOptions} data={chartData} />}
         </div>
     );
 };
