@@ -10,7 +10,11 @@
         justify-content: space-around
     }
 
-        .paragraphDate {
+    .partDiv{
+        flex-basis: calc((100% - 24px)/42);
+    }
+
+    .paragraphDate {
             font-family: Oswald;
             font-size: 17px;
             padding-bottom: 5px;

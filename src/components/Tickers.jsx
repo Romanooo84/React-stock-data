@@ -85,7 +85,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
         results = results.filter(item => item.Code===(newTicker))
         if (id==='CreateGraph'){
-            console.log(results[0])
             setChartName(results[0].Name) 
             setChartTicker(ticker) 
             setAddChartName(null)
@@ -120,7 +119,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                         data.Name = (results[0].Name)
                         return data
                     })
-                    console.log(markup)
                     setMultiplyList(markup);
                 }
               });
@@ -146,7 +144,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                         data.Name = (results[0].Name)
                         return data
                     })
-                    console.log(markup)
                     setMultiplyList(markup);
                 }
               });

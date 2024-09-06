@@ -5,6 +5,7 @@ import { TickerData } from "./TickerData";
 import tickers from '../data/ticers'
 import css from '../styles/Chart.module.css'
 import Select from 'react-select';
+import { MdShowChart } from "react-icons/md";
 import { Datepicker } from '@mobiscroll/react';
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { useEffect, useState, useRef, useMemo } from "react";
@@ -40,18 +41,18 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             borderBottom: 'none',
             borderLeft: '0px solid transparent',
             borderRight: '0px solid transparent',
-            boxShadow: state.isFocused ? 'none' : 'none', // Brak cienia w focusie
+            boxShadow: state.isFocused ? 'none' : 'none',
             '&:hover': {
-                borderBottom: '2px solid blue', // Efekt hover na dolnej krawędzi
+                borderBottom: '2px solid blue', 
             },
         }),
         dropdownIndicator: (provided) => ({
             ...provided,
-            display: 'none' // Ukrywa strzałkę rozwijaną
+            display: 'none'
         }),
         indicatorSeparator: (provided) => ({
             ...provided,
-            display: 'none' // Ukrywa separator
+            display: 'none'
         })
     }), []);
 
@@ -66,7 +67,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     const onChange = (selectedOption) => {
         setTicker(selectedOption.value)   
-        console.log(selectedOption.label)
        setTickerName(selectedOption.label)
     }
 
@@ -121,7 +121,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (chartTicker && startDate && endDate) {
-            console.log(chartName)
             setTicker(chartTicker)
             setTickerName(chartName)  
         }},[chartTicker, startDate, endDate, chartName, setChartTicker]
@@ -129,7 +128,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (startDate!==null&& endDate && ticker){
-            console.log(ticker)
         liveData(ticker)
             .then(data => {
                 if (data) {
@@ -171,16 +169,18 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
         }
         else if(startDate&&endDate){
             if(!isRegression){
+                console.log(1)
                 setDataset(startData)
                 setAddYAxis()  
             }
             else if(isRegression&&chartTicker){
+                console.log(2)
                 setDataset(startData)
                 setAddYAxis()  
-                setIsRegression(false)
                 setChartTicker(null)
             }
             else if(isRegression&&!chartTicker){
+                console.log(3)
                 const tempRegYAxis=linearRegression(yAxis)
                 const tempDataSet=[ {
                 label: `Regression ${tickerName}`,
@@ -196,8 +196,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData, isRegression, chartTicker,setChartTicker]);
 
     useEffect(() => {
-        
-        if (downloadedHistoricalData.length > 0 && downloadedLiveData.code) {
+        if (downloadedHistoricalData.length > 0 && downloadedLiveData.close) {
+            console.log(downloadedLiveData.close)
             let tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
             let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             const tempDate = new Date(downloadedLiveData.timestamp * 1000);
@@ -210,6 +210,13 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             setXAxis(tempXAxis);
             setYAxis(tempYAxis);
         }
+        else if (downloadedHistoricalData.length > 0) {
+            console.log(downloadedLiveData)
+                let tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
+                let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
+                setXAxis(tempXAxis);
+                setYAxis(tempYAxis);
+            }
     }, [downloadedHistoricalData, downloadedLiveData, endDate]);
 
     useEffect(() => {
@@ -302,10 +309,10 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             </div>
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={endDate} />
             <div className={css.datepickerDiv}>
-                <Datepicker className={css.datepicker} onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)} placeholder={'select date'} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
+                <Datepicker className={css.datepicker} onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
                 {isRegression!==true?
-                    (<button id='addRegression' name='button' onClick={onClick}>Add regression</button>):
-                    (<button id='removeRegression' name='button' onClick={onClick}>Remove regression</button>)
+                    (<button className={css.button} id='addRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconAdd}`} /></button>):
+                    (<button className={css.button} id='removeRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconRemove}`}/></button>)
                     }
             </div>
             {chartData && <Line className={css.chart}  options={chartOptions} data={chartData} />}
