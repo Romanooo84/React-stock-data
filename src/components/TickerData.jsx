@@ -21,19 +21,23 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
                 <div className={css.mainDiv}>
                     <div className={css.partDiv}>
                         <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>
-                        <p className={css.paragraph}>Open: {downloadedHistoricalData[0].open}</p>
-                        <p className={css.paragraph}>Close: {downloadedHistoricalData[0].close}</p>
-                        <p className={css.paragraph}>High: {downloadedHistoricalData[0].high}</p>
-                        <p className={css.paragraph}>Low: {downloadedHistoricalData[0].low}</p>
-                        <p className={css.paragraph}>Volume: {downloadedHistoricalData[0].volume}</p>
+                        <div>
+                            <p className={css.paragraph}>Open: {parseFloat(downloadedHistoricalData[0].open).toFixed(2)}</p>
+                            <p className={css.paragraph}>Close: {parseFloat(downloadedHistoricalData[0].close).toFixed(2)}</p>
+                            <p className={css.paragraph}>High: {parseFloat(downloadedHistoricalData[0].high).toFixed(2)}</p>
+                            <p className={css.paragraph}>Low: {parseFloat(downloadedHistoricalData[0].low).toFixed(2)}</p>
+                            <p className={css.paragraph}>Volume: {downloadedHistoricalData[0].volume}</p>
+                        </div>
                     </div>
                     <div className={css.partDiv}>
                         <p className={css.paragraphDate}>{endDate}</p>
-                        <p className={css.paragraph}>Open: {downloadedLiveData.open}</p>
-                        <p className={css.paragraph}>Close: {downloadedLiveData.close}</p>
-                        <p className={css.paragraph}>High: {downloadedLiveData.high}</p>
-                        <p className={css.paragraph}>Low: {downloadedLiveData.low}</p>
-                        <p className={css.paragraph}>Volume: {downloadedLiveData.volume}</p>
+                        <div>
+                            <p className={css.paragraph}>Open: {parseFloat(downloadedLiveData.open).toFixed(2)}</p>
+                            <p className={css.paragraph}>Close: {parseFloat(downloadedLiveData.close).toFixed(2)}</p>
+                            <p className={css.paragraph}>High: {parseFloat(downloadedLiveData.high).toFixed(2)}</p>
+                            <p className={css.paragraph}>Low: {parseFloat(downloadedLiveData.low).toFixed(2)}</p>
+                            <p className={css.paragraph}>Volume: {downloadedLiveData.volume}</p>
+                        </div>
                     </div>
                 </div>
                 
@@ -42,19 +46,23 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
                     <div className={css.mainDiv}>
                         <div className={css.partDiv}>
                             <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>
-                            <p className={css.paragraph}>Open: {downloadedHistoricalData[0].open}</p>
-                            <p className={css.paragraph}>Close: {downloadedHistoricalData[0].close}</p>
-                            <p className={css.paragraph}>High: {downloadedHistoricalData[0].high}</p>
-                            <p className={css.paragraph}>Low: {downloadedHistoricalData[0].low}</p>
-                            <p className={css.paragraph}>Volume: {downloadedHistoricalData[0].volume}</p>
-                        </div>
-                        <div className={css.partDiv}>
                             <p className={css.paragraphDate}>{downloadedHistoricalData[downloadedHistoricalData.length - 1].date}</p>
-                            <p className={css.paragraph}>Open: {downloadedHistoricalData[downloadedHistoricalData.length - 1].open}</p>
-                            <p className={css.paragraph}>Close: {downloadedHistoricalData[downloadedHistoricalData.length - 1].close}</p>
-                            <p className={css.paragraph}>High: {downloadedHistoricalData[downloadedHistoricalData.length - 1].high}</p>
-                            <p className={css.paragraph}>Low: {downloadedHistoricalData[downloadedHistoricalData.length - 1].low}</p>
-                            <p className={css.paragraph}>Volume: {downloadedHistoricalData[downloadedHistoricalData.length - 1].volume}</p>
+                        </div>
+                        <div className={css.partDiv}>      
+                            <div>
+                                <p className={css.paragraph}>Open: {parseFloat(downloadedHistoricalData[0].open).toFixed(2)}</p>
+                                <p className={css.paragraph}>Close: {parseFloat(downloadedHistoricalData[0].close).toFixed(2)}</p>
+                                <p className={css.paragraph}>High: {parseFloat(downloadedHistoricalData[0].high).toFixed(2)}</p>
+                                <p className={css.paragraph}>Low: {parseFloat(downloadedHistoricalData[0].low).toFixed(2)}</p>
+                                <p className={css.paragraph}>Volume: {downloadedHistoricalData[0].volume}</p>
+                            </div>
+                            <div> 
+                                <p className={css.paragraph}>Open: {parseFloat(downloadedHistoricalData[downloadedHistoricalData.length - 1].open).toFixed(2)}</p>
+                                <p className={css.paragraph}>Close: {parseFloat(downloadedHistoricalData[downloadedHistoricalData.length - 1].close).toFixed(2)}</p>
+                                <p className={css.paragraph}>High: {parseFloat(downloadedHistoricalData[downloadedHistoricalData.length - 1].high).toFixed(2)}</p>
+                                <p className={css.paragraph}>Low: {parseFloat(downloadedHistoricalData[downloadedHistoricalData.length - 1].low).toFixed(2)}</p>
+                                <p className={css.paragraph}>Volume: {downloadedHistoricalData[downloadedHistoricalData.length - 1].volume}</p>
+                            </div>
                         </div>
                     </div>
                 )

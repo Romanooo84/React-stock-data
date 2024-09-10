@@ -192,8 +192,8 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                             <Select className={css.selectTicker} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
                             </div>
                             <div className={css.dataDiv}>
-                                <div className={css.simpleDatadiv}>{ticker.close!=='NA'? ticker.close:'Brak Danych'}</div>
-                                <div className={css.simpleDatadiv}>{ticker.change_p!=='NA'? `${ticker.change_p}%`:""}</div>
+                                <div className={css.simpleDatadiv}>{ticker.close!=='NA'? parseFloat(ticker.close).toFixed(2):'Brak Danych'}</div>
+                                <div className={css.simpleDatadiv}>{ticker.change_p!=='NA'? `${parseFloat(ticker.change_p).toFixed(2)}%`:""}</div>
                             </div>
                             <div className={css.buttonsDiv}>
                                 <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><BiLineChart className={`${css.icon} ${css.iconCreate}`}/></button>

@@ -339,7 +339,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             <div className={css.slectDiv}>
                 <Select className={css.slect} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker)} placeholder={ticker} value={{ label: `${ticker} - ${tickerName}`, value: ticker }} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
                 <div className={css.dataDiv}>
-                    <p>{downloadedLiveData.change_p}%</p>
+                    <p>{parseFloat(downloadedLiveData.change_p).toFixed(2)}%</p>
                 </div>
             </div>
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={endDate} />
