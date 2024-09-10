@@ -16,8 +16,9 @@ export const liveData= async (ticker)=>{
 
 }
 
-export const historicalData= async (ticker, startDate, endDate)=>{
+export const historicalData = async (ticker, startDate, endDate) => {
   const url = `https://eodhd.com/api/eod/${ticker}?from=${startDate}&to=${endDate}&period=d&api_token=${token}&fmt=json`
+  console.log(url)
   try {
     const response = await fetch(url);
     if (!response.ok) {
