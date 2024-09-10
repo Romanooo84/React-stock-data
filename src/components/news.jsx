@@ -1,4 +1,5 @@
 import { newsData } from "hooks/downloadData";
+import css from '../styles/News.module.css'
 import { useState, useEffect } from "react";
 
 export const News = ({ chartTicker }) => {
@@ -9,7 +10,7 @@ export const News = ({ chartTicker }) => {
             .then(data => {
                 const markup = data.map((news, index) => (
                     <div key={index}>
-                        <p>{news.title}</p>
+                        <p className={css.title}>{news.title}</p>
                         <p>{news.date}</p>
                         <p>{news.content}</p>
                     </div>
@@ -19,6 +20,9 @@ export const News = ({ chartTicker }) => {
     }, [chartTicker]);
 
     return (
-        <div>{text}</div>
+        <div>
+            <h1>Latest News</h1>
+            <div>{text}</div>
+        </div>
     );
 };
