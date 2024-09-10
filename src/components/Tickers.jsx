@@ -7,7 +7,7 @@ import { BiSolidAddToQueue } from "react-icons/bi";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 import css from '../styles/Tickers.module.css'
 
-export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker, addChartTicker})=>{
+export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker, addChartTicker, setSecondChart, secondChart})=>{
     const selectRef = useRef(null);
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','GSPC.INDX'])
@@ -24,18 +24,18 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             borderBottom: 'none',
             borderLeft: '0px solid transparent',
             borderRight: '0px solid transparent',
-            boxShadow: state.isFocused ? 'none' : 'none', // Brak cienia w focusie
+            boxShadow: state.isFocused ? 'none' : 'none', 
             '&:hover': {
-                borderBottom: '2px solid blue', // Efekt hover na dolnej krawędzi
+                borderBottom: '2px solid blue',
             },
         }),
         dropdownIndicator: (provided) => ({
             ...provided,
-            display: 'none' // Ukrywa strzałkę rozwijaną
+            display: 'none' 
         }),
         indicatorSeparator: (provided) => ({
             ...provided,
-            display: 'none' // Ukrywa separator
+            display: 'none'
         })
     }), []);
 
@@ -87,19 +87,24 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         if (id==='CreateGraph'){
             setChartName(results[0].Name) 
             setChartTicker(ticker) 
+
             setAddChartName(null)
             setAddChartTicker(null)
         }
         else if(id==='Add to Graph')
             {setAddChartName(results[0].Name)
+                console.log(5)
             setAddChartTicker(ticker) 
+            setSecondChart(true)
         }
         else if(id==='Remove from Graph')
-            {setAddChartName(null)
+            {
+            setAddChartName(null)
              setAddChartTicker(null)
+             setSecondChart(false)
         }
     
-    }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker]);
+    }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker,setSecondChart]);
 
     useEffect(() => {
         const intervalID = setInterval(() => {
@@ -126,6 +131,12 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     
           return () => clearInterval(intervalID);
       }, [tickerList]);
+
+      useEffect(()=>{
+        if (secondChart===false){
+            setAddChartTicker(null)
+        }
+      },[secondChart, setAddChartTicker])
 
       useEffect(() => {
             multiplyData(tickerList)

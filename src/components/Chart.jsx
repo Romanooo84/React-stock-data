@@ -14,7 +14,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, setChartTicker}) => {
+export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, setChartTicker, setAddChartTicker, secondChart, setSecondChart}) => {
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
     const [addYAxis, setAddYAxis]= useState([])
@@ -29,9 +29,10 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     const [options, setOptions] = useState([]);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState();
-    const [dataset, setDataset] = useState([])
+    const [dataset, setDataset] = useState([]);
     const [isRegression, setIsRegression] = useState(false)
     const [datepickerOpen, setDatepickerOpen] = useState(false);
+    
     const selectRef = useRef(null);
 
     const customStyles = useMemo(() => ({
@@ -70,6 +71,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     const onChange = (selectedOption) => {
         setTicker(selectedOption.value)   
        setTickerName(selectedOption.label)
+       setSecondChart(false)
     }
 
     const onDateChange = (selectedOption) => {
@@ -124,14 +126,18 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     },[startDate])
 
     useEffect(() => {
-        if (chartTicker && startDate && endDate) {
+        if (chartTicker && startDate && endDate) {   
             setTicker(chartTicker)
             setTickerName(chartName)  
-        }},[chartTicker, startDate, endDate, chartName, setChartTicker]
+        }},[chartTicker, startDate, endDate, chartName, setChartTicker, ]
     )
 
     useEffect(() => {
-        if (startDate!==null&& endDate && ticker){
+        
+        if (startDate!==null&& endDate && ticker &&secondChart===false){
+            console.log(1)
+            setAddDownloadedHistoricalData([])
+            setSecondChart(false)
         liveData(ticker)
             .then(data => {
                 if (data) {
@@ -145,7 +151,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                     setDownloadedHistoricalData(data);
                 }
             });
-    }}, [ticker, startDate, endDate, addChartTicker, chartTicker]);
+    }}, [ticker, startDate, endDate, secondChart, setSecondChart]);
 
 
     useEffect(() => {
@@ -163,28 +169,31 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     
 
     useEffect(() => {
-        if (startDate&&endDate&&addChartTicker!=='none'&&addChartTicker!==undefined&&addChartTicker!==null){
-        historicalData(addChartTicker, startDate, endDate)
-            .then(data => {
-                if (data) {
-                    setAddDownloadedHistoricalData(data);
-                }
-            });
+
+        if (startDate&&endDate&&addChartTicker!==null && secondChart===true){
+        if(addDownloadedHistoricalData.length>0){
+            return
+        }
+        else{
+            historicalData(addChartTicker, startDate, endDate)
+                .then(data => {
+                    if (data) {
+                        setAddDownloadedHistoricalData(data);
+                    }
+                });
+            }
         }
         else if(startDate&&endDate){
             if(!isRegression){
-                console.log(1)
                 setDataset(startData)
                 setAddYAxis()  
             }
             else if(isRegression&&chartTicker){
-                console.log(2)
                 setDataset(startData)
                 setAddYAxis()  
                 setChartTicker(null)
             }
             else if(isRegression&&!chartTicker){
-                console.log(3)
                 const tempRegYAxis=linearRegression(yAxis)
                 const tempDataSet=[ {
                 label: `Regression ${tickerName}`,
@@ -199,11 +208,10 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
           setAddYAxis()  
             }
         }
-    }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData, isRegression, chartTicker,setChartTicker]);
+    }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData, isRegression, chartTicker, setChartTicker, secondChart, setSecondChart, addDownloadedHistoricalData.length]);
 
     useEffect(() => {
         if (downloadedHistoricalData.length > 0 && downloadedLiveData.close) {
-            console.log(downloadedLiveData.close)
             let tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
             let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             const tempDate = new Date(downloadedLiveData.timestamp * 1000);
@@ -217,7 +225,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             setYAxis(tempYAxis);
         }
         else if (downloadedHistoricalData.length > 0) {
-            console.log(downloadedLiveData)
                 let tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
                 let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
                 setXAxis(tempXAxis);
@@ -227,6 +234,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (addDownloadedHistoricalData.length>0) {
+            console.log(2)
             const tempYAxis = addDownloadedHistoricalData.map((axis) => axis.close);
             setAddYAxis(tempYAxis);
         }
@@ -257,14 +265,14 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     }, [searchTerm])
 
     useEffect(()=>{
-        
-        if (addYAxis&&dataset.length===1&&addChartName!==null){
+        if (addYAxis&&dataset.length===1&&addChartName!==null && secondChart===false){
             const newDataSet= [...dataset, ...startData];
             setDataset(newDataSet)
             setAddYAxis()
             
         }
-        if (addYAxis&&dataset.length>1){
+        if (addYAxis&&secondChart===true){
+            
             const tempDataSet=[
                 {
                     label: `${addChartTicker} - ${addChartName}$`,
@@ -294,11 +302,11 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             else if (isRegression&&chartTicker){
                 setChartTicker(null)   
                 setDataset(startData)
-                setAddYAxis()
-                
+                setAddYAxis()  
                 } 
+              
         }
-    },[addYAxis, yAxis, dataset, addChartName, addChartTicker, startData, chartTicker, isRegression, setChartTicker])
+    },[addYAxis, yAxis, dataset, addChartName, addChartTicker, startData, chartTicker, isRegression, setChartTicker, setAddChartTicker, secondChart, setSecondChart])
 
 
     const chartOptions = {

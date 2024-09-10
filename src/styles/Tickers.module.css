@@ -23,7 +23,6 @@
         display: flex;
         justify-content: space-around;
         flex-direction: column;
-        border-bottom: 2px solid blue;
         padding-bottom: 10px;
         
     }
