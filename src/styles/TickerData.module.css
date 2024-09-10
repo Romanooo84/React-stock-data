@@ -10,7 +10,12 @@
         flex-wrap: wrap;
     }
 
-    .partDiv{
+    .dateDiv{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dateDiv {
         display: flex;
     }
 

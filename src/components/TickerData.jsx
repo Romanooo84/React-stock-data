@@ -19,8 +19,11 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
         <div>
             {actualDate && downloadedHistoricalData.length>0 ? (    
                 <div className={css.mainDiv}>
-                    <div className={css.partDiv}>
+                    <div className={css.datetDiv}>
                         <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>
+                        <p className={css.paragraphDate}>{endDate}</p>
+                    </div>
+                    <div className={css.dataDiv}>
                         <div>
                             <p className={css.paragraph}>Open: {parseFloat(downloadedHistoricalData[0].open).toFixed(2)}</p>
                             <p className={css.paragraph}>Close: {parseFloat(downloadedHistoricalData[0].close).toFixed(2)}</p>
@@ -28,9 +31,6 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
                             <p className={css.paragraph}>Low: {parseFloat(downloadedHistoricalData[0].low).toFixed(2)}</p>
                             <p className={css.paragraph}>Volume: {downloadedHistoricalData[0].volume}</p>
                         </div>
-                    </div>
-                    <div className={css.partDiv}>
-                        <p className={css.paragraphDate}>{endDate}</p>
                         <div>
                             <p className={css.paragraph}>Open: {parseFloat(downloadedLiveData.open).toFixed(2)}</p>
                             <p className={css.paragraph}>Close: {parseFloat(downloadedLiveData.close).toFixed(2)}</p>
@@ -44,11 +44,11 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
             ) : (
                 downloadedHistoricalData.length > 0 && (
                     <div className={css.mainDiv}>
-                        <div className={css.partDiv}>
+                        <div className={css.dateDiv}>
                             <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>
-                            <p className={css.paragraphDate}>{downloadedHistoricalData[downloadedHistoricalData.length - 1].date}</p>
+                            <p className={css.paragraphDate}>{endDate}</p>
                         </div>
-                        <div className={css.partDiv}>      
+                        <div className={css.dataDiv}>      
                             <div>
                                 <p className={css.paragraph}>Open: {parseFloat(downloadedHistoricalData[0].open).toFixed(2)}</p>
                                 <p className={css.paragraph}>Close: {parseFloat(downloadedHistoricalData[0].close).toFixed(2)}</p>
