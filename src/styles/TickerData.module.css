@@ -7,25 +7,32 @@
     .mainDiv{
         padding-top: 10px;
         display: flex;
-        flex-wrap: wrap;
     }
 
     .dateDiv{
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
     }
 
-    .dateDiv {
+    .dataDiv {
         display: flex;
+        flex-wrap: wrap
+    }
+
+    .partDiv{
+        display: flex;
+        flex-wrap: wrap;
+        padding-bottom: 10px;
     }
 
     .paragraphDate {
         display: flex;
         font-family: Oswald;
         font-size: 17px;
-        width: 120px;
         align-items: center;
-        }
+        width: 80px;
+    }
 
     .paragraph{
         font-family: Oswald;
