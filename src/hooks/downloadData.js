@@ -17,7 +17,6 @@ export const liveData= async (ticker)=>{
 }
 
 export const historicalData= async (ticker, startDate, endDate)=>{
-  console.log(ticker)
   const url = `https://eodhd.com/api/eod/${ticker}?from=${startDate}&to=${endDate}&period=d&api_token=${token}&fmt=json`
   try {
     const response = await fetch(url);
@@ -25,7 +24,6 @@ export const historicalData= async (ticker, startDate, endDate)=>{
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const downloadedData = await response.json();
-    console.log(downloadedData)
     return downloadedData;
   } catch (error) {
     console.error("Data error:", error);

@@ -93,7 +93,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
         else if(id==='Add to Graph')
             {setAddChartName(results[0].Name)
-                console.log(5)
             setAddChartTicker(ticker) 
             setSecondChart(true)
         }

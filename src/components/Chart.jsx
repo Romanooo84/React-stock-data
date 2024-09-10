@@ -135,7 +135,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     useEffect(() => {
         
         if (startDate!==null&& endDate && ticker &&secondChart===false){
-            console.log(1)
             setAddDownloadedHistoricalData([])
             setSecondChart(false)
         liveData(ticker)
@@ -234,7 +233,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (addDownloadedHistoricalData.length>0) {
-            console.log(2)
             const tempYAxis = addDownloadedHistoricalData.map((axis) => axis.close);
             setAddYAxis(tempYAxis);
         }
