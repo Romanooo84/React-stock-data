@@ -134,7 +134,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (startDate !== null && endDate && ticker && secondChart === false) {
-            console.log(3)
             setAddDownloadedHistoricalData([])
             setSecondChart(false)
             liveData(ticker)
@@ -153,7 +152,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
         }
 
         else if (startDate !== null && endDate && ticker && secondChart === true) {
-            console.log(3,2)
             liveData(ticker)
                 .then(data => {
                     if (data) {
@@ -202,7 +200,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
         }
         else if (startDate && endDate) {
             if (!isRegression) {
-                console.log(4)
                 setSecondChart(false)
                 setDataset(startData)
                 setAddYAxis()  
@@ -231,7 +228,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (downloadedHistoricalData.length > 0 && downloadedLiveData.close) {
-             console.log(2,1)
             let tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
             let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             const tempDate = new Date(downloadedLiveData.timestamp * 1000);
