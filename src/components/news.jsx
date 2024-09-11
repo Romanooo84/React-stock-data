@@ -1,6 +1,6 @@
 import { newsData } from "hooks/downloadData";
 import css from '../styles/News.module.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {Modal} from '../components/Modal';
 
 export const News = ({ chartTicker }) => {
@@ -9,7 +9,7 @@ export const News = ({ chartTicker }) => {
     const [dataNews, setDataNews]=useState([])
     const [modalNews, setModalNews]=useState()
 
-    const openModal = (e) => {
+    const openModal = useCallback((e) => {
         const id=e.target.id
         console.log(dataNews)
         let data=dataNews[id]
@@ -27,7 +27,7 @@ export const News = ({ chartTicker }) => {
         )
         setIsModalOpen(true);
     }
-    }
+    },[dataNews])
     const closeModal = () => setIsModalOpen(false);
 
     useEffect(() => {
