@@ -9,11 +9,13 @@ export const News = ({ chartTicker }) => {
     const [dataNews, setDataNews]=useState([])
     const [modalNews, setModalNews]=useState()
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+    }
+
     const openModal = useCallback((e) => {
         const id=e.target.id
-        console.log(dataNews)
         let data=dataNews[id]
-        console.log(data)
         if (data){
         setModalNews(
             <div className={css.newsDiv}>
@@ -28,30 +30,32 @@ export const News = ({ chartTicker }) => {
         setIsModalOpen(true);
     }
     },[dataNews])
-    const closeModal = () => setIsModalOpen(false);
+    
 
     useEffect(() => {
         newsData(chartTicker)
             .then(data => {
                 setDataNews(data)
-                const markup = data.map((news, index) =>{
-                    news.date=news.date.split('T')
-                    let newHour=news.date[1].split('+')
-                    news.date=[...news.date,...newHour]
-                    return(
-            
-                    <div className={css.newsDiv} key={index}>
-                        <p className={css.title}>{news.title}</p>
-                        <div className={css.date}>
-                            <p>{news.date[0]}</p>
-                            <p>{news.date[2]} UTC</p>
-                        </div>
-                        <button id={index}className={css.text} onClick={openModal}>{news.content}</button>
-                    </div>
-                )} );
-                setText(markup);
             });
-    }, [chartTicker, isModalOpen, openModal]);
+    }, [chartTicker]);
+
+    useEffect(()=>{
+        const markup = dataNews.map((news, index) =>{
+            news.date=news.date.split('T')
+            let newHour=news.date[1].split('+')
+            news.date=[...news.date,...newHour]
+            return(
+            <div className={css.newsDiv} key={index}>
+                <p className={css.title}>{news.title}</p>
+                <div className={css.date}>
+                    <p>{news.date[0]}</p>
+                    <p>{news.date[2]} UTC</p>
+                </div>
+                <button id={index}className={css.text} onClick={openModal}>{news.content}</button>
+            </div>
+        )} );
+        setText(markup);
+    },[dataNews, openModal])
 
     return (
         <div className={css.mainDiv}>

@@ -36,14 +36,11 @@
         font-size: 15px;
     }
 
-
-
     .selectTicker{
         width: 150px;
         height: 100%;
         
     }
-
 
     .buttonsDiv{
         display: flex;
@@ -93,7 +90,5 @@
     .iconRemove{
         color: red;
     }
-
-  
 
 }
