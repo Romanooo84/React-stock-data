@@ -1,3 +1,10 @@
+.modalText {
+    text-align: justify; 
+    max-height: 50vh;     
+    overflow-y: auto;      
+    overflow-x: hidden; 
+}
+
 @media screen and (min-width: 320px) {}
 
 @media screen and (max-width: 480px) {
@@ -48,9 +55,12 @@
     }
 
     .modalText {
-        overflow: auto; 
+        overflow-y: hidden;
         text-align: justify; 
         width: 320px;
+        max-height: 50vh;     
+        overflow-y: auto;      
+        overflow-x: hidden; 
     }
 
 }
