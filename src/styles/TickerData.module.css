@@ -12,7 +12,6 @@
     .dateDiv{
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 10px;
     }
 
     .dataDiv {
@@ -23,7 +22,6 @@
     .partDiv{
         display: flex;
         flex-wrap: wrap;
-        padding-bottom: 10px;
     }
 
     .paragraphDate {

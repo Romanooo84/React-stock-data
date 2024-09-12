@@ -6,16 +6,12 @@
 
     .mainDiv{
         padding-top: 5px;
-        padding-bottom: 10px;
+        padding-bottom: 20px;
+        border-bottom: 4px solid blue;
     }
 
-    .mainDiv .tickersDiv:last-child {
-            padding-bottom: 20px;
-            border-bottom: 4px solid blue;
-        }
-
     .inputDataDiv{
-        padding-top: 15px;
+        padding-top: 10px;
         display: flex ;
         justify-content: space-evenly
     }
@@ -24,9 +20,8 @@
         display: flex;
         justify-content: space-around;
         flex-direction: column;
-        padding-bottom: 10px;
-        
     }
+
     .slectDiv{
         border-radius: 5px;
         box-shadow: 0px 10px 9px -5px rgba(66, 68, 90, 1);

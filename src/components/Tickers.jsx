@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
+import { Loader } from "./Loader";
 import { multiplyData } from '../hooks/downloadData';
 import { BiLineChart } from "react-icons/bi";
 import { BiSolidAddToQueue } from "react-icons/bi";
@@ -15,6 +16,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     const [searchTerm, setSearchTerm]=useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
+    const [isLoading, setIsLoading] =useState(true)
 
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
@@ -137,7 +139,8 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
       },[secondChart, setAddChartTicker])
 
-      useEffect(() => {
+    useEffect(() => {
+          setIsLoading(true)
             multiplyData(tickerList)
               .then(downloadedData => {
                 if (downloadedData) {
@@ -155,6 +158,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                         return data
                     })
                     setMultiplyList(markup);
+                    setIsLoading(false)
                 }
               });
           }, [tickerList]);
@@ -211,7 +215,14 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
     }, [multiplyList, options, addChartTicker, onChange, openMenu, onClick, customStyles]);
 
-    return(
-            <div className={css.mainDiv}>{list}</div>
-    )
+    return (
+        <div className={css.mainDiv}> 
+            {isLoading ? (
+                <Loader className={css.tickersDiv}/>
+            ) : (
+                <div>{list}</div>
+            )}
+        </div>
+);
+            
 }
