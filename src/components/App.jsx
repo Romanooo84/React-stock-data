@@ -1,16 +1,18 @@
-
-import { MainPage } from 'pages.jsx/MainPage';
-import { Header } from './Header';
-import {Footer} from './Footer'
-import css from '../styles/App.module.css'
+import { MainPage } from '../pages/MainPage';
+import { AlleNews } from '../pages/news';
+import { SharedLayout } from './sharedLayout';
+import { Route, Routes,Navigate } from "react-router-dom";
 
 export const App = () => {
-
   return (
-    <div className={css.main}>
-      <Header></Header>
-      <MainPage></MainPage>
-      <Footer></Footer>
-    </div>
+    <Routes>
+      {/* Główna ścieżka ze wspólnym układem (SharedLayout) */}
+      <Route path="React-stock-data/" element={<SharedLayout />}>
+        {/* Przekierowanie z głównej ścieżki na stronę 'main' */}
+        <Route index element={<Navigate to="home" />} />
+        <Route path="home" element={<MainPage />} />
+        <Route path="news" element={<AlleNews />} />
+      </Route>
+    </Routes>
   );
 };

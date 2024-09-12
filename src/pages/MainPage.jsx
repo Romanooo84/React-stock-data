@@ -1,6 +1,6 @@
 import { Tickers } from '../components/Tickers';
 import { Chart } from '../components/Chart';
-import { News } from '../components/news';
+import { News } from '../components/ShortNews';
 import React,{ useState } from 'react';
 
 

@@ -1,13 +1,18 @@
 import { newsData } from "hooks/downloadData";
-import css from '../styles/News.module.css'
 import { useState, useEffect, useCallback } from "react";
-import {Modal} from '../components/Modal';
+import {Modal} from './Modal';
+import css from '../styles/News.module.css'
+import { createDate } from "hooks/createDate";
 
-export const News = ({ chartTicker }) => {
+export const News=()=>{
+
     const [text, setText] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataNews, setDataNews]=useState([])
     const [modalNews, setModalNews]=useState()
+    const [startDate, setStartDate] = useState()
+    const [endDate, setEndDate] = useState()
+
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -32,12 +37,20 @@ export const News = ({ chartTicker }) => {
     },[dataNews])
     
 
+    useEffect(()=>{
+        let date = new Date()
+        console.log(createDate(date) )
+        setStartDate(createDate(date))
+        setEndDate(createDate(date))
+    },[])
+
     useEffect(() => {
-        newsData(chartTicker)
+        if(startDate){
+        newsData('APPL',1000, startDate, endDate)
             .then(data => {
                 setDataNews(data)
-            });
-    }, [chartTicker]);
+            });}
+    }, [startDate, endDate]);
 
     useEffect(()=>{
         const markup = dataNews.map((news, index) =>{
@@ -59,7 +72,6 @@ export const News = ({ chartTicker }) => {
 
     return (
         <div className={css.mainDiv}>
-            <h1>Latest News</h1>
             <div>{text}</div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <div>
@@ -68,4 +80,4 @@ export const News = ({ chartTicker }) => {
             </Modal>
         </div>
     );
-};
+}

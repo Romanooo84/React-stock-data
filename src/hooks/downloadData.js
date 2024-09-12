@@ -90,8 +90,8 @@ export const getTickers = async (data) => {
   return(ticerList)
 };
 
-export const newsData = async (ticker)=>{
-  const url= `https://eodhd.com/api/news?${ticker}S&offset=0&limit=10&api_token=${token}&fmt=json`
+export const newsData = async (ticker, quanity, startDate, endDate)=>{
+  const url= `https://eodhd.com/api/news?${ticker}S&from=${startDate}&to=${endDate} &offset=0&limit=${quanity}&api_token=${token}&fmt=json`
   try {
     const response = await fetch(url);
     if (!response.ok) {
