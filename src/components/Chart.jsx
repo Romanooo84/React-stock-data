@@ -2,7 +2,6 @@ import { liveData, historicalData } from "hooks/downloadData";
 import { linearRegression } from "hooks/math";
 import { createDate } from "hooks/createDate";
 import { TickerData } from "./TickerData";
-import { Loader } from "./Loader";
 import tickers from '../data/ticers'
 import css from '../styles/Chart.module.css'
 import Select from 'react-select';
@@ -33,7 +32,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     const [dataset, setDataset] = useState([]);
     const [isRegression, setIsRegression] = useState(false)
     const [datepickerOpen, setDatepickerOpen] = useState(false);
-    const [isLoadingChart, setIsLoadingChart] =useState(true)
     
     const selectRef = useRef(null);
 
@@ -136,7 +134,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     useEffect(() => {
         if (startDate !== null && endDate && ticker && secondChart === false) {
-            setIsLoadingChart(true)
             setAddDownloadedHistoricalData([])
             setSecondChart(false)
             liveData(ticker)
@@ -150,7 +147,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             .then(data => {
                 if (data) {
                     setDownloadedHistoricalData(data);
-                    setIsLoadingChart(false)
                     console.log(false)
                 }
             });
@@ -324,7 +320,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 setDataset(startData)
                 setAddYAxis()  
                 } 
-            setIsLoadingChart(false)
         }
     },[addYAxis, yAxis, dataset, addChartName, addChartTicker, startData, chartTicker, isRegression, setChartTicker, setAddChartTicker, secondChart, setSecondChart])
 
@@ -343,10 +338,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                     <p>{parseFloat(downloadedLiveData.change_p).toFixed(2)}%</p>
                 </div>
             </div>
-            {isLoadingChart ? (
-                    <Loader/>
-            ) : (
-            <>
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={endDate} />
             <div className={css.datepickerDiv}>
                 <Datepicker className={css.datepicker} onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
@@ -356,8 +347,6 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                     }
             </div>
             {chartData && <Line className={css.chart} options={chartOptions} data={chartData} />}
-            </>
-)}
         </div>
     );
 };

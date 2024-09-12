@@ -17,7 +17,7 @@ export const Loader = () => {
                     <circle className={css.back} cx="17" cy="17" r="14"></circle>
                     <circle className={css.front} cx="17" cy="17" r="14"></circle>
                 </svg>
-                <div className={css.text} data-text="Searching..."></div>
+                <div className={css.text} data-text="Searching for data..."></div>
             </div>
         </div>
     )

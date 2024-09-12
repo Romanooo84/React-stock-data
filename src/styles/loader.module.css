@@ -15,6 +15,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: fixed;
+        z-index: 100;
+        background: white;
+        width: 100vw;
+        height: 100vh;
+        top: 19vw;
 }
 
 .wifiLoader svg {
@@ -94,8 +100,8 @@
 }
 
 .wifiLoader .text {
-    position: absolute;
-    bottom: -10px;
+    position: relative;
+    bottom: -20vw;
     display: flex;
     justify-content: center;
     align-items: center;
