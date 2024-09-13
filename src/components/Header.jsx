@@ -13,7 +13,6 @@ export const Header=()=>{
         const buttonsList = ['home', 'details', 'news', 'contact']
         const path=location.pathname.split('/')
         const pageTitle = path[path.length-1]
-        console.log(buttonsList)
         const markup=buttonsList.map((button, index)=>{
             if (button!==pageTitle.toLowerCase()) {
                 let upperLetter=button.charAt(0).toUpperCase()+button.slice(1)

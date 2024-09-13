@@ -36,7 +36,6 @@ export const News = ({ chartTicker }) => {
 
     useEffect(()=>{
         let date = new Date()
-        console.log(createDate(date) )
         setStartDate(createDate(date))
         setEndDate(createDate(date))
     },[])

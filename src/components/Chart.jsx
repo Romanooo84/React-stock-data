@@ -11,6 +11,7 @@ import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { useEffect, useState, useRef, useMemo } from "react";
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { useData } from "hooks/dataContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -32,6 +33,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     const [dataset, setDataset] = useState([]);
     const [isRegression, setIsRegression] = useState(false)
     const [datepickerOpen, setDatepickerOpen] = useState(false);
+    const { updateData } = useData();
     
     const selectRef = useRef(null);
 
@@ -133,23 +135,37 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     )
 
     useEffect(() => {
-        if (startDate !== null && endDate && ticker && secondChart === false) {
+        console.log(chartTicker)
+        console.log(ticker)
+        if (startDate !== null && endDate && ticker && secondChart === false && (chartTicker===null|| chartTicker===ticker)) {
             setAddDownloadedHistoricalData([])
             setSecondChart(false)
-            liveData(ticker)
+            setChartTicker(undefined)
+            let live=[]
+            let historical=[]
+           
+
+            historicalData(ticker, startDate, endDate)
                 .then(data => {
                     if (data) {
-                        setDownloadedLiveData(data);
+                        historical=data
+                        setDownloadedHistoricalData(data);
+                        liveData(ticker)
+                            .then(data => {
+                                if (data) {
+                                    live=data
+                                    setDownloadedLiveData(data);
+                                    updateData({
+                                        historicalData:historical,
+                                        liveData:live,
+                                        endDate,
+                                        startDate,
+                                        chartName
+                                    })
+                                }
+                            });
                     }
                 });
-
-        historicalData(ticker, startDate, endDate)
-            .then(data => {
-                if (data) {
-                    setDownloadedHistoricalData(data);
-                    console.log(false)
-                }
-            });
         }
 
         else if (startDate !== null && endDate && ticker && secondChart === true) {
@@ -167,7 +183,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 }
             });
         }
-        }, [ticker, startDate, endDate, secondChart, setSecondChart]);
+        }, [ticker, startDate, endDate, secondChart, setSecondChart, updateData, chartName, chartTicker, setChartTicker]);
 
 
     useEffect(() => {
