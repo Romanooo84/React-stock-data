@@ -1,5 +1,4 @@
 .mainDiv{
-        margin-top: 20px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -10,17 +9,15 @@
     --front-color: #4f29f0;
     --back-color: #c3c8de;
     --text-color: #414856;
-    width: 320px;
-    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-        z-index: 100;
-        background: white;
-        width: 100vw;
-        height: 100vh;
-        top: 18vw;
+    z-index: 1000;
+    background: white;
+    width: 100vw;
+    height: 100vh;
+    top: 13vw;
 }
 
 .wifiLoader svg {
@@ -33,7 +30,7 @@
 .wifiLoader svg circle {
     position: absolute;
     fill: none;
-    stroke-width: 6px;
+    stroke-width: 4px;
     stroke-linecap: round;
     stroke-linejoin: round;
     transform: rotate(-100deg);
@@ -49,8 +46,9 @@
 }
 
 .wifiLoader svg.circleOuter {
-    height: 120px;
-    width: 120px;
+    height: 170px;
+    width: 170px;
+    margin-top: -50vh
 }
 
 .wifiLoader svg.circleOuter circle {
@@ -66,8 +64,9 @@
 }
 
 .wifiLoader svg.circleMiddle {
-    height: 80px;
-    width: 80px;
+    height: 130px;
+    width: 130px;
+    margin-top: -50vh
 }
 
 .wifiLoader svg.circleMiddle circle {
@@ -83,8 +82,9 @@
 }
 
 .wifiLoader svg.circleInner {
-    height: 45px;
-    width: 45px;
+    height: 90px;
+    width: 90px;
+    margin-top: -50vh
 }
 
 .wifiLoader svg.circleInner circle {
@@ -101,7 +101,8 @@
 
 .wifiLoader .text {
     position: relative;
-    bottom: -20vw;
+    margin-top: -50vh;
+    bottom: -15vh;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -221,7 +221,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                 <Loader className={css.tickersDiv}/>
             ) : (
                 <div>{list}</div>
-            )}
+            )}     
         </div>
 );
             

@@ -90,7 +90,6 @@ export const News=()=>{
                 <Datepicker className={css.datepicker} placeholder={`${endDate}`} onChange={onDateChange} controls={['calendar']} touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>
             </div>
             { isLoading ? (
-            <Loader/>
             ) : (
                 <div>{text}</div>
             )}
