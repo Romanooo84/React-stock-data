@@ -13,6 +13,12 @@
         border-bottom:  4px solid blue;
     }
 
+    .datepickerDiv{
+        margin-top: 25px;
+        display: flex;
+        justify-content: center
+    }
+
     .newsDiv{
         padding-bottom: 20px;
         border-bottom: 2px solid blue;

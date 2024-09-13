@@ -4,9 +4,29 @@ header{
     padding: 10px;;
 }
 
-button{
+.logoDiv{
+    display: flex;
+    margin-right: 20px;
+}
+
+.paragrph{
+    font-size: 10px;
+    color:#88b3c2;
+    font-weight: 500;
+}
+
+.headerButton{
     border: none;
     background: none;
+    color:#88b3c2;
+    font-weight: 600;
+}
+
+.activePageButton{
+    border: none;
+    background: none;
+    color:#4d9cb9;
+    font-weight: 600;
 }
 
 .mainDiv{

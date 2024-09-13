@@ -17,11 +17,21 @@ export const Header=()=>{
         const markup=buttonsList.map((button, index)=>{
             if (button!==pageTitle.toLowerCase()) {
                 let upperLetter=button.charAt(0).toUpperCase()+button.slice(1)
-                return (<Link key={index} to={`/React-stock-data/${button}`}>
-                <button>{upperLetter}</button>
-                </Link> )
+                return (
+                    <Link key={index} to={`/React-stock-data/${button}`}>
+                    <button className={css.headerButton}>{upperLetter}</button>
+                    </Link> 
+                )
             }
-            return null;
+            else {
+                let upperLetter=button.charAt(0).toUpperCase()+button.slice(1)
+                return (
+                    <Link key={index} to={`/React-stock-data/${button}`}>
+                    <button className={css.activePageButton}>{upperLetter}</button>
+                    </Link> 
+                )
+                
+            }
             })
         setButtons(markup)
     },[location])
@@ -31,10 +41,13 @@ export const Header=()=>{
         <header>
             <div className ={css.mainDiv}>
                 <div className ={css.mainDiv}>
-                <FcComboChart />
-                <p>Stock-Market-Data</p>
-                {buttons}
-                <p>Roman Pisarski</p>
+                    <div className={css.logoDiv}>
+                    <FcComboChart />
+                    <p className={css.paragrph}>Stock-Market-Data</p>
+                    </div>
+                    <div>
+                        {buttons}
+                    </div>
                 </div>
             </div>
         </header>

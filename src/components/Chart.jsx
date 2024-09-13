@@ -340,7 +340,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             </div>
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={endDate} />
             <div className={css.datepickerDiv}>
-                <Datepicker className={css.datepicker} onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }}/>   
+                <Datepicker className={css.datepicker} onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
                 {isRegression!==true?
                     (<button className={css.button} id='addRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconAdd}`} /></button>):
                     (<button className={css.button} id='removeRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconRemove}`}/></button>)

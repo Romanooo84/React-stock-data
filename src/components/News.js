@@ -4,6 +4,7 @@ import { Loader } from "./Loader";
 import {Modal} from './Modal';
 import css from '../styles/News.module.css'
 import { createDate } from "hooks/createDate";
+import { Datepicker } from '@mobiscroll/react';
 
 export const News=()=>{
 
@@ -13,7 +14,6 @@ export const News=()=>{
     const [modalNews, setModalNews]=useState()
     const [startDate, setStartDate] = useState()
     const [endDate, setEndDate] = useState()
-    const [today, setToday] = useState()
     const [isLoading, setIsLoading] =useState(true)
     
     const closeModal = () => {
@@ -37,14 +37,22 @@ export const News=()=>{
         setIsModalOpen(true);
     }
     },[dataNews])
-    
+
+    const onDateChange = (selectedOption) => {
+        console.log(selectedOption)
+        const startDate=createDate(selectedOption.value)
+        const endDate = createDate(selectedOption.value)
+         setStartDate(startDate)
+         setEndDate(endDate )
+     }
+
 
     useEffect(()=>{
         let date = new Date()
-        setToday(createDate(date))
         setStartDate(createDate(date))
         setEndDate(createDate(date))
     },[])
+
 
     useEffect(() => {
         if (startDate) {
@@ -75,47 +83,12 @@ export const News=()=>{
         setIsLoading(false)
     }, [dataNews, openModal])
     
-    const RenderDate = () => {
-        return (
-            <div>
-                {endDate !== today ? (
-                <>
-                    <button onClick={onBefore}>before</button>
-                    {endDate}
-                    <button onClick={onAfter}>next</button>
-                </>
-                ) : (
-                <>
-                    {endDate}
-                    <button onClick={onAfter}>next</button>
-                </>
-                )}
-            </div>
-        )
-    }
-
-    const onBefore = () => {
-            let date = new Date(endDate);
-            console.log(new Date())
-            date.setDate(date.getDate() + 1); 
-            date = createDate(date)
-            setStartDate(date)
-            setEndDate(date)
-        
-    }
-
-    const onAfter = () => {
-            let date = new Date(endDate);
-            console.log(new Date())
-            date.setDate(date.getDate() - 1); 
-            date = createDate(date)
-        setStartDate(date)
-        setEndDate(date)
-    }
 
     return (
         <div className={css.mainDiv}>
-            <RenderDate />
+            <div className={css.datepickerDiv}>
+                <Datepicker className={css.datepicker} placeholder={`${endDate}`} onChange={onDateChange} controls={['calendar']} touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>
+            </div>
             { isLoading ? (
             <Loader/>
             ) : (
