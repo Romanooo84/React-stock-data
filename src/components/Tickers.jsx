@@ -19,7 +19,8 @@ export const Tickers=()=>{
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
     const { Data, updateData } = useData();
-    const [secondChart, setSecondChart]=useState(false)
+    const [secondChart, setSecondChart] = useState(false)
+    const [secondChartTicker, setSecondChartTicker]=useState()
 
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
@@ -110,33 +111,36 @@ export const Tickers=()=>{
             )
         }
         else if (id === 'Add to Graph')
-           
         {
-             setSecondChart(true)
+            setSecondChart(true)
+            setSecondChartTicker(ticker)
             updateData(
                 {secondChartName:results[0].Name,
                 secondChartTicker: ticker,
-                isSecondChart:true,
+                isSecondChart: true,
+                isStartPage: true,
+                
                 }
             )
         }
         else if (id === 'Remove from Graph')
             {
             setSecondChart(false)
+            setMultiplyList(Data.multiplyList)
             updateData({
-                isSecondChart:false
+                isSecondChart: false,
             })
         }
     
-    }, [updateData]);
+    }, [updateData, Data.multiplyList]);
 
     useEffect(()=>{
-        if (Data.isStartPage) {
+        if (Data.isStartPage && !Data.secondChart) {
             updateData({
                 isLoading: true,
             })
     }   
-    },[updateData, Data.isStartPage])
+    },[updateData, Data.isStartPage, Data.secondChart])
 
     useEffect(() => {
         const intervalID = setInterval(() => {
@@ -231,7 +235,7 @@ export const Tickers=()=>{
                             </div>
                             <div className={css.buttonsDiv}>
                                 <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><BiLineChart className={`${css.icon} ${css.iconCreate}`}/></button>
-                                {Data.secondChartTicker===ticker.code && secondChart? (
+                                {secondChartTicker===ticker.code && secondChart? (
                                 <button className={css.button} id='Remove from Graph' name={ticker.code} onClick={onClick}><RiDeleteBack2Fill className={`${css.icon} ${css.iconRemove}`}/></button>
                                 ) : (
                             <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><BiSolidAddToQueue className={`${css.icon} ${css.iconAdd}`} /></button>
@@ -241,11 +245,14 @@ export const Tickers=()=>{
             
                 </div>
             ));
-             setList(markup);
+            setList(markup);
+            updateData({
+                isLoading: false,
+                multiplyList
+            })
              setMultiplyList([])
-             updateData({isLoading:false})
         }
-    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, secondChart, updateData]);
+    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, secondChartTicker, secondChart, updateData]);
 
     return (
         <div className={css.mainDiv}> 

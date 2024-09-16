@@ -33,7 +33,8 @@ export const DataProvider = ({ children }) => {
       secondChartName: null,
       secondChartTicker: null,
       isDatepickerOpen: false,
-      isStartPage: true
+      isStartPage: true,
+      multiplyList:[]
     });
   }, []);
 
