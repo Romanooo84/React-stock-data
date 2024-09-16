@@ -136,7 +136,7 @@ export const Tickers=()=>{
         const intervalID = setInterval(() => {
             multiplyData(tickerList)
               .then(downloadedData => {
-                if (downloadedData && Data.isDatepickerOpen) {
+                if (downloadedData && !Data.isDatepickerOpen) {
                   const markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
                         let country = data.code.split('.')[1];

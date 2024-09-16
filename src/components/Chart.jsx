@@ -78,9 +78,10 @@ export const Chart = () => {
     const onDateChange = (selectedOption) => {
         const startDate=createDate(selectedOption.value[0])
         const endDate = createDate(selectedOption.value[1])
-         updateData(
+        updateData({
             startDate,
             endDate
+        }
          )
      }
 
@@ -147,7 +148,8 @@ export const Chart = () => {
 
 
     useEffect(() => {
-        if (Data.isSecondChart === false && Data.newChart===true && Data.ticker!==null) {
+        if (Data.isSecondChart === false && Data.newChart === true && Data.ticker !== null) {
+            console.log(Data.newChart)
             updateData({
                 chartTicker: null,
                 newChart: false
@@ -209,7 +211,7 @@ export const Chart = () => {
     }, [Data.ticker, Data.isDatepickerOpen]);
     
     useEffect(() => {
-        if (Data.secondChartTicker!==null && Data.isSecondChart===true){
+        if (Data.secondChartTicker !== null && Data.isSecondChart === true) {
             historicalData(Data.secondChartTicker, Data.startDate, Data.endDate)
                 .then(data => {
                     if (data) {
@@ -361,7 +363,7 @@ export const Chart = () => {
             </div>
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={Data.endDate} />
             <div className={css.datepickerDiv}>
-                <Datepicker className={css.datepicker} onOpen={() => updateData({ isDatepicerOpne: true })} onClose={() => updateData({ isDatepicerOpne: false})} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
+                <Datepicker className={css.datepicker} onOpen={() => updateData({ isDatepickerOpen: true })} onClose={() => updateData({ isDatepickerOpen: false, newChart: true})} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
                 {Data.isRegression!==true?
                     (<button className={css.button} id='addRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconAdd}`} /></button>):
                     (<button className={css.button} id='removeRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconRemove}`}/></button>)
