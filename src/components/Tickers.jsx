@@ -240,7 +240,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             ));
             setList(markup);
         }
-    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker]);
+    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart]);
 
     return (
         <div className={css.mainDiv}> 
