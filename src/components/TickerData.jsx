@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import css from '../styles/TickerData.module.css'
 
 export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDate }) => {
-    console.log(downloadedLiveData)
-    console.log(downloadedHistoricalData)
     const [actualDate, setActualDate]=useState()
     useEffect(() => {
         if (downloadedLiveData.code) {

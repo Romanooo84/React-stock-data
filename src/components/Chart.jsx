@@ -23,17 +23,17 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     const [addDownloadedHistoricalData, setAddDownloadedHistoricalData] = useState([]);
     const [downloadedLiveData, setDownloadedLiveData] = useState([]);
     const [chartData, setChartData] = useState(null);
-    const [ticker, setTicker] = useState('AAPL.US');
-    const [tickerName, setTickerName]=useState('Apple INC')
+    const [ticker] = useState('AAPL.US');
+    const [tickerName]=useState('Apple INC')
     const [search, setSearch] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [options, setOptions] = useState([]);
-    const [startDate, setStartDate] = useState(null);
+    const [setStartDate] = useState(null);
     const [endDate, setEndDate] = useState();
     const [dataset, setDataset] = useState([]);
-    const [isRegression, setIsRegression] = useState(false)
+    const [isRegression] = useState(false)
     const [datepickerOpen, setDatepickerOpen] = useState(false);
-    const { updateData } = useData();
+    const { Data, updateData } = useData();
     
     const selectRef = useRef(null);
 
@@ -61,19 +61,22 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     const startData = useMemo(() => [
         {
-          label: `${ticker} - ${tickerName}`,
+          label: `${Data.ticker} - ${Data.tickerName}`,
           data: yAxis,
           borderColor: 'blue',
           fill: false,
           borderWidth: 2,
           pointRadius: 0,
         },
-      ], [ticker, tickerName, yAxis]);
+      ], [yAxis,Data.ticker,Data.tickerName]);
 
     const onChange = (selectedOption) => {
-       setTicker(selectedOption.value)   
-       setTickerName(selectedOption.label)
-       setSecondChart(false)
+       updateData({
+        ticker:selectedOption.value,
+        tickerName:selectedOption.label,
+        isSecondChart: false,
+        newChart:true
+       })
     }
 
     const onDateChange = (selectedOption) => {
@@ -81,6 +84,10 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
         const endDate = createDate(selectedOption.value[1])
          setStartDate(startDate)
          setEndDate(endDate )
+         updateData(
+            startDate,
+            endDate
+         )
      }
 
     const onInputChange = (event) => {
@@ -97,10 +104,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
 
     const onClick=(e)=>{
         if(e.target.id==='addRegression'){
-            setIsRegression(true)
+            updateData(
+                {isRegression:true
+            })
             const tempRegYAxis=linearRegression(yAxis)
             const tempDataSet=[ {
-                label: `Regression ${tickerName}`,
+                label: `Regression ${Data.tickerName}`,
                 data: tempRegYAxis,
                 borderColor: 'red',
                 fill: false,
@@ -111,46 +120,55 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
           setDataset(newDataSet)
         }
         else{
-            setIsRegression(false)
+            updateData(
+                {isRegression:false
+            })
             const tempDataset = dataset.filter(item => !item.label.toLowerCase().includes('regression'));
             setDataset(tempDataset)
         }
     }
 
     useEffect(()=>{
-        if (startDate===null){
+        if (Data.startDate===null){
         let beginigEndDate = new Date();
         let beginigstartDate = new Date(beginigEndDate);
         beginigstartDate.setDate(beginigstartDate.getDate() - 30);
-        setStartDate(createDate(beginigstartDate))
-        setEndDate(createDate(beginigEndDate))
+        updateData({
+            ticker: ticker,
+            tickerName:tickerName,
+            startDate:createDate(beginigstartDate),
+            endDate: createDate(beginigEndDate),
+            newChart:true
+        })
     }
-    },[startDate])
+    }, [ticker,tickerName,updateData,Data.startDate])
+
+    useEffect(()=>{
+    if (Data.isDetailsOpen){
+        updateData(
+            {
+                newChart:true,
+                isDetailsOpen:false,
+                isLoading: true,
+            })
+    }},[Data.isDetailsOpen, updateData])
+
 
     useEffect(() => {
-        if (chartTicker && startDate && endDate) {   
-            setTicker(chartTicker)
-            setTickerName(chartName)  
-        }},[chartTicker, startDate, endDate, chartName, setChartTicker, ]
-    )
-
-    useEffect(() => {
-        console.log(chartTicker)
-        console.log(ticker)
-        if (startDate !== null && endDate && ticker && secondChart === false && (chartTicker===null|| chartTicker===ticker)) {
+        if (Data.isSecondChart === false && Data.newChart===true && Data.ticker!==null) {
+            updateData({
+                chartTicker: null,
+                newChart: false
+            })
             setAddDownloadedHistoricalData([])
-            setSecondChart(false)
-            setChartTicker(undefined)
             let live=[]
             let historical=[]
-           
-
-            historicalData(ticker, startDate, endDate)
+            historicalData(Data.ticker, Data.startDate, Data.endDate)
                 .then(data => {
                     if (data) {
                         historical=data
                         setDownloadedHistoricalData(data);
-                        liveData(ticker)
+                        liveData(Data.ticker)
                             .then(data => {
                                 if (data) {
                                     live=data
@@ -158,9 +176,8 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                                     updateData({
                                         historicalData:historical,
                                         liveData:live,
-                                        endDate,
-                                        startDate,
-                                        chartName
+                                        newChart:false,
+                                        isLoading:false,
                                     })
                                 }
                             });
@@ -168,68 +185,63 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 });
         }
 
-        else if (startDate !== null && endDate && ticker && secondChart === true) {
-            liveData(ticker)
+        else if (Data.isSecondChart === true && Data.newChart===true && Data.ticker!==null) {
+            updateData({newChart:false})
+            liveData(Data.ticker)
                 .then(data => {
                     if (data) {
                         setDownloadedLiveData(data);
                     }
                 });
 
-        historicalData(ticker, startDate, endDate)
+        historicalData(Data.ticker, Data.startDate, Data.endDate)
             .then(data => {
                 if (data) {
                     setDownloadedHistoricalData(data);
                 }
             });
         }
-        }, [ticker, startDate, endDate, secondChart, setSecondChart, updateData, chartName, chartTicker, setChartTicker]);
+        }, [Data.endDate, Data.isSecondChart, Data.secondChart, Data.startDate, Data.ticker, updateData, Data.newChart]);
 
 
     useEffect(() => {
         const intervalID = setInterval(() => {
-            liveData(ticker)
+            liveData(Data.ticker)
             .then(data => {
                 if (data && !datepickerOpen) {
                     setDownloadedLiveData(data)
                 }
             });
-        }, 2500);
+        }, 5000);
     
         return () => clearInterval(intervalID);
-    }, [ticker, datepickerOpen]);
+    }, [Data.ticker, datepickerOpen]);
     
-
     useEffect(() => {
-
-        if (startDate&&endDate&&addChartTicker!==null && secondChart===true){
-        if(addDownloadedHistoricalData.length>0){
-            return
-        }
-        else {
-            historicalData(addChartTicker, startDate, endDate)
+        if (Data.secondChartTicker!==null && Data.isSecondChart===true){
+            historicalData(Data.secondChartTicker, Data.startDate, Data.endDate)
                 .then(data => {
                     if (data) {
                         setAddDownloadedHistoricalData(data);
                     }
                 });
             }
-        }
-        else if (startDate && endDate) {
-            if (!isRegression) {
-                setSecondChart(false)
+        else if (Data.startDate && Data.isSecondChart===false) {
+            if (!Data.isRegression) {
                 setDataset(startData)
                 setAddYAxis()  
             }
-            else if(isRegression&&chartTicker){
+            else if(Data.isRegression&&Data.chartTicker!==null){
                 setDataset(startData)
                 setAddYAxis()  
-                setChartTicker(null)
+                updateData(
+                    {chartTicker: null}
+                )
             }
-            else if(isRegression&&!chartTicker){
+            else if(Data.isRegression&&chartTicker===null){
                 const tempRegYAxis=linearRegression(yAxis)
                 const tempDataSet=[ {
-                label: `Regression ${tickerName}`,
+                label: `Regression ${Data.tickerName}`,
                 data: tempRegYAxis,
                 borderColor: 'red',
                 fill: false,
@@ -241,7 +253,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
           setAddYAxis()  
             }
         }
-    }, [addChartTicker, startDate, endDate, tickerName, yAxis, startData, isRegression, chartTicker, setChartTicker, secondChart, setSecondChart, addDownloadedHistoricalData.length]);
+    }, [Data, Data.chartTicker, Data.isRegression, Data.isSecondChart, Data.secondChartTicker, Data.startDate, Data.tickerName, chartTicker, startData, updateData, yAxis]);
 
     useEffect(() => {
         if (downloadedHistoricalData.length > 0 && downloadedLiveData.close) {
@@ -335,9 +347,12 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 setChartTicker(null)   
                 setDataset(startData)
                 setAddYAxis()  
+                updateData(
+                    {chartTicker:null}
+                )
                 } 
         }
-    },[addYAxis, yAxis, dataset, addChartName, addChartTicker, startData, chartTicker, isRegression, setChartTicker, setAddChartTicker, secondChart, setSecondChart])
+    },[updateData,addYAxis, yAxis, dataset, addChartName, addChartTicker, startData, chartTicker, isRegression, setChartTicker, setAddChartTicker, secondChart, setSecondChart])
 
 
     const chartOptions = {
@@ -349,7 +364,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     return (
         <div className={css.mainDiv}>   
             <div className={css.slectDiv}>
-                <Select className={css.slect} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker)} placeholder={ticker} value={{ label: `${ticker} - ${tickerName}`, value: ticker }} name={ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
+                <Select className={css.slect} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(Data.ticker)} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.tickerName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
                 <div className={css.dataDiv}>
                     <p>{parseFloat(downloadedLiveData.change_p).toFixed(2)}%</p>
                 </div>
@@ -357,7 +372,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={endDate} />
             <div className={css.datepickerDiv}>
                 <Datepicker className={css.datepicker} onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
-                {isRegression!==true?
+                {Data.isRegression!==true?
                     (<button className={css.button} id='addRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconAdd}`} /></button>):
                     (<button className={css.button} id='removeRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconRemove}`}/></button>)
                     }

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const DataContext = createContext();
 
@@ -7,13 +7,34 @@ export const useData = () => {
 };
 
 export const DataProvider = ({ children }) => {
-  const [Data, setData] = useState({
-   
-  });
+  const [Data, setData] = useState({});
 
   const updateData = (newData) => {
-    setData(newData); 
+    setData((prevData) => ({
+      ...prevData,         
+      ...newData           
+    }));
   };
+
+  useEffect(() => {
+    updateData({
+      historicalData: [],
+      liveData: [],
+      endDate: null,
+      startDate: null,
+      isLoading: true,
+      newChart: true,
+      ticker: null,
+      tickerName:null,
+      chartName: null,
+      chartTicker: null,
+      isRegression: false,
+      isSecondChart: false,
+      secondChartName: null,
+      secondChartTicker: null,
+      isDetailsOpen:false,
+    });
+  }, []);
 
   return (
     <DataContext.Provider value={{ Data, updateData }}>

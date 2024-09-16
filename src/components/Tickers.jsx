@@ -7,6 +7,8 @@ import { BiLineChart } from "react-icons/bi";
 import { BiSolidAddToQueue } from "react-icons/bi";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 import css from '../styles/Tickers.module.css'
+import { useData } from "hooks/dataContext";
+
 
 export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker, addChartTicker, setSecondChart, secondChart})=>{
     const selectRef = useRef(null);
@@ -17,6 +19,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
     const [isLoading, setIsLoading] =useState(true)
+    const { Data, updateData } = useData();
 
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
@@ -73,12 +76,20 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         const newTicker = ticker.split('.')[0];
         let country = ticker.split('.')[1];
         let results = tickers.filter(item => item.Code.includes(newTicker)); 
-        if (id==='CreateGraph'){
-        setChartTicker(event.target.name)
-        setAddChartName(null)
-        setAddChartTicker(null) 
+        if (id==='CreateGraph'){ 
+        updateData(
+            {
+            ticker: event.target.name,
+            isSecondChart: false,
+            isRegression: false,
+            newChart: true,
+            }
+        )
         }
-        else{setAddChartTicker(event.target.name);
+        else{
+            updateData(
+                {secondChartName: event.target.name}
+            )
         }
         if (country!=='US'){
         results = results.filter(item => item.Exchange.includes(country)); 
@@ -89,23 +100,39 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         if (id==='CreateGraph'){
             setChartName(results[0].Name) 
             setChartTicker(ticker) 
-
             setAddChartName(null)
             setAddChartTicker(null)
+            updateData(
+                {chartName: results[0].Name,
+                chartTicker:ticker,
+                isSecondChart: false,
+                isRegression: false,
+                }
+
+            )
         }
         else if(id==='Add to Graph')
             {setAddChartName(results[0].Name)
             setAddChartTicker(ticker) 
             setSecondChart(true)
+            updateData(
+                {secondChartName:results[0].Name,
+                secondChartTicker: ticker,
+                isSecondChart:true,
+                }
+            )
         }
         else if(id==='Remove from Graph')
             {
             setAddChartName(null)
              setAddChartTicker(null)
              setSecondChart(false)
+            updateData({
+                isSecondChart:false
+            })
         }
     
-    }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker,setSecondChart]);
+    }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker,setSecondChart, updateData]);
 
     useEffect(() => {
         const intervalID = setInterval(() => {
@@ -128,7 +155,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                     setMultiplyList(markup);
                 }
               });
-          }, 2500);
+          }, 5000);
     
           return () => clearInterval(intervalID);
       }, [tickerList]);
@@ -201,7 +228,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                             </div>
                             <div className={css.buttonsDiv}>
                                 <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><BiLineChart className={`${css.icon} ${css.iconCreate}`}/></button>
-                                {ticker.code === addChartTicker ? (
+                                {Data.secondChartTicker===ticker.code && Data.isSecondChart? (
                                 <button className={css.button} id='Remove from Graph' name={ticker.code} onClick={onClick}><RiDeleteBack2Fill className={`${css.icon} ${css.iconRemove}`}/></button>
                                 ) : (
                             <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><BiSolidAddToQueue className={`${css.icon} ${css.iconAdd}`} /></button>
@@ -213,7 +240,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             ));
             setList(markup);
         }
-    }, [multiplyList, options, addChartTicker, onChange, openMenu, onClick, customStyles]);
+    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker]);
 
     return (
         <div className={css.mainDiv}> 

@@ -1,9 +1,17 @@
 import { TickerData } from 'components/TickerData';
 import { useData } from 'hooks/dataContext';
+import { useEffect } from 'react';
 
 export const Details = () => {
-  const { Data } = useData();
+  const { Data, updateData } = useData();
   const {historicalData, liveData, endDate}=Data
+  useEffect(()=>{
+    console.log(Data.isDetailsOpen)
+    if (!Data.isDetailsOpen){
+      updateData({isDetailsOpen:true})
+    }},[updateData, Data.isDetailsOpen])
+  
+  
 
   const TickerTable = (historicalData) => {
     if (historicalData.historicalData.length>0){
