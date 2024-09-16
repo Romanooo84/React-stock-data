@@ -6,7 +6,6 @@ export const Details = () => {
   const { Data, updateData } = useData();
   const {historicalData, liveData, endDate}=Data
   useEffect(()=>{
-    console.log(Data.isDetailsOpen)
     if (!Data.isDetailsOpen){
       updateData({isDetailsOpen:true})
     }},[updateData, Data.isDetailsOpen])

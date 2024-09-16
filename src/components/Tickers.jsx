@@ -18,7 +18,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     const [searchTerm, setSearchTerm]=useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
-    const [isLoading, setIsLoading] =useState(true)
     const { Data, updateData } = useData();
 
     const customStyles = useMemo(() => ({
@@ -134,6 +133,11 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
     
     }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker,setSecondChart, updateData]);
 
+    useEffect(()=>{
+        updateData({isLoading:true})
+
+    })
+
     useEffect(() => {
         const intervalID = setInterval(() => {
             multiplyData(tickerList)
@@ -167,7 +171,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
       },[secondChart, setAddChartTicker])
 
     useEffect(() => {
-          setIsLoading(true)
             multiplyData(tickerList)
               .then(downloadedData => {
                 if (downloadedData) {
@@ -185,7 +188,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                         return data
                     })
                     setMultiplyList(markup);
-                    setIsLoading(false)
                 }
               });
           }, [tickerList]);
@@ -239,12 +241,13 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
                 </div>
             ));
             setList(markup);
+            updateData({isLoading:false})
         }
-    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart]);
+    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData]);
 
     return (
         <div className={css.mainDiv}> 
-            {isLoading ? (
+            {Data.isLoading ? (
                 <Loader className={css.tickersDiv}/>
             ) : (
                 <div>{list}</div>
