@@ -149,7 +149,6 @@ export const Chart = () => {
 
     useEffect(() => {
         if (Data.isSecondChart === false && Data.newChart === true && Data.ticker !== null) {
-            console.log(Data.newChart)
             updateData({
                 chartTicker: null,
                 newChart: false
@@ -179,7 +178,7 @@ export const Chart = () => {
         }
 
         else if (Data.isSecondChart === true && Data.newChart===true && Data.ticker!==null) {
-            updateData({newChart:false})
+            updateData({ newChart: false })
             liveData(Data.ticker)
                 .then(data => {
                     if (data) {
@@ -271,7 +270,7 @@ export const Chart = () => {
     }, [downloadedHistoricalData, downloadedLiveData, Data.endDate]);
 
     useEffect(() => {
-        if (addDownloadedHistoricalData.length>0) {
+        if (addDownloadedHistoricalData.length > 0) {
             const tempYAxis = addDownloadedHistoricalData.map((axis) => axis.close);
             setAddYAxis(tempYAxis);
         }
@@ -308,11 +307,10 @@ export const Chart = () => {
             setAddYAxis()
             
         }
-        if (addYAxis&&Data.isSecondChart===true){
-            
+        if (addYAxis && Data.isSecondChart === true) {
             const tempDataSet=[
                 {
-                    label: `${Data.SecondChartTicker} - ${Data.DataSecondChartName}$`,
+                    label: `${Data.secondChartTicker} - ${Data.secondChartName}$`,
                     data: addYAxis,
                     borderColor: 'green',
                     fill: false,
@@ -344,7 +342,7 @@ export const Chart = () => {
                 )
                 } 
         }
-    },[updateData,addYAxis, yAxis, dataset, startData,  Data.isRegression, Data.DataSecondChartName, Data.SecondChartName, Data.SecondChartTicker, Data.chartTicker, Data.isSecondChart])
+    },[updateData,addYAxis, yAxis, dataset, startData,  Data.isRegression, Data.SecondChartName, Data.secondChartName, Data.secondChartTicker, Data.chartTicker, Data.isSecondChart])
 
 
     const chartOptions = {
