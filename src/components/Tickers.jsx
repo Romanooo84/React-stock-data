@@ -125,15 +125,18 @@ export const Tickers=()=>{
     }, [updateData]);
 
     useEffect(()=>{
-        updateData({isLoading:true})
-
-    })
+        if (Data.isStartPage) {
+            updateData({
+                isLoading: true,
+            })
+    }   
+    },[updateData, Data.isStartPage])
 
     useEffect(() => {
         const intervalID = setInterval(() => {
             multiplyData(tickerList)
               .then(downloadedData => {
-                if (downloadedData) {
+                if (downloadedData && Data.isDatepickerOpen) {
                   const markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
                         let country = data.code.split('.')[1];
@@ -153,7 +156,7 @@ export const Tickers=()=>{
           }, 5000);
     
           return () => clearInterval(intervalID);
-      }, [tickerList]);
+      }, [tickerList, Data.isDatepickerOpen]);
 
       useEffect(()=>{
         if (Data.secondChart===false){
@@ -162,9 +165,10 @@ export const Tickers=()=>{
       },[Data.secondChart, updateData])
 
     useEffect(() => {
+        if (Data.isStartPage ) {
+            updateData({ isStartPage: false })
             multiplyData(tickerList)
-              .then(downloadedData => {
-                if (downloadedData) {
+                .then(downloadedData => {
                     const markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
                         let country = data.code.split('.')[1];
@@ -180,8 +184,8 @@ export const Tickers=()=>{
                     })
                     setMultiplyList(markup);
                 }
-              });
-          }, [tickerList]);
+              );
+          }}, [tickerList, Data.isStartPage, updateData]);
 
     useEffect(() => {
         if (searchTerm&&searchTerm.length>2){
@@ -207,8 +211,8 @@ export const Tickers=()=>{
 
 
 
-     useEffect(() => {
-         if (multiplyList.length > 0) {
+    useEffect(() => {
+        if (multiplyList.length > 0) {
             const markup = multiplyList.map((ticker, index) => (
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
@@ -231,8 +235,9 @@ export const Tickers=()=>{
             
                 </div>
             ));
-            setList(markup);
-            updateData({isLoading:false})
+             setList(markup);
+             setMultiplyList([])
+             updateData({isLoading:false})
         }
     }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData]);
 

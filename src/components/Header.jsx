@@ -1,12 +1,20 @@
 import { FcComboChart } from "react-icons/fc";
+import { useData } from 'hooks/dataContext';
 import { Link, useLocation  } from "react-router-dom"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import css from '../styles/Header.module.css'
 
 export const Header=()=>{
 
     const [buttons, setButtons] = useState()
+    const { updateData } = useData();
     const location = useLocation()
+
+    const onClick = useCallback(() => {
+    
+
+    updateData({ isStartPage: true });
+},[updateData]);
     
 
     useEffect(()=>{
@@ -18,7 +26,7 @@ export const Header=()=>{
                 let upperLetter=button.charAt(0).toUpperCase()+button.slice(1)
                 return (
                     <Link key={index} to={`/React-stock-data/${button}`}>
-                    <button className={css.headerButton}>{upperLetter}</button>
+                    <button className={css.headerButton} onClick={onClick}>{upperLetter}</button>
                     </Link> 
                 )
             }
@@ -33,7 +41,7 @@ export const Header=()=>{
             }
             })
         setButtons(markup)
-    },[location])
+    },[location, onClick])
   
 
     return(

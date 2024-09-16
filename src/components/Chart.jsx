@@ -28,11 +28,7 @@ export const Chart = () => {
     const [search, setSearch] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [options, setOptions] = useState([]);
-    const [setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState();
     const [dataset, setDataset] = useState([]);
-    const [isRegression] = useState(false)
-    const [datepickerOpen, setDatepickerOpen] = useState(false);
     const { Data, updateData } = useData();
     
     const selectRef = useRef(null);
@@ -82,8 +78,6 @@ export const Chart = () => {
     const onDateChange = (selectedOption) => {
         const startDate=createDate(selectedOption.value[0])
         const endDate = createDate(selectedOption.value[1])
-         setStartDate(startDate)
-         setEndDate(endDate )
          updateData(
             startDate,
             endDate
@@ -144,14 +138,12 @@ export const Chart = () => {
     }, [ticker,tickerName,updateData,Data.startDate])
 
     useEffect(()=>{
-    if (Data.isDetailsOpen){
+    if (Data.isStartPage){
         updateData(
             {
                 newChart:true,
-                isDetailsOpen:false,
-                isLoading: true,
             })
-    }},[Data.isDetailsOpen, updateData])
+    }},[Data.isStartPage, updateData])
 
 
     useEffect(() => {
@@ -177,7 +169,6 @@ export const Chart = () => {
                                         historicalData:historical,
                                         liveData:live,
                                         newChart:false,
-                                        isLoading:false,
                                     })
                                 }
                             });
@@ -208,18 +199,17 @@ export const Chart = () => {
         const intervalID = setInterval(() => {
             liveData(Data.ticker)
             .then(data => {
-                if (data && !datepickerOpen) {
+                if (data && !Data.isDatepickerOpen) {
                     setDownloadedLiveData(data)
                 }
             });
         }, 5000);
     
         return () => clearInterval(intervalID);
-    }, [Data.ticker, datepickerOpen]);
+    }, [Data.ticker, Data.isDatepickerOpen]);
     
     useEffect(() => {
         if (Data.secondChartTicker!==null && Data.isSecondChart===true){
-            console.log(Data)
             historicalData(Data.secondChartTicker, Data.startDate, Data.endDate)
                 .then(data => {
                     if (data) {
@@ -262,7 +252,7 @@ export const Chart = () => {
             let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             const tempDate = new Date(downloadedLiveData.timestamp * 1000);
             const formattedDate = tempDate.toISOString().split('T')[0];  
-            if(formattedDate===endDate){
+            if(formattedDate===Data.endDate){
                     const close = downloadedLiveData.close
                     tempXAxis.push(formattedDate)
                     tempYAxis.push(close)
@@ -276,7 +266,7 @@ export const Chart = () => {
                 setXAxis(tempXAxis);
                 setYAxis(tempYAxis);
             }
-    }, [downloadedHistoricalData, downloadedLiveData, endDate]);
+    }, [downloadedHistoricalData, downloadedLiveData, Data.endDate]);
 
     useEffect(() => {
         if (addDownloadedHistoricalData.length>0) {
@@ -293,7 +283,7 @@ export const Chart = () => {
                 };
             setChartData(tempData);
         }
-    }, [xAxis, yAxis, ticker, dataset, isRegression]);
+    }, [xAxis, yAxis, ticker, dataset]);
 
     useEffect(() => {
         setSearchTerm(search)
@@ -328,23 +318,23 @@ export const Chart = () => {
                     pointRadius: 0,
                 },
             ]
-            if (!isRegression){
+            if (!Data.isRegression){
             const newDataSet= [...startData, ...tempDataSet]
             setDataset(newDataSet)
             setAddYAxis()
             }
-            else if (isRegression&&dataset.length<3&&!Data.chartTicker){
+            else if (Data.isRegression&&dataset.length<3&&!Data.chartTicker){
             const newDataSet= [...dataset, ...tempDataSet]
             setDataset(newDataSet)
             setAddYAxis()
             } 
-            else if (isRegression&&dataset.length===3&&!Data.chartTicker){
+            else if (Data.isRegression&&dataset.length===3&&!Data.chartTicker){
                 const filtredDataSet = dataset.filter(item => item.borderColor !== 'green');
                 const newDataSet= [...filtredDataSet, ...tempDataSet]
                 setDataset(newDataSet)
                 setAddYAxis()
                 } 
-            else if (isRegression&&Data.chartTicker){
+            else if (Data.isRegression&&Data.chartTicker){
                 setDataset(startData)
                 setAddYAxis()  
                 updateData(
@@ -352,7 +342,7 @@ export const Chart = () => {
                 )
                 } 
         }
-    },[updateData,addYAxis, yAxis, dataset, startData,  isRegression, Data.DataSecondChartName, Data.SecondChartName, Data.SecondChartTicker, Data.chartTicker, Data.isSecondChart])
+    },[updateData,addYAxis, yAxis, dataset, startData,  Data.isRegression, Data.DataSecondChartName, Data.SecondChartName, Data.SecondChartTicker, Data.chartTicker, Data.isSecondChart])
 
 
     const chartOptions = {
@@ -369,9 +359,9 @@ export const Chart = () => {
                     <p>{parseFloat(downloadedLiveData.change_p).toFixed(2)}%</p>
                 </div>
             </div>
-            <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={endDate} />
+            <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={Data.endDate} />
             <div className={css.datepickerDiv}>
-                <Datepicker className={css.datepicker} onOpen={() => setDatepickerOpen(true)} onClose={() => setDatepickerOpen(false)} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
+                <Datepicker className={css.datepicker} onOpen={() => updateData({ isDatepicerOpne: true })} onClose={() => updateData({ isDatepicerOpne: false})} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
                 {Data.isRegression!==true?
                     (<button className={css.button} id='addRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconAdd}`} /></button>):
                     (<button className={css.button} id='removeRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconRemove}`}/></button>)

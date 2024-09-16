@@ -7,7 +7,9 @@ export const Details = () => {
   const {historicalData, liveData, endDate}=Data
   useEffect(()=>{
     if (!Data.isDetailsOpen){
-      updateData({isDetailsOpen:true})
+      updateData({
+        isDetailsOpen: true,
+      })
     }},[updateData, Data.isDetailsOpen])
   
   
