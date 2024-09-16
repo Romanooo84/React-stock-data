@@ -19,8 +19,7 @@ export const Tickers=()=>{
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
     const { Data, updateData } = useData();
-    const [secondChart, setSecondChart] = useState(false)
-    const [secondChartTicker, setSecondChartTicker]=useState()
+  
 
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
@@ -78,7 +77,6 @@ export const Tickers=()=>{
         let country = ticker.split('.')[1];
         let results = tickers.filter(item => item.Code.includes(newTicker)); 
         if (id === 'CreateGraph') { 
-            setSecondChart(false)
         updateData(
             {
             ticker: event.target.name,
@@ -100,7 +98,6 @@ export const Tickers=()=>{
         }
         results = results.filter(item => item.Code===(newTicker))
         if (id === 'CreateGraph') {
-            setSecondChart(false)
             updateData(
                 {chartName: results[0].Name,
                 chartTicker:ticker,
@@ -112,8 +109,6 @@ export const Tickers=()=>{
         }
         else if (id === 'Add to Graph')
         {
-            setSecondChart(true)
-            setSecondChartTicker(ticker)
             updateData(
                 {secondChartName:results[0].Name,
                 secondChartTicker: ticker,
@@ -125,7 +120,6 @@ export const Tickers=()=>{
         }
         else if (id === 'Remove from Graph')
             {
-            setSecondChart(false)
             setMultiplyList(Data.multiplyList)
             updateData({
                 isSecondChart: false,
@@ -135,12 +129,12 @@ export const Tickers=()=>{
     }, [updateData, Data.multiplyList]);
 
     useEffect(()=>{
-        if (Data.isStartPage && !Data.secondChart) {
+        if (Data.isStartPage && !Data.isSecondChart) {
             updateData({
                 isLoading: true,
             })
     }   
-    },[updateData, Data.isStartPage, Data.secondChart])
+    },[updateData, Data.isStartPage, Data.isSecondChart])
 
     useEffect(() => {
         const intervalID = setInterval(() => {
@@ -235,7 +229,7 @@ export const Tickers=()=>{
                             </div>
                             <div className={css.buttonsDiv}>
                                 <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><BiLineChart className={`${css.icon} ${css.iconCreate}`}/></button>
-                                {secondChartTicker===ticker.code && secondChart? (
+                                {Data.secondChartTicker===ticker.code && Data.isSecondChart? (
                                 <button className={css.button} id='Remove from Graph' name={ticker.code} onClick={onClick}><RiDeleteBack2Fill className={`${css.icon} ${css.iconRemove}`}/></button>
                                 ) : (
                             <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><BiSolidAddToQueue className={`${css.icon} ${css.iconAdd}`} /></button>
@@ -252,7 +246,7 @@ export const Tickers=()=>{
             })
              setMultiplyList([])
         }
-    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, secondChartTicker, secondChart, updateData]);
+    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData]);
 
     return (
         <div className={css.mainDiv}> 
