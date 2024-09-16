@@ -10,7 +10,7 @@ import css from '../styles/Tickers.module.css'
 import { useData } from "hooks/dataContext";
 
 
-export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChartTicker, addChartTicker, setSecondChart, secondChart})=>{
+export const Tickers=()=>{
     const selectRef = useRef(null);
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','GSPC.INDX'])
@@ -97,10 +97,6 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
         results = results.filter(item => item.Code===(newTicker))
         if (id==='CreateGraph'){
-            setChartName(results[0].Name) 
-            setChartTicker(ticker) 
-            setAddChartName(null)
-            setAddChartTicker(null)
             updateData(
                 {chartName: results[0].Name,
                 chartTicker:ticker,
@@ -111,9 +107,7 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
             )
         }
         else if(id==='Add to Graph')
-            {setAddChartName(results[0].Name)
-            setAddChartTicker(ticker) 
-            setSecondChart(true)
+            {
             updateData(
                 {secondChartName:results[0].Name,
                 secondChartTicker: ticker,
@@ -123,15 +117,12 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
         }
         else if(id==='Remove from Graph')
             {
-            setAddChartName(null)
-             setAddChartTicker(null)
-             setSecondChart(false)
             updateData({
                 isSecondChart:false
             })
         }
     
-    }, [setChartTicker, setChartName, setAddChartName, setAddChartTicker,setSecondChart, updateData]);
+    }, [updateData]);
 
     useEffect(()=>{
         updateData({isLoading:true})
@@ -165,10 +156,10 @@ export const Tickers=({setChartTicker, setChartName, setAddChartName, setAddChar
       }, [tickerList]);
 
       useEffect(()=>{
-        if (secondChart===false){
-            setAddChartTicker(null)
+        if (Data.secondChart===false){
+            updateData({seconChartTicker:null})
         }
-      },[secondChart, setAddChartTicker])
+      },[Data.secondChart, updateData])
 
     useEffect(() => {
             multiplyData(tickerList)

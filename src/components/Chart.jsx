@@ -15,7 +15,7 @@ import { useData } from "hooks/dataContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, setChartTicker, setAddChartTicker, secondChart, setSecondChart}) => {
+export const Chart = () => {
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
     const [addYAxis, setAddYAxis]= useState([])
@@ -219,6 +219,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     
     useEffect(() => {
         if (Data.secondChartTicker!==null && Data.isSecondChart===true){
+            console.log(Data)
             historicalData(Data.secondChartTicker, Data.startDate, Data.endDate)
                 .then(data => {
                     if (data) {
@@ -238,7 +239,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                     {chartTicker: null}
                 )
             }
-            else if(Data.isRegression&&chartTicker===null){
+            else if(Data.isRegression&&Data.chartTicker===null){
                 const tempRegYAxis=linearRegression(yAxis)
                 const tempDataSet=[ {
                 label: `Regression ${Data.tickerName}`,
@@ -253,7 +254,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
           setAddYAxis()  
             }
         }
-    }, [Data, Data.chartTicker, Data.isRegression, Data.isSecondChart, Data.secondChartTicker, Data.startDate, Data.tickerName, chartTicker, startData, updateData, yAxis]);
+    }, [Data, Data.chartTicker, Data.isRegression, Data.isSecondChart, Data.secondChartTicker, Data.startDate, Data.tickerName, startData, updateData, yAxis]);
 
     useEffect(() => {
         if (downloadedHistoricalData.length > 0 && downloadedLiveData.close) {
@@ -309,17 +310,17 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
     }, [searchTerm])
 
     useEffect(()=>{
-        if (addYAxis&&dataset.length===1&&addChartName!==null && secondChart===false){
+        if (addYAxis&&dataset.length===1&&Data.SecondChartName!==null && Data.isSecondChart===false){
             const newDataSet= [...dataset, ...startData];
             setDataset(newDataSet)
             setAddYAxis()
             
         }
-        if (addYAxis&&secondChart===true){
+        if (addYAxis&&Data.isSecondChart===true){
             
             const tempDataSet=[
                 {
-                    label: `${addChartTicker} - ${addChartName}$`,
+                    label: `${Data.SecondChartTicker} - ${Data.DataSecondChartName}$`,
                     data: addYAxis,
                     borderColor: 'green',
                     fill: false,
@@ -332,19 +333,18 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
             setDataset(newDataSet)
             setAddYAxis()
             }
-            else if (isRegression&&dataset.length<3&&!chartTicker){
+            else if (isRegression&&dataset.length<3&&!Data.chartTicker){
             const newDataSet= [...dataset, ...tempDataSet]
             setDataset(newDataSet)
             setAddYAxis()
             } 
-            else if (isRegression&&dataset.length===3&&!chartTicker){
+            else if (isRegression&&dataset.length===3&&!Data.chartTicker){
                 const filtredDataSet = dataset.filter(item => item.borderColor !== 'green');
                 const newDataSet= [...filtredDataSet, ...tempDataSet]
                 setDataset(newDataSet)
                 setAddYAxis()
                 } 
-            else if (isRegression&&chartTicker){
-                setChartTicker(null)   
+            else if (isRegression&&Data.chartTicker){
                 setDataset(startData)
                 setAddYAxis()  
                 updateData(
@@ -352,7 +352,7 @@ export const Chart = ({chartTicker, chartName, addChartTicker, addChartName, set
                 )
                 } 
         }
-    },[updateData,addYAxis, yAxis, dataset, addChartName, addChartTicker, startData, chartTicker, isRegression, setChartTicker, setAddChartTicker, secondChart, setSecondChart])
+    },[updateData,addYAxis, yAxis, dataset, startData,  isRegression, Data.DataSecondChartName, Data.SecondChartName, Data.SecondChartTicker, Data.chartTicker, Data.isSecondChart])
 
 
     const chartOptions = {
