@@ -72,27 +72,27 @@
   @keyframes spin {
     0%,
     100% {
-      box-shadow: .2em 0px 1px 0px currentcolor;
+      box-shadow: .2em 0px 0px 0px currentcolor;
     }
     12% {
-      box-shadow: .2em .2em 1px 1px currentcolor;
+      box-shadow: .2em .2em 0px 1px currentcolor;
     }
     25% {
-      box-shadow: 0 .2em 1px 3px currentcolor;
+      box-shadow: 0 .2em 0px 3px currentcolor;
     }
     37% {
-      box-shadow: -.2em .2em 3px 6px currentcolor;
+      box-shadow: -.2em .2em 0px 6px currentcolor;
     }
     50% {
-      box-shadow: -.2em 0 6px 10px currentcolor;
+      box-shadow: -.2em 0 0px 10px currentcolor;
     }
     62% {
-      box-shadow: -.2em -.2em 3px 6px currentcolor;
+      box-shadow: -.2em -.2em 0px 6px currentcolor;
     }
     75% {
-      box-shadow: 0px -.2em 1px 3px currentcolor;
+      box-shadow: 0px -.2em 0px 3px currentcolor;
     }
     87% {
-      box-shadow: .2em -.2em 1px 1px currentcolor;
+      box-shadow: .2em -.2em 0px 1px currentcolor;
     }
   }
