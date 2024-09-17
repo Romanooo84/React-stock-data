@@ -18,6 +18,7 @@ export const Tickers=()=>{
     const [searchTerm, setSearchTerm]=useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
+    const [changedTicker, setChangedTicker]=useState(false)
     const { Data, updateData } = useData();
   
 
@@ -45,6 +46,8 @@ export const Tickers=()=>{
     }), []);
 
     const onChange = useCallback((selectedOption, index) => {
+        updateData({isStartPage: true})
+        setChangedTicker(true)
         const newTicker = selectedOption.value
         const previousTicker = index.name
         const tickerIndex = tickerList.indexOf(previousTicker);
@@ -56,7 +59,7 @@ export const Tickers=()=>{
             }
         })
         setTickerList(newTickerList)
-    },[tickerList])
+    },[tickerList, updateData])
     
     const onInputChange = (event) => {
         setSearch(event.toLowerCase())
@@ -129,12 +132,15 @@ export const Tickers=()=>{
     }, [updateData, Data.multiplyList]);
 
     useEffect(()=>{
-        if (Data.isStartPage && !Data.isSecondChart) {
+        if (Data.isStartPage && !Data.isSecondChart && !changedTicker) {
             updateData({
                 isLoading: true,
-            })
-    }   
-    },[updateData, Data.isStartPage, Data.isSecondChart])
+            }) 
+    }  
+    else if(changedTicker){
+        setChangedTicker(false)
+    } 
+    },[updateData, Data.isStartPage, Data.isSecondChart, changedTicker])
 
     useEffect(() => {
         const intervalID = setInterval(() => {
