@@ -128,9 +128,20 @@ export const Chart = () => {
         let beginigEndDate = new Date();
         let beginigstartDate = new Date(beginigEndDate);
         beginigstartDate.setDate(beginigstartDate.getDate() - 30);
+        const newTicker = ticker.split('.')[0];
+        let country = ticker.split('.')[1];
+        let results = tickers.filter(item => item.Code.includes(newTicker)); 
+        if (country!=='US'){
+            results = results.filter(item => item.Exchange.includes(country)); 
+        } else  {
+            results = results.filter(item => item.Country.includes('USA'))
+        }
+        results = results.filter(item => item.Code===(newTicker))
+        console.log(results)
         updateData({
             ticker: ticker,
-            tickerName:tickerName,
+            tickerName:results[0].Name,
+            chartName:results[0].Name,
             startDate:createDate(beginigstartDate),
             endDate: createDate(beginigEndDate),
             newChart:true
