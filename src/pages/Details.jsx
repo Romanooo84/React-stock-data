@@ -1,29 +1,28 @@
 import { TickerData } from 'components/TickerData';
 import { useData } from 'hooks/dataContext';
-import { useEffect } from 'react';
+import css from '../styles/Details.module.css'
 
 export const Details = () => {
-  const { Data, updateData } = useData();
+  const { Data} = useData();
   const {historicalData, liveData, endDate}=Data
-  useEffect(()=>{
-    if (!Data.isDetailsOpen){
-      updateData({
-        isDetailsOpen: true,
-      })
-    }},[updateData, Data.isDetailsOpen])
-  
+ 
   
 
-  const TickerTable = (historicalData) => {
-    if (historicalData.historicalData.length>0){
-    const markup=historicalData.historicalData.map((data, index) => (
-      <div key={index}>
-        <p>Date: {data.date}</p>
-        <p>Open: {data.open}</p>
-        <p>Close: {data.close}</p>
-        <p>High: {data.high}</p>
-        <p>Low: {data.low}</p>
-        <p>Volume: {data.volume}</p>
+  const TickerTable = ({historicalData}) => {
+    if (historicalData.length>0){
+    let temphistoricalData= [...historicalData].reverse();
+    const markup=temphistoricalData.map((data, index) => (
+      <div className={css.mainDiv}key={index}>
+        <div className={css.dateDiv}>
+          <p>Date: {data.date}</p>
+        </div>
+        <div className={css.dataDiv}>
+          <p>Open: {data.open}</p>
+          <p>Close: {data.close}</p>
+          <p>High: {data.high}</p>
+          <p>Low: {data.low}</p>
+          <p>Volume: {data.volume}</p>
+        </div>
       </div>
     ));
     return(markup)

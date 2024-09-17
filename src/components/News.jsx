@@ -1,6 +1,6 @@
 import { newsData } from "hooks/downloadData";
 import { useState, useEffect, useCallback } from "react";
-import { Loader } from "./Loader";
+import { Loader2 } from "./loader2";
 import {Modal} from './Modal';
 import css from '../styles/News.module.css'
 import { createDate } from "hooks/createDate";
@@ -90,7 +90,7 @@ export const News=()=>{
                 <Datepicker className={css.datepicker} placeholder={`${endDate}`} onChange={onDateChange} controls={['calendar']} touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>
             </div>
             { isLoading ? (
-                <Loader/>
+                <Loader2/>
             ) : (
                 <div>{text}</div>
             )}

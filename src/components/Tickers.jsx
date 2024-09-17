@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
-import { Loader } from "./Loader";
+import { Loader2 } from './loader2'
 import { multiplyData } from '../hooks/downloadData';
 import { BiLineChart } from "react-icons/bi";
 import { BiSolidAddToQueue } from "react-icons/bi";
@@ -256,8 +256,10 @@ export const Tickers=()=>{
 
     return (
         <div className={css.mainDiv}> 
-            {Data.isLoading ? (
-                <Loader className={css.tickersDiv}/>
+            {Data.isLoading ===true ? (
+                <div>
+                <Loader2 className={css.tickersDiv}/>
+                </div>
             ) : (
                 <div>{list}</div>
             )}     

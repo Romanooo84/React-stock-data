@@ -1,0 +1,18 @@
+.mainDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.dateDiv{
+    display: flex;
+    background: #ace4e6;
+    width: 100%;
+    justify-content: center;
+}
+
+.dataDiv{
+    display: flex;
+    background: rgb(12, 96, 185, 0.67);
+}
