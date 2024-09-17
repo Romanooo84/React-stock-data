@@ -57,14 +57,14 @@ export const Chart = () => {
 
     const startData = useMemo(() => [
         {
-          label: `${Data.ticker} - ${Data.tickerName}`,
+          label: `${Data.ticker} - ${Data.chartName}`,
           data: yAxis,
           borderColor: 'blue',
           fill: false,
           borderWidth: 2,
           pointRadius: 0,
         },
-      ], [yAxis,Data.ticker,Data.tickerName]);
+      ], [yAxis,Data.ticker,Data.chartName]);
 
     const onChange = (selectedOption) => {
        updateData({
@@ -278,13 +278,14 @@ export const Chart = () => {
 
     useEffect(() => {
         if (xAxis.length > 0 && yAxis.length > 0 && ticker && dataset) {
+            console.log(Data)
                 const tempData = {
                     labels: xAxis,
                     datasets: dataset
                 };
             setChartData(tempData);
         }
-    }, [xAxis, yAxis, ticker, dataset]);
+    }, [xAxis, yAxis, ticker, dataset, Data]);
 
     useEffect(() => {
         setSearchTerm(search)
@@ -354,7 +355,7 @@ export const Chart = () => {
     return (
         <div className={css.mainDiv}>   
             <div className={css.slectDiv}>
-                <Select className={css.slect} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(Data.ticker)} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.tickerName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
+                <Select className={css.slect} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(Data.ticker)} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
                 <div className={css.dataDiv}>
                     <p>{parseFloat(downloadedLiveData.change_p).toFixed(2)}%</p>
                 </div>
