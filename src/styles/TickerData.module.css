@@ -1,30 +1,24 @@
-@media screen and (min-width: 320px) {
-
+.mainDiv {
+    padding-top: 10px;
+    display: flex;
 }
 
-@media screen and (max-width: 480px) {
+.dateDiv {
+    display: flex;
+    flex-wrap: wrap;
+}
 
-    .mainDiv{
-        padding-top: 10px;
-        display: flex;
-    }
+ .dataDiv {
+     display: flex;
+     flex-wrap: wrap
+ }
 
-    .dateDiv{
-        display: flex;
-        flex-wrap: wrap;
-    }
+.partDiv {
+      display: flex;
+      flex-wrap: wrap;
+  }
 
-    .dataDiv {
-        display: flex;
-        flex-wrap: wrap
-    }
-
-    .partDiv{
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .paragraphDate {
+.paragraphDate {
         display: flex;
         font-family: Oswald;
         font-size: 17px;
@@ -32,8 +26,22 @@
         width: 80px;
     }
 
-    .paragraph{
-        font-family: Oswald;
-        font-size: 13px;
-    }
+.paragraph {
+    font-family: Oswald;
+    font-size: 13px;
+}
+
+@media screen and (min-width: 320px) {
+
+}
+
+@media screen and (max-width: 767px) {
+
+    
+
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 1158px) {
+
 }
