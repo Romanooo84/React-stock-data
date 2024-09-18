@@ -7,36 +7,43 @@ header{
     left: 0;
     width: 100%;
     z-index: 100000;
+    display: flex;
+    justify-content: center;
 }
 
 .logoDiv{
     display: flex;
-    margin-right: 20px;
+    align-items: center;
 }
 
 .paragrph{
-    font-size: 10px;
+    font-size: 12px;
     color:#88b3c2;
     font-weight: 500;
 }
 
 .headerButton{
+    width: 60px;
     border: none;
     background: none;
     color:#88b3c2;
     font-weight: 600;
+    font-size: 13px;
 }
 
 .activePageButton{
+    width: 60px;
     border: none;
     background: none;
     color:#4d9cb9;
     font-weight: 600;
+    font-size: 15px;
 }
 
 .mainDiv{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 360px;
 }
 

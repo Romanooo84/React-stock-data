@@ -26,10 +26,6 @@
     justify-content: space-evenly
 }
 
-.buttonsDiv {
-    display: flex;
-    gap: 5px
-}
 
 .button {
     width: 25px;
@@ -88,6 +84,11 @@
         width: 150px;
         height: 100%;
     }  
+
+    .buttonsDiv {
+        display: flex;
+        gap: 5px
+    }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1158px) {
@@ -112,7 +113,60 @@
     }
 
     .buttonsDiv{
+        display: flex;
+        gap: 5px;
         margin-top: 10px;
     }
+
+}
+
+@media screen and (min-width: 1159px) {
+
+    .mainDiv {
+        border-right: 4px solid blue;
+        width: 270px;
+        position: fixed;
+        height: 100vh;
+    }
+
+    .tickersDiv{
+        margin-top: 20px;
+    }
+
+    .inputDataDiv{
+        
+        flex-wrap: wrap;
+        width: 260px;
+        padding-top: 10px;
+        justify-content: space-around;
+        
+    }
+
+    .slectDiv{
+        width: 260px;
+        font-size: 20px;
+    }
+
+    .dataDiv{
+        margin-top: 20px;
+    }
+
+    .simpleDatadiv {
+        font-size: 20px
+    }
+
+    .buttonsDiv{
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        align-items: center;
+    }
+
+
+    .button{
+        width: 35px;
+        height: 35px;
+    }
+
 
 }

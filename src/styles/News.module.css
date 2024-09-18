@@ -61,6 +61,7 @@
     }
 
     .text {
+        font-family: Oswald;
         width: 320px;
         -webkit-line-clamp: 6;
         line-clamp: 6;
@@ -84,6 +85,7 @@
 @media screen and (min-width: 768px) and (max-width: 1158px){
     .mainDiv {
         margin-left: 250px;
+        width: 450px;
     }
 
     .date {
@@ -91,9 +93,39 @@
     }
 
     .text {
+        font-family: Oswald;
         font-size: 17px;
         width: 450px;
         -webkit-line-clamp: 10;
         line-clamp: 10;
+    }
+}
+
+@media screen and (min-width: 1158px) {
+    .mainDiv {
+        margin-left: 330px;
+    }
+
+    .date {
+        width: 750px;
+        padding-bottom: 15px;
+    }
+
+    .text {
+        font-family: Oswald;
+        font-size: 17px;
+        width: 750px;
+        -webkit-line-clamp: 10;
+        line-clamp: 10;
+    }
+
+    .title {
+        font-size: 30px;
+        padding-bottom: 15px;
+        padding-top: 20px;
+    }
+
+    .newsDiv {
+        margin-top: 20px;
     }
 }

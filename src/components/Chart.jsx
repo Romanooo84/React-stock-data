@@ -59,12 +59,14 @@ export const Chart = () => {
         {
           label: `${Data.ticker} - ${Data.chartName}`,
           data: yAxis,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'blue',
           fill: false,
-          borderWidth: 2,
+          borderWidth: 3,
           pointRadius: 0,
         },
       ], [yAxis,Data.ticker,Data.chartName]);
+      
 
     const onChange = (selectedOption) => {
        updateData({
@@ -246,6 +248,7 @@ export const Chart = () => {
                 const tempDataSet=[ {
                 label: `Regression ${Data.tickerName}`,
                 data: tempRegYAxis,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'red',
                 fill: false,
                 borderWidth: 2,
@@ -324,6 +327,7 @@ export const Chart = () => {
                 {
                     label: `${Data.secondChartTicker} - ${Data.secondChartName}$`,
                     data: addYAxis,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'green',
                     fill: false,
                     borderWidth: 2,
@@ -361,6 +365,40 @@ export const Chart = () => {
         responsive: true,
         maintainAspectRatio: true,
         aspectRatio: 1,
+        scales: {
+            y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald',
+                  },
+                },
+              },
+            x: {
+              grid: {
+                display: false, 
+              },
+              ticks: {
+                font: {
+                  size: 15, 
+                  family: 'Oswald', 
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+                labels: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald', 
+                  },
+                },
+              },
+          },
     };
 
     return (

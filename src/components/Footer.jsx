@@ -5,13 +5,12 @@ export const Footer=()=>{
     return(
         <footer>
             <div className ={css.mainDiv}>
-                <div className ={css.mainDiv}>
+                <div className ={css.logoDiv}>
                 <FcComboChart />
-                <p>Stock-Market-Data</p>
-                <p>Footer</p>
+                <p className={css.paragrph}>Stock-Market-Data</p>
                 </div>
                 <div>
-                    <p>Roman Pisarski</p>
+                    <p className={css.paragrph}>Roman Pisarski</p>
                 </div>
             </div>
         </footer>
