@@ -2,6 +2,7 @@ import { liveData, historicalData } from "hooks/downloadData";
 import { linearRegression } from "hooks/math";
 import { createDate } from "hooks/createDate";
 import { TickerData } from "./TickerData";
+import { chartOptions, barchartOptions, barVolumeChartOptions } from "data/chartOptions";
 import tickers from '../data/ticers'
 import css from '../styles/Chart.module.css'
 import Select from 'react-select';
@@ -19,19 +20,20 @@ export const Chart = () => {
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
     const [barYaxis, setBarYAxis] = useState([]);
-    const [addYAxis, setAddYAxis]= useState([])
+    const [barVolumeYAxis, setBarVolumeYAxis] = useState([])
+    const [addYAxis, setAddYAxis] = useState([])
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
     const [addDownloadedHistoricalData, setAddDownloadedHistoricalData] = useState([]);
     const [downloadedLiveData, setDownloadedLiveData] = useState([]);
     const [chartData, setChartData] = useState(null);
     const [barChartData, setBarChartData] = useState(null);
+    const [barVolumeChartData, setBarVolumeChartData] = useState([])
     const [ticker] = useState('AAPL.US');
     const [tickerName]=useState('Apple INC')
     const [search, setSearch] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [options, setOptions] = useState([]);
     const [dataset, setDataset] = useState([]);
-    const [aspectRatio, setAspectRatio]=useState()
     const { Data, updateData } = useData();
     
     const selectRef = useRef(null);
@@ -71,19 +73,29 @@ export const Chart = () => {
         },
       ], [yAxis,Data.ticker,Data.chartName]);
 
-      const barDataset = useMemo(() => [
+    const barDataset = useMemo(() => [
         {
-          label: `${Data.ticker} - ${Data.chartName}`,
+          label: `Min-MAx for ${Data.ticker} - ${Data.chartName}`,
           data: barYaxis,
-          backgroundColor: 'blue',
-          borderColor: 'blue',
+          backgroundColor: 'rgb(10, 195, 225)',
           fill: false,
           borderWidth: 1,
-          pointRadius: 0,
           barThickness: 3,
           borderSkipped: true
         },
-      ], [barYaxis,Data.ticker,Data.chartName]);
+    ], [barYaxis, Data.ticker, Data.chartName]);
+    
+    const barVolumeDataset = useMemo(() => [
+        {
+          label: `Volume for ${Data.ticker} - ${Data.chartName}`,
+          data: barVolumeYAxis,
+          backgroundColor: 'rgb(153, 0, 255)',
+          fill: false,
+          borderWidth: 1,
+          barThickness: 3,
+          borderSkipped: true
+        },
+      ], [barVolumeYAxis,Data.ticker,Data.chartName]);
       
 
     const onChange = (selectedOption) => {
@@ -142,28 +154,6 @@ export const Chart = () => {
             setDataset(tempDataset)
         }
     }
-
-    useEffect(()=>{
-        const ratio=()=>{
-            const screenWidth=window.innerWidth
-            if(screenWidth<768){
-                setAspectRatio(1.2)
-            }
-            else if(screenWidth>=768 && screenWidth<1158){
-                setAspectRatio(1.5)
-            }
-            else{
-                setAspectRatio(2)
-            }
-        }
-
-        window.addEventListener('resize', ratio);
-        
-        return()=>{
-            window.removeEventListener('resize', ratio);
-          };
-    },[])
-
 
     useEffect(()=>{
         if (Data.startDate===null){
@@ -306,6 +296,7 @@ export const Chart = () => {
             let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
             let tempBarLowYAxis = downloadedHistoricalData.map((axis) => axis.low);
             let tempBarHighYAxis = downloadedHistoricalData.map((axis) => axis.high);
+            let tempBarVolumeYAxis = downloadedHistoricalData.map((axis) => axis.volume);
             const tempDate = new Date(downloadedLiveData.timestamp * 1000);
             const formattedDate = tempDate.toISOString().split('T')[0];  
             if(formattedDate===Data.endDate){
@@ -320,6 +311,7 @@ export const Chart = () => {
             setXAxis(tempXAxis);
             setYAxis(tempYAxis);
             setBarYAxis(BarYAxis)
+            setBarVolumeYAxis(tempBarVolumeYAxis)
            
         }
         else if (downloadedHistoricalData.length > 0 && !downloadedLiveData.close) {
@@ -327,6 +319,7 @@ export const Chart = () => {
                 let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
                 let tempBarLowYAxis = downloadedHistoricalData.map((axis) => axis.low);
                 let tempBarHighYAxis = downloadedHistoricalData.map((axis) => axis.high);
+                let tempBarVolumeYAxis = downloadedHistoricalData.map((axis) => axis.volume);
                 const BarYAxis= []
                 for (let i=0; i<tempBarLowYAxis.length; i++) {
                     BarYAxis.push([tempBarLowYAxis[i], tempBarHighYAxis[i]])
@@ -334,6 +327,7 @@ export const Chart = () => {
                 setXAxis(tempXAxis);
                 setYAxis(tempYAxis);
                 setBarYAxis(BarYAxis)
+                setBarVolumeYAxis(tempBarVolumeYAxis)
         
     }}, [downloadedHistoricalData, downloadedLiveData, Data.endDate]);
 
@@ -363,6 +357,16 @@ export const Chart = () => {
                 setBarChartData(tempData);
         }
     }, [xAxis, yAxis, ticker, Data, barDataset]);
+
+    useEffect(() => {
+        if (xAxis.length > 0 && yAxis.length > 0 && ticker) {
+                const tempData = {
+                    labels: xAxis,
+                    datasets: barVolumeDataset
+                };
+                setBarVolumeChartData(tempData);
+        }
+    }, [xAxis, yAxis, ticker, Data, barVolumeDataset]);
 
     useEffect(() => {
         setSearchTerm(search)
@@ -424,47 +428,6 @@ export const Chart = () => {
     },[updateData,addYAxis, yAxis, dataset, startData,  Data.isRegression, Data.SecondChartName, Data.secondChartName, Data.secondChartTicker, Data.chartTicker, Data.isSecondChart])
 
 
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio,
-        scales: {
-            y: {
-                grid: {
-                  display: false,
-                },
-                ticks: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald',
-                  },
-                },
-                beginAtZero: false
-              },
-            x: {
-              grid: {
-                display: false, 
-              },
-              ticks: {
-                font: {
-                  size: 15, 
-                  family: 'Oswald', 
-                },
-              },
-            },
-          },
-          plugins: {
-            legend: {
-                labels: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald', 
-                  },
-                },
-              },
-          },
-    };
-
 
     return (
         <div className={css.mainDiv}>   
@@ -483,7 +446,8 @@ export const Chart = () => {
                     }
             </div>
             {chartData && <Line className={css.chart} options={chartOptions} data={chartData} />}
-            {barChartData && <Bar className={css.chart} options={chartOptions} data={barChartData} />}
+            {barChartData && <Bar className={css.chart} options={barchartOptions} data={barChartData} />}
+            {barChartData && <Bar className={css.chart} options={barVolumeChartOptions} data={barVolumeChartData} />}
         </div>
     );
 };

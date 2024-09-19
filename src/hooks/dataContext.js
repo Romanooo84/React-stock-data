@@ -34,7 +34,8 @@ export const DataProvider = ({ children }) => {
       secondChartTicker: null,
       isDatepickerOpen: false,
       isStartPage: true,
-      multiplyList:[]
+      multiplyList: [],
+      tickersHistoricalList:[]
     });
   }, []);
 

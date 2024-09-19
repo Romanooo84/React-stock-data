@@ -2,7 +2,9 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
 import { Loader2 } from './loader2'
-import { multiplyData } from '../hooks/downloadData';
+import { aspectRatio } from "data/chartOptions";
+import { TickerData } from "./TickerData";
+import { multiplyData, historicalData } from '../hooks/downloadData';
 import { BiLineChart } from "react-icons/bi";
 import { BiSolidAddToQueue } from "react-icons/bi";
 import { RiDeleteBack2Fill } from "react-icons/ri";
@@ -18,7 +20,9 @@ export const Tickers=()=>{
     const [searchTerm, setSearchTerm]=useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
-    const [changedTicker, setChangedTicker]=useState(false)
+    const [changedTicker, setChangedTicker] = useState(false)
+    const [liveList, setLivelList] = useState([])
+    const [historicalDataComp, setHistoricalDataComp] = useState()
     const { Data, updateData } = useData();
   
 
@@ -161,8 +165,10 @@ export const Tickers=()=>{
                         return data
                     })
                     setMultiplyList(markup);
+                    setLivelList(markup)
                 }
-              });
+              }
+            );
           }, 5000);
     
           return () => clearInterval(intervalID);
@@ -175,25 +181,39 @@ export const Tickers=()=>{
       },[Data.secondChart, updateData])
 
     useEffect(() => {
-        if (Data.isStartPage ) {
-            updateData({ isStartPage: false })
+        if (Data.isStartPage) {
             multiplyData(tickerList)
                 .then(downloadedData => {
                     const markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
                         let country = data.code.split('.')[1];
                         let results = tickers.filter(item => item.Code.includes(newTicker))
-                        if (country!=='US'){
-                            results = results.filter(item => item.Exchange.includes(country)); 
-                        } else  {
+                        if (country !== 'US') {
+                            results = results.filter(item => item.Exchange.includes(country));
+                        } else {
                             results = results.filter(item => item.Country.includes('USA'))
                         }
-                        results = results.filter(item => item.Code===(newTicker))
+                        results = results.filter(item => item.Code === (newTicker))
                         data.Name = (results[0].Name)
                         return data
                     })
                     setMultiplyList(markup);
+                    setLivelList(markup)
                 }
+            ).then(() => { 
+                if (Data.isStartPage) {
+                    let historicalList = []
+                    for (let i = 0; i < tickerList.length; i++) {
+                        historicalData(tickerList[i], '84-05-01', '91-05-01')
+                            .then(data => {
+                                historicalList.push({ [tickerList[i]]: data })
+                            })
+                            .then(() => {
+                                updateData({ tickersHistoricalList: historicalList })
+                            })
+                    }
+                }
+                    }
               );
           }}, [tickerList, Data.isStartPage, updateData]);
 
@@ -253,6 +273,30 @@ export const Tickers=()=>{
              setMultiplyList([])
         }
     }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData]);
+    
+   useEffect(() => {
+    if (Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3 && Data.isStartPage) {
+        updateData({ isStartPage: false });
+        let markup = Data.tickersHistoricalList.map(dataList => {
+            return Object.keys(dataList).map(key => {
+                console.log(dataList[key]);
+                const result = liveList.find(item => item.code === key);
+                console.log(result);
+
+                return (
+                    <TickerData
+                        key={key} 
+                        downloadedHistoricalData={dataList[key]}
+                        downloadedLiveData={result}
+                        endDate={Data.endDate}
+                    />
+                );
+            });
+        });
+        console.log(markup)
+        setHistoricalDataComp(markup)
+    }
+}, [Data.tickersHistoricalList, updateData, Data.isStartPage, liveList]);
 
     return (
         <div className={css.mainDiv}> 
@@ -261,7 +305,14 @@ export const Tickers=()=>{
                 <Loader2 className={css.tickersDiv}/>
                 </div>
             ) : (
-                <div>{list}</div>
+                    <>
+                    <div>{list}</div>
+                        {aspectRatio === 2 ? (
+                        <div>
+                        {historicalDataComp}
+                        </div>):(<></>) } 
+                    
+                    </>
             )}     
         </div>
 );
