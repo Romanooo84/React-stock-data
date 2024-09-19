@@ -2,7 +2,7 @@ header{
     background: linear-gradient(#04184b 10%, #144ea0 50%, #04184b 90%);
     box-shadow: 0 5px 5px rgba(0, 0, 0, .66);
     padding: 10px;
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;

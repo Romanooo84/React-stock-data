@@ -4,30 +4,36 @@
 @media screen and (max-width: 767px) {
 
     .main{
-        margin: 50px auto 0; 
+        margin: 20px auto 0; 
         width: 340px;
         padding-bottom: 15vw;
+        position: sticky;
+        z-index: 0;
     }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1158px) {
 
     .main {
-        margin: 50px auto 0;
+        margin: 20px auto 0;
         width: 720px;
         padding-bottom: 5vw;
         display: flex;
         flex-wrap: wrap;
+        position: sticky;
+        z-index: 0;
     }
 }
 
 @media screen and (min-width: 1158px){
     .main{
-        margin: 50px auto 0;
+        margin: 20px auto 0;
         width: 1100px;
         padding-bottom: 5vw;
         display: flex;
         flex-wrap: wrap;
+        position: sticky;
+        z-index: 0;
     }
 
 }

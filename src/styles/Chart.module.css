@@ -93,9 +93,6 @@ canvas{
         width: 230px;
     }
 
-    .chart{
-        height: 700px;
-    }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1158px) {
@@ -114,6 +111,7 @@ canvas{
 
     .datepickerDiv{
         z-index: 0;
+  
     }
 
 }
@@ -126,8 +124,10 @@ canvas{
     }
 
     .slect {
-        width: 270px;
-    }
+            width: 270px;
+            font-size: 20px;
+            height: 30px;
+        }
 
     .slectDiv{
         z-index: 0;
@@ -135,6 +135,25 @@ canvas{
 
     .datepickerDiv{
         z-index: 0;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        gap: 10px;
+    }
+
+    input{
+        font-size: 20px;
+        width: 220px;
+    }
+
+    .button {
+        width: 27x;
+        height: 27px;
+    }
+
+
+    .dataDiv{
+        font-size: 20px;
     }
 
 }

@@ -43,5 +43,52 @@
 }
 
 @media screen and (min-width: 768px) and (max-width: 1158px) {
+    .mainDiv {
+        padding-top: 10px;
+        display: flex;
+    }
 
+    .dateDiv{
+        width: 120px;
+    }
+
+    .CloseOpen  {
+        height: 50px;
+        width: 100px;
+    }
+
+    .HighLow{
+        height: 50px;
+        width: 100px;
+    }
+
+ 
+}
+
+   
+
+@media screen and (min-width: 1158px){
+    .dateDiv{
+        width: 150px;
+    }
+
+
+    .paragraphDate{
+        font-size: 20px;
+        width: 130px;
+    }
+
+    .CloseOpen  {
+        height: 70px;
+        width: 150px;
+    }
+
+    .HighLow{
+        height: 70px;
+        width: 150px;
+    }
+
+    .paragraph{
+        font-size: 20px;
+    }
 }

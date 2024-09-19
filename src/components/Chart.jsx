@@ -9,26 +9,29 @@ import { MdShowChart } from "react-icons/md";
 import { Datepicker } from '@mobiscroll/react';
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { useEffect, useState, useRef, useMemo } from "react";
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { Line, Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { useData } from "hooks/dataContext";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale,BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
 export const Chart = () => {
     const [xAxis, setXAxis] = useState([]);
     const [yAxis, setYAxis] = useState([]);
+    const [barYaxis, setBarYAxis] = useState([]);
     const [addYAxis, setAddYAxis]= useState([])
     const [downloadedHistoricalData, setDownloadedHistoricalData] = useState([]);
     const [addDownloadedHistoricalData, setAddDownloadedHistoricalData] = useState([]);
     const [downloadedLiveData, setDownloadedLiveData] = useState([]);
     const [chartData, setChartData] = useState(null);
+    const [barChartData, setBarChartData] = useState(null);
     const [ticker] = useState('AAPL.US');
     const [tickerName]=useState('Apple INC')
     const [search, setSearch] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [options, setOptions] = useState([]);
     const [dataset, setDataset] = useState([]);
+    const [aspectRatio, setAspectRatio]=useState()
     const { Data, updateData } = useData();
     
     const selectRef = useRef(null);
@@ -36,18 +39,19 @@ export const Chart = () => {
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
             ...provided,
+            minHeight: 10,
             borderTop: 'none',
             borderBottom: 'none',
             borderLeft: '0px solid transparent',
             borderRight: '0px solid transparent',
-            boxShadow: state.isFocused ? 'none' : 'none',
+            boxShadow: state.isFocused ? 'none' : 'none', 
             '&:hover': {
-                borderBottom: '2px solid blue', 
+                borderBottom: '2px solid blue',
             },
         }),
         dropdownIndicator: (provided) => ({
             ...provided,
-            display: 'none'
+            display: 'none' 
         }),
         indicatorSeparator: (provided) => ({
             ...provided,
@@ -66,6 +70,20 @@ export const Chart = () => {
           pointRadius: 0,
         },
       ], [yAxis,Data.ticker,Data.chartName]);
+
+      const barDataset = useMemo(() => [
+        {
+          label: `${Data.ticker} - ${Data.chartName}`,
+          data: barYaxis,
+          backgroundColor: 'blue',
+          borderColor: 'blue',
+          fill: false,
+          borderWidth: 1,
+          pointRadius: 0,
+          barThickness: 3,
+          borderSkipped: true
+        },
+      ], [barYaxis,Data.ticker,Data.chartName]);
       
 
     const onChange = (selectedOption) => {
@@ -126,6 +144,28 @@ export const Chart = () => {
     }
 
     useEffect(()=>{
+        const ratio=()=>{
+            const screenWidth=window.innerWidth
+            if(screenWidth<768){
+                setAspectRatio(1.2)
+            }
+            else if(screenWidth>=768 && screenWidth<1158){
+                setAspectRatio(1.5)
+            }
+            else{
+                setAspectRatio(2)
+            }
+        }
+
+        window.addEventListener('resize', ratio);
+        
+        return()=>{
+            window.removeEventListener('resize', ratio);
+          };
+    },[])
+
+
+    useEffect(()=>{
         if (Data.startDate===null){
         let beginigEndDate = new Date();
         let beginigstartDate = new Date(beginigEndDate);
@@ -139,7 +179,6 @@ export const Chart = () => {
             results = results.filter(item => item.Country.includes('USA'))
         }
         results = results.filter(item => item.Code===(newTicker))
-        console.log(results)
         updateData({
             ticker: ticker,
             tickerName:results[0].Name,
@@ -265,6 +304,8 @@ export const Chart = () => {
         if (downloadedHistoricalData.length > 0 && downloadedLiveData.close) {
             let tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
             let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
+            let tempBarLowYAxis = downloadedHistoricalData.map((axis) => axis.low);
+            let tempBarHighYAxis = downloadedHistoricalData.map((axis) => axis.high);
             const tempDate = new Date(downloadedLiveData.timestamp * 1000);
             const formattedDate = tempDate.toISOString().split('T')[0];  
             if(formattedDate===Data.endDate){
@@ -272,16 +313,29 @@ export const Chart = () => {
                     tempXAxis.push(formattedDate)
                     tempYAxis.push(close)
                 }
+            const BarYAxis = []
+            for (let i=0; i<tempBarLowYAxis.length; i++) {
+                BarYAxis.push([tempBarLowYAxis[i], tempBarHighYAxis[i]])
+            }
             setXAxis(tempXAxis);
             setYAxis(tempYAxis);
+            setBarYAxis(BarYAxis)
+           
         }
         else if (downloadedHistoricalData.length > 0 && !downloadedLiveData.close) {
                 let tempXAxis = downloadedHistoricalData.map((axis) => axis.date);
                 let tempYAxis = downloadedHistoricalData.map((axis) => axis.close);
+                let tempBarLowYAxis = downloadedHistoricalData.map((axis) => axis.low);
+                let tempBarHighYAxis = downloadedHistoricalData.map((axis) => axis.high);
+                const BarYAxis= []
+                for (let i=0; i<tempBarLowYAxis.length; i++) {
+                    BarYAxis.push([tempBarLowYAxis[i], tempBarHighYAxis[i]])
+                }
                 setXAxis(tempXAxis);
                 setYAxis(tempYAxis);
-            }
-    }, [downloadedHistoricalData, downloadedLiveData, Data.endDate]);
+                setBarYAxis(BarYAxis)
+        
+    }}, [downloadedHistoricalData, downloadedLiveData, Data.endDate]);
 
     useEffect(() => {
         if (addDownloadedHistoricalData.length > 0) {
@@ -292,7 +346,6 @@ export const Chart = () => {
 
     useEffect(() => {
         if (xAxis.length > 0 && yAxis.length > 0 && ticker && dataset) {
-            console.log(Data)
                 const tempData = {
                     labels: xAxis,
                     datasets: dataset
@@ -302,8 +355,18 @@ export const Chart = () => {
     }, [xAxis, yAxis, ticker, dataset, Data]);
 
     useEffect(() => {
+        if (xAxis.length > 0 && yAxis.length > 0 && ticker) {
+                const tempData = {
+                    labels: xAxis,
+                    datasets: barDataset
+                };
+                setBarChartData(tempData);
+        }
+    }, [xAxis, yAxis, ticker, Data, barDataset]);
+
+    useEffect(() => {
         setSearchTerm(search)
-}, [search])
+    }, [search])
 
     useEffect(() => {
         if (searchTerm&&searchTerm.length>2){
@@ -364,7 +427,7 @@ export const Chart = () => {
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: true,
-        aspectRatio: 1,
+        aspectRatio,
         scales: {
             y: {
                 grid: {
@@ -376,6 +439,7 @@ export const Chart = () => {
                     family: 'Oswald',
                   },
                 },
+                beginAtZero: false
               },
             x: {
               grid: {
@@ -401,6 +465,7 @@ export const Chart = () => {
           },
     };
 
+
     return (
         <div className={css.mainDiv}>   
             <div className={css.slectDiv}>
@@ -418,6 +483,7 @@ export const Chart = () => {
                     }
             </div>
             {chartData && <Line className={css.chart} options={chartOptions} data={chartData} />}
+            {barChartData && <Bar className={css.chart} options={chartOptions} data={barChartData} />}
         </div>
     );
 };
