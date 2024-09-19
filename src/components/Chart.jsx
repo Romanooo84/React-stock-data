@@ -2,7 +2,7 @@ import { liveData, historicalData } from "hooks/downloadData";
 import { linearRegression } from "hooks/math";
 import { createDate } from "hooks/createDate";
 import { TickerData } from "./TickerData";
-import { chartOptions, barchartOptions, barVolumeChartOptions } from "data/chartOptions";
+import { aspectRatio } from "data/chartOptions";
 import tickers from '../data/ticers'
 import css from '../styles/Chart.module.css'
 import Select from 'react-select';
@@ -423,11 +423,134 @@ export const Chart = () => {
                 updateData(
                     {chartTicker:null}
                 )
-                } 
+            } 
+    
+
         }
     },[updateData,addYAxis, yAxis, dataset, startData,  Data.isRegression, Data.SecondChartName, Data.secondChartName, Data.secondChartTicker, Data.chartTicker, Data.isSecondChart])
 
-
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio : aspectRatio,
+        scales: {
+            y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald',
+                  },
+                },
+                beginAtZero: false
+              },
+            x: {
+              grid: {
+                display: false, 
+              },
+              ticks: {
+                font: {
+                  size: 15, 
+                  family: 'Oswald', 
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+                labels: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald', 
+                  },
+                },
+              },
+          },
+};
+    
+    const barchartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio,
+        scales: {
+            y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald',
+                  },
+                },
+                beginAtZero: false
+              },
+            x: {
+              grid: {
+                display: false, 
+              },
+              ticks: {
+                font: {
+                  size: 15, 
+                  family: 'Oswald', 
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+                labels: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald', 
+                  },
+                },
+              },
+          },
+};
+    
+        const barVolumeChartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio,
+        scales: {
+            y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald',
+                  },
+                },
+                beginAtZero: false
+              },
+            x: {
+              grid: {
+                display: false, 
+              },
+              ticks: {
+                font: {
+                  size: 15, 
+                  family: 'Oswald', 
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+                labels: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald', 
+                  },
+                },
+              },
+          },
+    };
 
     return (
         <div className={css.mainDiv}>   

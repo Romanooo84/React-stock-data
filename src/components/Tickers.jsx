@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
-import { Loader2 } from './loader2'
-import { aspectRatio } from "data/chartOptions";
+import { Loader2 } from "./loader2";
 import { TickerData } from "./TickerData";
 import { multiplyData, historicalData } from '../hooks/downloadData';
 import { BiLineChart } from "react-icons/bi";
@@ -12,18 +11,37 @@ import css from '../styles/Tickers.module.css'
 import { useData } from "hooks/dataContext";
 
 
-export const Tickers=()=>{
+
+export const Tickers = () => {
     const selectRef = useRef(null);
     const [list, setList] = useState()
-    const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US','GSPC.INDX'])
+    const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US', 'GSPC.INDX'])
     const [search, setSearch] = useState(null)
-    const [searchTerm, setSearchTerm]=useState(null)
+    const [searchTerm, setSearchTerm] = useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
     const [changedTicker, setChangedTicker] = useState(false)
     const [liveList, setLivelList] = useState([])
     const [historicalDataComp, setHistoricalDataComp] = useState()
     const { Data, updateData } = useData();
+
+    let aspectRatio
+    let screenWidth
+
+    const ratio = () => {
+    screenWidth = window.innerWidth
+    if (screenWidth < 768) {
+        aspectRatio = 1.2
+    }
+    else if (screenWidth >= 768 && screenWidth < 1179) {
+        aspectRatio = 1.5
+    }
+    else if (screenWidth >= 1179) {
+        aspectRatio = 2
+    }
+}
+
+    
   
 
     const customStyles = useMemo(() => ({
@@ -34,14 +52,14 @@ export const Tickers=()=>{
             borderBottom: 'none',
             borderLeft: '0px solid transparent',
             borderRight: '0px solid transparent',
-            boxShadow: state.isFocused ? 'none' : 'none', 
+            boxShadow: state.isFocused ? 'none' : 'none',
             '&:hover': {
                 borderBottom: '2px solid blue',
             },
         }),
         dropdownIndicator: (provided) => ({
             ...provided,
-            display: 'none' 
+            display: 'none'
         }),
         indicatorSeparator: (provided) => ({
             ...provided,
@@ -50,83 +68,83 @@ export const Tickers=()=>{
     }), []);
 
     const onChange = useCallback((selectedOption, index) => {
-        updateData({isStartPage: true})
+        updateData({ isStartPage: true })
         setChangedTicker(true)
         const newTicker = selectedOption.value
         const previousTicker = index.name
         const tickerIndex = tickerList.indexOf(previousTicker);
-        const newTickerList=tickerList.map((ticker, index)=>{
-            if(tickerIndex===index){
+        const newTickerList = tickerList.map((ticker, index) => {
+            if (tickerIndex === index) {
                 return newTicker
-            }else{
+            } else {
                 return ticker
             }
         })
         setTickerList(newTickerList)
-    },[tickerList, updateData])
+    }, [tickerList, updateData])
     
     const onInputChange = (event) => {
         setSearch(event.toLowerCase())
     }
 
-    const openMenu=useCallback((index)=>{
+    const openMenu = useCallback((index) => {
         if ((search && search.length > 2) && selectRef.current === index) {
             return true;
-        } else if ((search && search.length <3)||!search) {
+        } else if ((search && search.length < 3) || !search) {
             return false;
         }
     }, [search])
 
     const onClick = useCallback((event) => {
-        const ticker=event.target.name
+        const ticker = event.target.name
         const id = event.target.id
         const newTicker = ticker.split('.')[0];
         let country = ticker.split('.')[1];
-        let results = tickers.filter(item => item.Code.includes(newTicker)); 
-        if (id === 'CreateGraph') { 
-        updateData(
-            {
-            ticker: event.target.name,
-            isSecondChart: false,
-            isRegression: false,
-            newChart: true,
-            }
-        )
-        }
-        else{
-            updateData(
-                {secondChartName: event.target.name}
-            )
-        }
-        if (country!=='US'){
-        results = results.filter(item => item.Exchange.includes(country)); 
-        } else  {
-            results = results.filter(item => item.Country.includes('USA'))
-        }
-        results = results.filter(item => item.Code===(newTicker))
+        let results = tickers.filter(item => item.Code.includes(newTicker));
         if (id === 'CreateGraph') {
             updateData(
-                {chartName: results[0].Name,
-                chartTicker:ticker,
-                isSecondChart: false,
-                isRegression: false,
+                {
+                    ticker: event.target.name,
+                    isSecondChart: false,
+                    isRegression: false,
+                    newChart: true,
+                }
+            )
+        }
+        else {
+            updateData(
+                { secondChartName: event.target.name }
+            )
+        }
+        if (country !== 'US') {
+            results = results.filter(item => item.Exchange.includes(country));
+        } else {
+            results = results.filter(item => item.Country.includes('USA'))
+        }
+        results = results.filter(item => item.Code === (newTicker))
+        if (id === 'CreateGraph') {
+            updateData(
+                {
+                    chartName: results[0].Name,
+                    chartTicker: ticker,
+                    isSecondChart: false,
+                    isRegression: false,
                 }
 
             )
         }
-        else if (id === 'Add to Graph')
-        {
+        else if (id === 'Add to Graph') {
             updateData(
-                {secondChartName:results[0].Name,
-                secondChartTicker: ticker,
-                isSecondChart: true,
-                isStartPage: true,
+                {
+                    secondChartName: results[0].Name,
+                    secondChartTicker: ticker,
+                    isSecondChart: true,
+                    isStartPage: true,
                 
                 }
             )
         }
-        else if (id === 'Remove from Graph')
-            {
+        else if (id === 'Remove from Graph') {
             setMultiplyList(Data.multiplyList)
             updateData({
                 isSecondChart: false,
@@ -135,50 +153,50 @@ export const Tickers=()=>{
     
     }, [updateData, Data.multiplyList]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (Data.isStartPage && !Data.isSecondChart && !changedTicker) {
             updateData({
                 isLoading: true,
-            }) 
-    }  
-    else if(changedTicker){
-        setChangedTicker(false)
-    } 
-    },[updateData, Data.isStartPage, Data.isSecondChart, changedTicker])
+            })
+        }
+        else if (changedTicker) {
+            setChangedTicker(false)
+        }
+    }, [updateData, Data.isStartPage, Data.isSecondChart, changedTicker])
 
     useEffect(() => {
         const intervalID = setInterval(() => {
             multiplyData(tickerList)
-              .then(downloadedData => {
-                if (downloadedData && !Data.isDatepickerOpen) {
-                  const markup = downloadedData.map(data => {
-                        const newTicker = data.code.split('.')[0];
-                        let country = data.code.split('.')[1];
-                        let results = tickers.filter(item => item.Code.includes(newTicker))
-                        if (country!=='US'){
-                            results = results.filter(item => item.Exchange.includes(country)); 
-                        } else  {
-                            results = results.filter(item => item.Country.includes('USA'))
-                        }
-                        results = results.filter(item => item.Code===(newTicker))
-                        data.Name = (results[0].Name)
-                        return data
-                    })
-                    setMultiplyList(markup);
-                    setLivelList(markup)
+                .then(downloadedData => {
+                    if (downloadedData && !Data.isDatepickerOpen) {
+                        const markup = downloadedData.map(data => {
+                            const newTicker = data.code.split('.')[0];
+                            let country = data.code.split('.')[1];
+                            let results = tickers.filter(item => item.Code.includes(newTicker))
+                            if (country !== 'US') {
+                                results = results.filter(item => item.Exchange.includes(country));
+                            } else {
+                                results = results.filter(item => item.Country.includes('USA'))
+                            }
+                            results = results.filter(item => item.Code === (newTicker))
+                            data.Name = (results[0].Name)
+                            return data
+                        })
+                        setMultiplyList(markup);
+                        setLivelList(markup)
+                    }
                 }
-              }
-            );
-          }, 5000);
+                );
+        }, 5000);
     
-          return () => clearInterval(intervalID);
-      }, [tickerList, Data.isDatepickerOpen]);
+        return () => clearInterval(intervalID);
+    }, [tickerList, Data.isDatepickerOpen]);
 
-      useEffect(()=>{
-        if (Data.secondChart===false){
-            updateData({seconChartTicker:null})
+    useEffect(() => {
+        if (Data.secondChart === false) {
+            updateData({ seconChartTicker: null })
         }
-      },[Data.secondChart, updateData])
+    }, [Data.secondChart, updateData])
 
     useEffect(() => {
         if (Data.isStartPage) {
@@ -200,44 +218,55 @@ export const Tickers=()=>{
                     setMultiplyList(markup);
                     setLivelList(markup)
                 }
-            ).then(() => { 
-                if (Data.isStartPage) {
-                    let historicalList = []
-                    for (let i = 0; i < tickerList.length; i++) {
-                        historicalData(tickerList[i], '84-05-01', '91-05-01')
-                            .then(data => {
-                                historicalList.push({ [tickerList[i]]: data })
-                            })
-                            .then(() => {
-                                updateData({ tickersHistoricalList: historicalList })
-                            })
+                ).then(() => {
+                    if (Data.isStartPage) {
+                        let historicalList = []
+                        for (let i = 0; i < tickerList.length; i++) {
+                            historicalData(tickerList[i], '84-05-01', '91-05-01')
+                                .then(data => {
+                                    historicalList.push({ [tickerList[i]]: data })
+                                })
+                                .then(() => {
+                                    updateData({ tickersHistoricalList: historicalList })
+                                })
+                        }
                     }
                 }
-                    }
-              );
-          }}, [tickerList, Data.isStartPage, updateData]);
+                );
+        }
+    }, [tickerList, Data.isStartPage, updateData]);
 
     useEffect(() => {
-        if (searchTerm&&searchTerm.length>2){
-            const results = tickers.filter(item => 
+        if (searchTerm && searchTerm.length > 2) {
+            const results = tickers.filter(item =>
                 item.Name.toLowerCase().includes(searchTerm) &&
-                item.Type !== 'ETF' && 
+                item.Type !== 'ETF' &&
                 item.Type !== 'FUND' &&
                 item.Type !== 'BOND' &&
                 item.Type !== 'Mutual Fund'
             );
-        const options = results.map(item => ({
-          value: item.Country==='USA'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
-          label: `${item.Code}-${item.Name}`
-        }));
+            const options = results.map(item => ({
+                value: item.Country === 'USA' ? `${item.Code}.US` : `${item.Code}.${item.Exchange}`,
+                label: `${item.Code}-${item.Name}`
+            }));
     
-        setOptions(options);}
-      }, [searchTerm])
+            setOptions(options);
+        }
+    }, [searchTerm])
 
 
     useEffect(() => {
-            setSearchTerm(search)
+        setSearchTerm(search)
     }, [search])
+
+    useEffect(() => {
+        
+    console.log(screenWidth)
+    console.log(aspectRatio)
+          
+
+    window.addEventListener('resize', ratio); 
+    })      
 
 
 
@@ -279,10 +308,7 @@ export const Tickers=()=>{
         updateData({ isStartPage: false });
         let markup = Data.tickersHistoricalList.map(dataList => {
             return Object.keys(dataList).map(key => {
-                console.log(dataList[key]);
-                const result = liveList.find(item => item.code === key);
-                console.log(result);
-
+                const result = liveList.find(item => item.code === key)
                 return (
                     <TickerData
                         key={key} 
@@ -293,10 +319,9 @@ export const Tickers=()=>{
                 );
             });
         });
-        console.log(markup)
         setHistoricalDataComp(markup)
     }
-}, [Data.tickersHistoricalList, updateData, Data.isStartPage, liveList]);
+}, [Data.tickersHistoricalList, updateData, Data.isStartPage, liveList, Data.endDate]);
 
     return (
         <div className={css.mainDiv}> 
@@ -306,7 +331,9 @@ export const Tickers=()=>{
                 </div>
             ) : (
                     <>
-                    <div>{list}</div>
+                        <p>{aspectRatio}</p>
+                        <div>{list}</div>
+                        
                         {aspectRatio === 2 ? (
                         <div>
                         {historicalDataComp}
