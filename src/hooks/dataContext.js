@@ -1,4 +1,3 @@
-import { aspectRatio } from 'data/chartOptions';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const DataContext = createContext();
