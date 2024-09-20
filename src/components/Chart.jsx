@@ -2,7 +2,7 @@ import { liveData, historicalData } from "hooks/downloadData";
 import { linearRegression } from "hooks/math";
 import { createDate } from "hooks/createDate";
 import { TickerData } from "./TickerData";
-import { aspectRatio } from "data/chartOptions";
+import {chartOptions,  barchartOptions, barVolumeChartOptions } from "data/chartOptions";
 import tickers from '../data/ticers'
 import css from '../styles/Chart.module.css'
 import Select from 'react-select';
@@ -37,131 +37,6 @@ export const Chart = () => {
     const { Data, updateData } = useData();
     
     const selectRef = useRef(null);
-
-
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio : aspectRatio,
-        scales: {
-            y: {
-                grid: {
-                  display: false,
-                },
-                ticks: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald',
-                  },
-                },
-                beginAtZero: false
-              },
-            x: {
-              grid: {
-                display: false, 
-              },
-              ticks: {
-                font: {
-                  size: 15, 
-                  family: 'Oswald', 
-                },
-              },
-            },
-          },
-          plugins: {
-            legend: {
-                labels: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald', 
-                  },
-                },
-              },
-          },
-    };
-    
-    const barchartOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio,
-        scales: {
-            y: {
-                grid: {
-                  display: false,
-                },
-                ticks: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald',
-                  },
-                },
-                beginAtZero: false
-              },
-            x: {
-              grid: {
-                display: false, 
-              },
-              ticks: {
-                font: {
-                  size: 15, 
-                  family: 'Oswald', 
-                },
-              },
-            },
-          },
-          plugins: {
-            legend: {
-                labels: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald', 
-                  },
-                },
-              },
-          },
-};
-    
-        const barVolumeChartOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio,
-        scales: {
-            y: {
-                grid: {
-                  display: false,
-                },
-                ticks: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald',
-                  },
-                },
-                beginAtZero: false
-              },
-            x: {
-              grid: {
-                display: false, 
-              },
-              ticks: {
-                font: {
-                  size: 15, 
-                  family: 'Oswald', 
-                },
-              },
-            },
-          },
-          plugins: {
-            legend: {
-                labels: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald', 
-                  },
-                },
-              },
-          },
-    };
-
     
 
     const customStyles = useMemo(() => ({

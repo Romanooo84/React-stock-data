@@ -27,4 +27,127 @@ const ratio = () => {
           }
 
 window.addEventListener('resize', ratio);
+
+export const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio : 1.4,
+    scales: {
+        y: {
+            grid: {
+              display: false,
+            },
+            ticks: {
+              font: {
+                size: 15, 
+                family: 'Oswald',
+              },
+            },
+            beginAtZero: false
+          },
+        x: {
+          grid: {
+            display: false, 
+          },
+          ticks: {
+            font: {
+              size: 15, 
+              family: 'Oswald', 
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: {
+            labels: {
+              font: {
+                size: 15, 
+                family: 'Oswald', 
+              },
+            },
+          },
+      },
+};
+
+export const barchartOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 1.4,
+    scales: {
+        y: {
+            grid: {
+              display: false,
+            },
+            ticks: {
+              font: {
+                size: 15, 
+                family: 'Oswald',
+              },
+            },
+            beginAtZero: false
+          },
+        x: {
+          grid: {
+            display: false, 
+          },
+          ticks: {
+            font: {
+              size: 15, 
+              family: 'Oswald', 
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: {
+            labels: {
+              font: {
+                size: 15, 
+                family: 'Oswald', 
+              },
+            },
+          },
+      },
+    };
+
+export   const barVolumeChartOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 1.4,
+    scales: {
+        y: {
+            grid: {
+              display: false,
+            },
+            ticks: {
+              font: {
+                size: 15, 
+                family: 'Oswald',
+              },
+            },
+            beginAtZero: false
+          },
+        x: {
+          grid: {
+            display: false, 
+          },
+          ticks: {
+            font: {
+              size: 15, 
+              family: 'Oswald', 
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: {
+            labels: {
+              font: {
+                size: 15, 
+                family: 'Oswald', 
+              },
+            },
+          },
+      },
+};
         

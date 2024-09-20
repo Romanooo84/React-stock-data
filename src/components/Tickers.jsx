@@ -277,8 +277,6 @@ export const Tickers = () => {
                     }
                 }
                 const live = liveList[index]
-                console.log(historical)
-                console.log(live)
                 return(
                 
                 <div className={css.tickersDiv} key={index} name={index}>
