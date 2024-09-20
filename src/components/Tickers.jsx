@@ -24,24 +24,6 @@ export const Tickers = () => {
     const [liveList, setLivelList] = useState([])
     const { Data, updateData } = useData();
 
-    let aspectRatio
-    let screenWidth =window.innerWidth
-
-    const ratio = () => {
-    screenWidth = window.innerWidth
-        if (screenWidth < 768) {
-            aspectRatio = 1.2
-        }
-        else if (screenWidth >= 768 && screenWidth < 1179) {
-            aspectRatio = 1.5
-        }
-        else if (screenWidth >= 1179) {
-            aspectRatio = 2
-        }
-    }   
-
-    ratio()
-
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
             ...provided,
@@ -78,6 +60,7 @@ export const Tickers = () => {
                 return ticker
             }
         })
+        console.log(1)
         setTickerList(newTickerList)
     }, [tickerList, updateData])
     
@@ -158,12 +141,15 @@ export const Tickers = () => {
             })
         }
         else if (changedTicker) {
-            setChangedTicker(false)
+            console.log(2)
+            /*setChangedTicker(false)*/
         }
     }, [updateData, Data.isStartPage, Data.isSecondChart, changedTicker])
 
     useEffect(() => {
+        
         const intervalID = setInterval(() => {
+            if(changedTicker===false){
             multiplyData(tickerList)
                 .then(downloadedData => {
                     if (downloadedData && !Data.isDatepickerOpen) {
@@ -185,10 +171,10 @@ export const Tickers = () => {
                     }
                 }
                 );
-        }, 5000);
+        }}, 5000);
     
         return () => clearInterval(intervalID);
-    }, [tickerList, Data.isDatepickerOpen]);
+    }, [tickerList, Data.isDatepickerOpen, changedTicker]);
 
     useEffect(() => {
         if (Data.secondChart === false) {
@@ -201,6 +187,7 @@ export const Tickers = () => {
             updateData({ 
                 isStartPage: false
              })
+             console.log(3)
             multiplyData(tickerList)
                 .then(downloadedData => {
                     const markup = downloadedData.map(data => {
@@ -222,7 +209,7 @@ export const Tickers = () => {
                 ).then(() => {
                         let historicalList = []
                         for (let i = 0; i < tickerList.length; i++) {
-                            historicalData(tickerList[i], '84-05-01', '91-05-01')
+                            historicalData(tickerList[i], Data.endDate, Data.endDate)
                                 .then(data => {
                                     historicalList.push({ [tickerList[i]]: data })
                                 })
@@ -235,7 +222,7 @@ export const Tickers = () => {
                     }
                 );
         }
-    }, [tickerList, Data.isStartPage, updateData]);
+    }, [tickerList, Data.isStartPage, updateData, Data.endDate]);
 
     useEffect(() => {
         if (searchTerm && searchTerm.length > 2) {
@@ -260,11 +247,6 @@ export const Tickers = () => {
         setSearchTerm(search)
     }, [search])
 
-    useEffect(() => {
-    window.addEventListener('resize', ratio); 
-    })      
-
-
 
     useEffect(() => {
         if (multiplyList.length > 0 && Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3) {
@@ -276,9 +258,9 @@ export const Tickers = () => {
                         break;  
                     }
                 }
+                console.log(Data.tickersHistoricalList)
                 const live = liveList[index]
                 return(
-                
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
                             <div className={css.slectDiv}>
@@ -295,9 +277,9 @@ export const Tickers = () => {
                              ) : (
                                 <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><BiSolidAddToQueue className={`${css.icon} ${css.iconAdd}`} /></button>
                             )}
-                            <div className={`${css.visuallyHidden} ${css.active}`}>
-                            <TickerData  key={index} downloadedHistoricalData={historical} downloadedLiveData={live} endDate={Data.endDate} />
                             </div>
+                            <div className={`${css.visuallyHidden} ${css.active}`}>
+                            <TickerData  key={index} downloadedHistoricalData={historical} downloadedLiveData={live} endDate={Data.endDate}  file={'Tickers'}/>
                             </div>
                         </div>
             
@@ -310,7 +292,7 @@ export const Tickers = () => {
             })
              setMultiplyList([])
         }
-    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, aspectRatio, liveList]);
+    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
     
 
     return (

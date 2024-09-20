@@ -16,19 +16,21 @@ export let aspectRatio = aspect
 const ratio = () => {
             screenWidth=window.innerWidth
             if(screenWidth<768){
-                aspectRatio=1
+                aspectRatio=0.5
             }
             else if (screenWidth >= 768 && screenWidth < 1178) {
-                aspectRatio=1.5
+                aspectRatio=1
             }
             else if(screenWidth>=1178){
                 aspectRatio=2
           }
+          chartOptions()
           }
 
 window.addEventListener('resize', ratio);
 
-export const chartOptions = {
+export const chartOptions =()=>{ 
+    return{
     responsive: true,
     maintainAspectRatio: true,
     aspectRatio : 1.4,
@@ -67,12 +69,12 @@ export const chartOptions = {
             },
           },
       },
-};
+};}
 
 export const barchartOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    aspectRatio: 1.4,
+    aspectRatio: 1.5,
     scales: {
         y: {
             grid: {
@@ -108,12 +110,12 @@ export const barchartOptions = {
             },
           },
       },
-    };
+    }
 
 export   const barVolumeChartOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    aspectRatio: 1.4,
+    aspectRatio: 1.5,
     scales: {
         y: {
             grid: {

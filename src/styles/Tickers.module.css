@@ -150,7 +150,7 @@
 
     .mainDiv {
         border-right: 4px solid blue;
-        width: 270px;
+        width: 280px;
         position: fixed;
     }
 
@@ -169,8 +169,8 @@
 
     .slectDiv{
         width: 260px;
-        font-size: 20px;
-        height: 30px;
+        font-size: 15px;
+        height: 25px;
     }
 
     .dataDiv{
@@ -178,7 +178,7 @@
     }
 
     .simpleDatadiv {
-        font-size: 20px
+        font-size: 17px
     }
 
     .buttonsDiv{
@@ -190,8 +190,8 @@
 
 
     .button{
-        width: 35px;
-        height: 35px;
+        width: 27px;
+        height: 27px;
     }
 
 

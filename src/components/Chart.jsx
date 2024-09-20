@@ -439,7 +439,7 @@ export const Chart = () => {
                     <p>{parseFloat(downloadedLiveData.change_p).toFixed(2)}%</p>
                 </div>
             </div>
-            <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={Data.endDate} />
+            <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={Data.endDate} file={'Chart'}/>
             <div className={css.datepickerDiv}>
                 <Datepicker className={css.datepicker} onOpen={() => updateData({ isDatepickerOpen: true })} onClose={() => updateData({ isDatepickerOpen: false, newChart: true})} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
                 {Data.isRegression!==true?
@@ -447,7 +447,7 @@ export const Chart = () => {
                     (<button className={css.button} id='removeRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconRemove}`}/></button>)
                     }
             </div>
-            {chartData && <Line className={css.chart} options={chartOptions} data={chartData} />}
+            {chartData && <Line className={css.chart} options={chartOptions()} data={chartData} />}
             {barChartData && <Bar className={css.chart} options={barchartOptions} data={barChartData} />}
             {barChartData && <Bar className={css.chart} options={barVolumeChartOptions} data={barVolumeChartData} />}
         </div>

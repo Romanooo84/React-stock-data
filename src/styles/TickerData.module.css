@@ -61,8 +61,18 @@
    
 
 @media screen and (min-width: 1159px){
+    .tickermainDiv {
+        display: flex;
+        width: 270px;
+        border-bottom: 1px solid blue;
+    }
+
     .dateDiv{
         width: 150px;
+    }
+
+    .tickerdateDiv{
+        width: 100px;
     }
 
 
@@ -71,9 +81,9 @@
         width: 130px;
     }
 
-    .CloseOpen  {
-        height: 70px;
-        width: 150px;
+    .tickerparagraphDate{
+        font-size: 15px;
+        width: 70px;
     }
 
     .HighLow{
@@ -81,7 +91,30 @@
         width: 150px;
     }
 
+    .tickerHighLow{
+        height: 50px;
+        width: 110px
+    }
+
     .paragraph{
         font-size: 20px;
+    }
+
+    .tickerparagraph{
+        font-size: 15px;
+    }
+
+    .tickerdataDiv {
+        display: flex;
+        flex-wrap: wrap
+    }
+
+    .tickerpartDiv {
+        display: flex;
+    }
+
+    .tickerCloseOpen  {
+        height: 50px;
+        width: 110px;
     }
 }

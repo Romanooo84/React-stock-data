@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import css from '../styles/TickerData.module.css'
 
-export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDate }) => {
+export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDate, file }) => {
     const [actualDate, setActualDate]=useState()
     useEffect(() => {
         if (downloadedLiveData.code) {
@@ -13,7 +13,7 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
             else{setActualDate(false)}
         }
     },[downloadedLiveData.code, endDate, downloadedLiveData.timestamp])
-
+    if (file==='Chart'){
     return (
         <div>
             {actualDate && downloadedHistoricalData.length>0 ? (    
@@ -91,5 +91,50 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
                 )
             )}
         </div>
-    );
+        );
+    } 
+    else if (file === 'Tickers')  {
+        return (
+            <div>
+                {actualDate && downloadedHistoricalData!==undefined && downloadedHistoricalData.length>0 ? (    
+                    <div className={css.tickermainDiv}>
+                        <div className={css.tickerdataDiv}>
+                            <div className={css.tickerpartDiv}>
+                            <div className={css.tickerCloseOpen}>
+                                    <p className={css.tickerparagraph}>Open: {parseFloat(downloadedLiveData.open).toFixed(2)}</p>
+                                    <p className={css.tickerparagraph}>Close: {parseFloat(downloadedLiveData.close).toFixed(2)}</p>
+                                </div>
+                                <div className={css.tickerHighLow}>
+                                    <p className={css.tickerparagraph}>High: {parseFloat(downloadedLiveData.high).toFixed(2)}</p>
+                                    <p className={css.tickerparagraph}>Low: {parseFloat(downloadedLiveData.low).toFixed(2)}</p>
+                                </div>
+                                <div className={css.tickerValue}>
+                                    <p className={css.tickerparagraph}>Volume: {downloadedLiveData.volume}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                ) : (
+                    downloadedHistoricalData!==undefined && downloadedHistoricalData.length>0  && (
+                        <div className={css.tickermainDiv}>
+                                <div className={css.tickerpartDiv}> 
+                                    <div className={css.tickerCloseOpen}>
+                                        <p className={css.tickerparagraph}>Open: {parseFloat(downloadedHistoricalData[downloadedHistoricalData.length - 1].open).toFixed(2)}</p>
+                                        <p className={css.tickerparagraph}>Close: {parseFloat(downloadedHistoricalData[downloadedHistoricalData.length - 1].close).toFixed(2)}</p>
+                                    </div>
+                                    <div className={css.tickerHighLow}> 
+                                        <p className={css.tickerparagraph}>High: {parseFloat(downloadedHistoricalData[downloadedHistoricalData.length - 1].high).toFixed(2)}</p>
+                                        <p className={css.tickerparagraph}>Low: {parseFloat(downloadedHistoricalData[downloadedHistoricalData.length - 1].low).toFixed(2)}</p>
+                                    </div>
+                                    <div className={css.tickerValue}>   
+                                        <p className={css.tickerparagraph}>Volume: {downloadedHistoricalData[downloadedHistoricalData.length - 1].volume}</p>
+                                    </div>
+                                </div>
+                        </div>
+                    )
+                )}
+            </div>
+            );
+    }
 }
