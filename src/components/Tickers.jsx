@@ -22,27 +22,25 @@ export const Tickers = () => {
     const [multiplyList, setMultiplyList] = useState([])
     const [changedTicker, setChangedTicker] = useState(false)
     const [liveList, setLivelList] = useState([])
-    const [historicalDataComp, setHistoricalDataComp] = useState()
     const { Data, updateData } = useData();
 
     let aspectRatio
-    let screenWidth
+    let screenWidth =window.innerWidth
 
     const ratio = () => {
     screenWidth = window.innerWidth
-    if (screenWidth < 768) {
-        aspectRatio = 1.2
-    }
-    else if (screenWidth >= 768 && screenWidth < 1179) {
-        aspectRatio = 1.5
-    }
-    else if (screenWidth >= 1179) {
-        aspectRatio = 2
-    }
-}
+        if (screenWidth < 768) {
+            aspectRatio = 1.2
+        }
+        else if (screenWidth >= 768 && screenWidth < 1179) {
+            aspectRatio = 1.5
+        }
+        else if (screenWidth >= 1179) {
+            aspectRatio = 2
+        }
+    }   
 
-    
-  
+    ratio()
 
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
@@ -200,6 +198,9 @@ export const Tickers = () => {
 
     useEffect(() => {
         if (Data.isStartPage) {
+            updateData({ 
+                isStartPage: false
+             })
             multiplyData(tickerList)
                 .then(downloadedData => {
                     const markup = downloadedData.map(data => {
@@ -219,7 +220,6 @@ export const Tickers = () => {
                     setLivelList(markup)
                 }
                 ).then(() => {
-                    if (Data.isStartPage) {
                         let historicalList = []
                         for (let i = 0; i < tickerList.length; i++) {
                             historicalData(tickerList[i], '84-05-01', '91-05-01')
@@ -227,11 +227,12 @@ export const Tickers = () => {
                                     historicalList.push({ [tickerList[i]]: data })
                                 })
                                 .then(() => {
-                                    updateData({ tickersHistoricalList: historicalList })
+                                    updateData({ 
+                                        tickersHistoricalList: historicalList,
+                                     })
                                 })
                         }
                     }
-                }
                 );
         }
     }, [tickerList, Data.isStartPage, updateData]);
@@ -260,19 +261,26 @@ export const Tickers = () => {
     }, [search])
 
     useEffect(() => {
-        
-    console.log(screenWidth)
-    console.log(aspectRatio)
-          
-
     window.addEventListener('resize', ratio); 
     })      
 
 
 
     useEffect(() => {
-        if (multiplyList.length > 0) {
-            const markup = multiplyList.map((ticker, index) => (
+        if (multiplyList.length > 0 && Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3) {
+            const markup = multiplyList.map((ticker, index) =>{ 
+                let historical
+                for (let i=0; i<Data.tickersHistoricalList.length; i++){
+                    if (Data.tickersHistoricalList[i][ticker.code]) {
+                        historical = Data.tickersHistoricalList[i][ticker.code];
+                        break;  
+                    }
+                }
+                const live = liveList[index]
+                console.log(historical)
+                console.log(live)
+                return(
+                
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
                             <div className={css.slectDiv}>
@@ -284,16 +292,19 @@ export const Tickers = () => {
                             </div>
                             <div className={css.buttonsDiv}>
                                 <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><BiLineChart className={`${css.icon} ${css.iconCreate}`}/></button>
-                                {Data.secondChartTicker===ticker.code && Data.isSecondChart? (
+                            {Data.secondChartTicker===ticker.code && Data.isSecondChart? (
                                 <button className={css.button} id='Remove from Graph' name={ticker.code} onClick={onClick}><RiDeleteBack2Fill className={`${css.icon} ${css.iconRemove}`}/></button>
-                                ) : (
-                            <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><BiSolidAddToQueue className={`${css.icon} ${css.iconAdd}`} /></button>
+                             ) : (
+                                <button className={css.button} id='Add to Graph' name={ticker.code} onClick={onClick}><BiSolidAddToQueue className={`${css.icon} ${css.iconAdd}`} /></button>
                             )}
+                            <div className={`${css.visuallyHidden} ${css.active}`}>
+                            <TickerData  key={index} downloadedHistoricalData={historical} downloadedLiveData={live} endDate={Data.endDate} />
+                            </div>
                             </div>
                         </div>
             
                 </div>
-            ));
+            )});
             setList(markup);
             updateData({
                 isLoading: false,
@@ -301,27 +312,8 @@ export const Tickers = () => {
             })
              setMultiplyList([])
         }
-    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData]);
+    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, aspectRatio, liveList]);
     
-   useEffect(() => {
-    if (Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3 && Data.isStartPage) {
-        updateData({ isStartPage: false });
-        let markup = Data.tickersHistoricalList.map(dataList => {
-            return Object.keys(dataList).map(key => {
-                const result = liveList.find(item => item.code === key)
-                return (
-                    <TickerData
-                        key={key} 
-                        downloadedHistoricalData={dataList[key]}
-                        downloadedLiveData={result}
-                        endDate={Data.endDate}
-                    />
-                );
-            });
-        });
-        setHistoricalDataComp(markup)
-    }
-}, [Data.tickersHistoricalList, updateData, Data.isStartPage, liveList, Data.endDate]);
 
     return (
         <div className={css.mainDiv}> 
@@ -331,14 +323,7 @@ export const Tickers = () => {
                 </div>
             ) : (
                     <>
-                        <p>{aspectRatio}</p>
                         <div>{list}</div>
-                        
-                        {aspectRatio === 2 ? (
-                        <div>
-                        {historicalDataComp}
-                        </div>):(<></>) } 
-                    
                     </>
             )}     
         </div>

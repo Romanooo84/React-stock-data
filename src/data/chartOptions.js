@@ -1,18 +1,29 @@
-export let aspectRatio
+let aspect
+let screenWidth=window.innerWidth
+if(screenWidth<768){
+    aspect=0.5
+}
+else if (screenWidth >= 768 && screenWidth < 1178) {
+    aspect=1.5
+}
+else if(screenWidth>=1178){
+    aspect=2
+}
+
+export let aspectRatio = aspect
+
 
 const ratio = () => {
-            const screenWidth=window.innerWidth
+            screenWidth=window.innerWidth
             if(screenWidth<768){
                 aspectRatio=1
             }
-            else if (screenWidth >= 768 && screenWidth < 1179) {
+            else if (screenWidth >= 768 && screenWidth < 1178) {
                 aspectRatio=1.5
             }
-            else if(screenWidth>=1179){
+            else if(screenWidth>=1178){
                 aspectRatio=2
           }
-  console.log(screenWidth)
-  console.log(aspectRatio)
           }
 
 window.addEventListener('resize', ratio);

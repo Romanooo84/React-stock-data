@@ -38,6 +38,132 @@ export const Chart = () => {
     
     const selectRef = useRef(null);
 
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio : aspectRatio,
+        scales: {
+            y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald',
+                  },
+                },
+                beginAtZero: false
+              },
+            x: {
+              grid: {
+                display: false, 
+              },
+              ticks: {
+                font: {
+                  size: 15, 
+                  family: 'Oswald', 
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+                labels: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald', 
+                  },
+                },
+              },
+          },
+    };
+    
+    const barchartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio,
+        scales: {
+            y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald',
+                  },
+                },
+                beginAtZero: false
+              },
+            x: {
+              grid: {
+                display: false, 
+              },
+              ticks: {
+                font: {
+                  size: 15, 
+                  family: 'Oswald', 
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+                labels: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald', 
+                  },
+                },
+              },
+          },
+};
+    
+        const barVolumeChartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio,
+        scales: {
+            y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald',
+                  },
+                },
+                beginAtZero: false
+              },
+            x: {
+              grid: {
+                display: false, 
+              },
+              ticks: {
+                font: {
+                  size: 15, 
+                  family: 'Oswald', 
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+                labels: {
+                  font: {
+                    size: 15, 
+                    family: 'Oswald', 
+                  },
+                },
+              },
+          },
+    };
+
+    
+
     const customStyles = useMemo(() => ({
         control: (provided, state) => ({
             ...provided,
@@ -429,129 +555,7 @@ export const Chart = () => {
         }
     },[updateData,addYAxis, yAxis, dataset, startData,  Data.isRegression, Data.SecondChartName, Data.secondChartName, Data.secondChartTicker, Data.chartTicker, Data.isSecondChart])
 
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio : aspectRatio,
-        scales: {
-            y: {
-                grid: {
-                  display: false,
-                },
-                ticks: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald',
-                  },
-                },
-                beginAtZero: false
-              },
-            x: {
-              grid: {
-                display: false, 
-              },
-              ticks: {
-                font: {
-                  size: 15, 
-                  family: 'Oswald', 
-                },
-              },
-            },
-          },
-          plugins: {
-            legend: {
-                labels: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald', 
-                  },
-                },
-              },
-          },
-};
-    
-    const barchartOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio,
-        scales: {
-            y: {
-                grid: {
-                  display: false,
-                },
-                ticks: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald',
-                  },
-                },
-                beginAtZero: false
-              },
-            x: {
-              grid: {
-                display: false, 
-              },
-              ticks: {
-                font: {
-                  size: 15, 
-                  family: 'Oswald', 
-                },
-              },
-            },
-          },
-          plugins: {
-            legend: {
-                labels: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald', 
-                  },
-                },
-              },
-          },
-};
-    
-        const barVolumeChartOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio,
-        scales: {
-            y: {
-                grid: {
-                  display: false,
-                },
-                ticks: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald',
-                  },
-                },
-                beginAtZero: false
-              },
-            x: {
-              grid: {
-                display: false, 
-              },
-              ticks: {
-                font: {
-                  size: 15, 
-                  family: 'Oswald', 
-                },
-              },
-            },
-          },
-          plugins: {
-            legend: {
-                labels: {
-                  font: {
-                    size: 15, 
-                    family: 'Oswald', 
-                  },
-                },
-              },
-          },
-    };
-
+  
     return (
         <div className={css.mainDiv}>   
             <div className={css.slectDiv}>

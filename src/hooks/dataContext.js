@@ -1,3 +1,4 @@
+import { aspectRatio } from 'data/chartOptions';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const DataContext = createContext();
@@ -35,7 +36,8 @@ export const DataProvider = ({ children }) => {
       isDatepickerOpen: false,
       isStartPage: true,
       multiplyList: [],
-      tickersHistoricalList:[]
+      tickersHistoricalList:[],
+      aspectRatio:null
     });
   }, []);
 
