@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
 import { Loader2 } from "./loader2";
@@ -13,7 +13,6 @@ import { useData } from "hooks/dataContext";
 
 
 export const Tickers = () => {
-    const selectRef = useRef(null);
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US', 'GSPC.INDX'])
     const [search, setSearch] = useState(null)
@@ -50,8 +49,8 @@ export const Tickers = () => {
     }), []);
 
     const onChange = useCallback((selectedOption, index) => {
-        console.log(index)
         updateData({ isStartPage: true })
+        setSearch('')
         setChangedTicker(true)
         const newTicker = selectedOption.value
         const previousTicker = index.name
@@ -64,6 +63,7 @@ export const Tickers = () => {
             }
         })
         setTickerList(newTickerList)
+        setActiveSelect(null)
     }, [tickerList, updateData])
 
     const onInputChange = (event) => {
@@ -149,9 +149,8 @@ export const Tickers = () => {
 
     useEffect(() => {
         const intervalID = setInterval(() => {
-            console.log(isMenuOpen)
             if(!isMenuOpen)
-            multiplyData(tickerList)
+                multiplyData(tickerList)
                 .then(downloadedData => {
                     if (downloadedData && !Data.isDatepickerOpen) {
                         const markup = downloadedData.map(data => {
@@ -187,10 +186,11 @@ export const Tickers = () => {
         if (Data.isStartPage) {
             updateData({ 
                 isStartPage: false
-             })
+            })
+            let markup
             multiplyData(tickerList)
                 .then(downloadedData => {
-                    const markup = downloadedData.map(data => {
+                    markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
                         let country = data.code.split('.')[1];
                         let results = tickers.filter(item => item.Code.includes(newTicker))
@@ -203,29 +203,32 @@ export const Tickers = () => {
                         data.Name = (results[0].Name)
                         return data
                     })
-                    setMultiplyList(markup);
                     setLivelList(markup)
                 }
                 ).then(() => {
-                        let historicalList = []
-                        for (let i = 0; i < tickerList.length; i++) {
-                            historicalData(tickerList[i], '84-05-01', '91-05-01')
-                                .then(data => {
-                                    historicalList.push({ [tickerList[i]]: data })
-                                })
-                                .then(() => {
-                                    updateData({ 
-                                        tickersHistoricalList: historicalList,
-                                     })
-                                })
-                        }
+                    let historicalList = []
+                    let promises = []
+                    for (let i = 0; i < tickerList.length; i++) {
+                        let promise = historicalData(tickerList[i], Data.startDate, Data.endDate)
+                            .then(data => {
+                                historicalList.push({ [tickerList[i]]: data })
+                            })
+                        promises.push(promise);
+                    }
+                    Promise.all(promises).then(() => {
+                        updateData({
+                            tickersHistoricalList: historicalList,
+                        });
+                        setMultiplyList(markup)
+                    });
                     }
                 );
         }
-    }, [tickerList, Data.isStartPage, updateData]);
+    }, [tickerList, Data.isStartPage, updateData,Data.startDate, Data.endDate]);
 
     useEffect(() => {
         if (search && search.length > 2) {
+            setMultiplyList(Data.multiplyList)
             const results = tickers.filter(item =>
                 item.Name.toLowerCase().includes(searchTerm) &&
                 item.Type !== 'ETF' &&
@@ -240,23 +243,24 @@ export const Tickers = () => {
 
             setOptions(options);
         }
-    }, [search,searchTerm])
+    }, [search,searchTerm, Data.multiplyList])
 
 
     useEffect(() => {
         if(search&&search.length>0){
             setIsMenuOpen(true)
-        }else{
+            setSearchTerm(search)
+        }else if (search&&search.length===0){
             setIsMenuOpen(false)
+            setSearchTerm(search)
         }
-        setSearchTerm(search)
     }, [search])
 
     useEffect(() => {
         if ((multiplyList.length > 0 && Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3)) {
-            const markup = multiplyList.map((ticker, index) =>{ 
+            const markup = multiplyList.map((ticker, index) => { 
                 let historical
-                for (let i=0; i<Data.tickersHistoricalList.length; i++){
+                for (let i = 0; i < Data.tickersHistoricalList.length; i++){
                     if (Data.tickersHistoricalList[i][ticker.code]) {
                         historical = Data.tickersHistoricalList[i][ticker.code];
                         break;  
@@ -293,6 +297,7 @@ export const Tickers = () => {
                 isLoading: false,
                 multiplyList
             })
+            setMultiplyList([])
         }
     }, [multiplyList, options, onChange, onClick,activeSelect, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
 

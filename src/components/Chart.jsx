@@ -32,6 +32,7 @@ export const Chart = () => {
     const [tickerName]=useState('Apple INC')
     const [search, setSearch] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    const [isMenuOpen, setIsMenuOpen]=useState(false)
     const [options, setOptions] = useState([]);
     const [dataset, setDataset] = useState([]);
     const { Data, updateData } = useData();
@@ -122,13 +123,6 @@ export const Chart = () => {
         setSearch(event.toLowerCase())
     }
 
-    const openMenu=(index)=>{
-        if ((search && search.length > 2) && selectRef.current === index) {
-            return true;
-        } else if ((search && search.length <3)||!search) {
-            return false;
-        }
-    }
 
     const onClick=(e)=>{
         if(e.target.id==='addRegression'){
@@ -241,12 +235,14 @@ export const Chart = () => {
 
     useEffect(() => {
         const intervalID = setInterval(() => {
-            liveData(Data.ticker)
-            .then(data => {
-                if (data && !Data.isDatepickerOpen) {
-                    setDownloadedLiveData(data)
-                }
-            });
+            if (!Data.isDatepickerOpen) {
+                liveData(Data.ticker)
+                    .then(data => {
+                        if (data && !Data.isDatepickerOpen) {
+                            setDownloadedLiveData(data)
+                        }
+                    });
+            }
         }, 5000);
     
         return () => clearInterval(intervalID);
@@ -370,18 +366,31 @@ export const Chart = () => {
     }, [xAxis, yAxis, ticker, Data, barVolumeDataset]);
 
     useEffect(() => {
-        setSearchTerm(search)
+        if(search&&search.length>0){
+            setSearchTerm(search)
+        }else if (search&&search.length===0){
+            setSearchTerm(search)
+        }
     }, [search])
 
     useEffect(() => {
-        if (searchTerm&&searchTerm.length>2){
-        const results = tickers.filter(item => item.Name.toLowerCase().includes(searchTerm));    
-        const options = results.map(item => ({
-        value: item.Country==='USA'? `${item.Code}.US`:`${item.Code}.${item.Exchange}`,
-        label: `${item.Name}`
-        }));
-        setOptions(options);}
-    }, [searchTerm])
+        if (search && search.length > 2) {
+            const results = tickers.filter(item =>
+                item.Name.toLowerCase().includes(searchTerm) &&
+                item.Type !== 'ETF' &&
+                item.Type !== 'FUND' &&
+                item.Type !== 'BOND' &&
+                item.Type !== 'Mutual Fund'
+            );
+            const options = results.map(item => ({
+                value: item.Country === 'USA' ? `${item.Code}.US` : `${item.Code}.${item.Exchange}`,
+                label: `${item.Code}-${item.Name}`
+            }));
+
+            setOptions(options);
+        }
+    }, [search,searchTerm])
+
 
     useEffect(()=>{
         if (addYAxis&&dataset.length===1&&Data.SecondChartName!==null && Data.isSecondChart===false){
@@ -434,7 +443,7 @@ export const Chart = () => {
     return (
         <div className={css.mainDiv}>   
             <div className={css.slectDiv}>
-                <Select className={css.slect} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(Data.ticker)} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
+                <Select className={css.slect} styles={customStyles} ref={selectRef} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
                 <div className={css.dataDiv}>
                     <p>{parseFloat(downloadedLiveData.change_p).toFixed(2)}%</p>
                 </div>
