@@ -93,6 +93,12 @@ canvas{
         width: 230px;
     }
 
+    .chart {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        min-height: 200px;
+    }
+
 }
 
 @media screen and (min-width: 768px) and (max-width: 1159px) {
@@ -111,8 +117,15 @@ canvas{
 
     .datepickerDiv{
         z-index: 0;
-  
     }
+
+    .chart {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        max-height: 300px;
+    }
+
+    
 
 }
 
@@ -153,6 +166,8 @@ canvas{
 
     .chart{
         margin-top: 20px;
+        margin-bottom: 20px;
+        max-height: 400px;
     }
 
 }

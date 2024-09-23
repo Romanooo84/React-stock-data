@@ -33,7 +33,7 @@ export const chartOptions =()=>{
     return{
     responsive: true,
     maintainAspectRatio: true,
-    aspectRatio : 1.4,
+    aspectRatio : 1.2,
     scales: {
         y: {
             grid: {
@@ -74,7 +74,7 @@ export const chartOptions =()=>{
 export const barchartOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    aspectRatio: 1.5,
+    aspectRatio : 1.2,
     scales: {
         y: {
             grid: {
@@ -115,7 +115,7 @@ export const barchartOptions = {
 export   const barVolumeChartOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    aspectRatio: 1.5,
+    aspectRatio : 1.2,
     scales: {
         y: {
             grid: {
