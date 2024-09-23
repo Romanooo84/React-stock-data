@@ -32,7 +32,6 @@ export const Chart = () => {
     const [tickerName]=useState('Apple INC')
     const [search, setSearch] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [isMenuOpen, setIsMenuOpen]=useState(false)
     const [options, setOptions] = useState([]);
     const [dataset, setDataset] = useState([]);
     const { Data, updateData } = useData();
