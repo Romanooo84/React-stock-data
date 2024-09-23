@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import css from '../styles/TickerData.module.css'
 
 export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDate, file }) => {
-    const [actualDate, setActualDate]=useState()
+    const [actualDate, setActualDate] = useState()
     useEffect(() => {
         if (downloadedLiveData.code) {
            const tempDate = new Date(downloadedLiveData.timestamp * 1000);

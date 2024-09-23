@@ -22,6 +22,8 @@ export const Tickers = () => {
     const [multiplyList, setMultiplyList] = useState([])
     const [changedTicker, setChangedTicker] = useState(false)
     const [liveList, setLivelList] = useState([])
+    const [onChangeTicker, setOnchangeTicker] = useState(true)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const { Data, updateData } = useData();
 
     const customStyles = useMemo(() => ({
@@ -49,6 +51,7 @@ export const Tickers = () => {
 
     const onChange = useCallback((selectedOption, index) => {
         updateData({ isStartPage: true })
+        setOnchangeTicker(true)
         setChangedTicker(true)
         const newTicker = selectedOption.value
         const previousTicker = index.name
@@ -62,16 +65,24 @@ export const Tickers = () => {
         })
         console.log(1)
         setTickerList(newTickerList)
+        updateData({isStartPage: true})
     }, [tickerList, updateData])
     
     const onInputChange = (event) => {
         setSearch(event.toLowerCase())
+        console.log(event.toLowerCase())
     }
 
     const openMenu = useCallback((index) => {
-        if ((search && search.length > 2) && selectRef.current === index) {
-            return true;
-        } else if ((search && search.length < 3) || !search) {
+        if (search && search.length > 0 && selectRef.current === index) {
+            console.log(search.length)
+            console.log('open')
+            setIsMenuOpen(true)
+            return true
+        } else {
+            console.log(search)
+            console.log('close')
+            setIsMenuOpen(false)
             return false;
         }
     }, [search])
@@ -141,15 +152,15 @@ export const Tickers = () => {
             })
         }
         else if (changedTicker) {
-            console.log(2)
-            /*setChangedTicker(false)*/
+            setChangedTicker(false)
         }
     }, [updateData, Data.isStartPage, Data.isSecondChart, changedTicker])
 
-    useEffect(() => {
+   useEffect(() => {
         
-        const intervalID = setInterval(() => {
-            if(changedTicker===false){
+       const intervalID = setInterval(() => {
+            console.log(isMenuOpen)
+            if(changedTicker===false && !changedTicker && !isMenuOpen){
             multiplyData(tickerList)
                 .then(downloadedData => {
                     if (downloadedData && !Data.isDatepickerOpen) {
@@ -174,7 +185,7 @@ export const Tickers = () => {
         }}, 5000);
     
         return () => clearInterval(intervalID);
-    }, [tickerList, Data.isDatepickerOpen, changedTicker]);
+    }, [tickerList, Data.isDatepickerOpen, changedTicker, isMenuOpen]);
 
     useEffect(() => {
         if (Data.secondChart === false) {
@@ -185,9 +196,8 @@ export const Tickers = () => {
     useEffect(() => {
         if (Data.isStartPage) {
             updateData({ 
-                isStartPage: false
+                isStartPage: false,
              })
-             console.log(3)
             multiplyData(tickerList)
                 .then(downloadedData => {
                     const markup = downloadedData.map(data => {
@@ -207,24 +217,28 @@ export const Tickers = () => {
                     setLivelList(markup)
                 }
                 ).then(() => {
-                        let historicalList = []
-                        for (let i = 0; i < tickerList.length; i++) {
-                            historicalData(tickerList[i], Data.endDate, Data.endDate)
-                                .then(data => {
-                                    historicalList.push({ [tickerList[i]]: data })
-                                })
-                                .then(() => {
-                                    updateData({ 
-                                        tickersHistoricalList: historicalList,
-                                     })
-                                })
-                        }
+                    let historicalList = []
+                    let promises = []
+                    for (let i = 0; i < tickerList.length; i++) {
+                        let promise = historicalData(tickerList[i], Data.endDate, Data.endDate)
+                            .then(data => {
+                                historicalList.push({ [tickerList[i]]: data })
+                            })
+                        promises.push(promise);
+                    }
+                    Promise.all(promises).then(() => {
+                        updateData({
+                            tickersHistoricalList: historicalList,
+                        });
+                    console.log('updated');
+    });
                     }
                 );
         }
     }, [tickerList, Data.isStartPage, updateData, Data.endDate]);
 
     useEffect(() => {
+        console.log(searchTerm)
         if (searchTerm && searchTerm.length > 2) {
             const results = tickers.filter(item =>
                 item.Name.toLowerCase().includes(searchTerm) &&
@@ -250,16 +264,20 @@ export const Tickers = () => {
 
     useEffect(() => {
         if (multiplyList.length > 0 && Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3) {
-            const markup = multiplyList.map((ticker, index) =>{ 
+            console.log('afterupdate')
+            console.log(Data.tickersHistoricalList)
+            const markup = multiplyList.map((ticker, index) => { 
                 let historical
-                for (let i=0; i<Data.tickersHistoricalList.length; i++){
-                    if (Data.tickersHistoricalList[i][ticker.code]) {
-                        historical = Data.tickersHistoricalList[i][ticker.code];
-                        break;  
-                    }
+                    for (let i = 0; i < Data.tickersHistoricalList.length; i++) {
+                        if (Data.tickersHistoricalList[i][ticker.code]) {
+                            
+                            historical=Data.tickersHistoricalList[i][ticker.code]
+                            break;
+                        }
                 }
-                console.log(Data.tickersHistoricalList)
-                const live = liveList[index]
+                    let live
+                    live =liveList[index]
+                    setOnchangeTicker(false)
                 return(
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
@@ -292,7 +310,7 @@ export const Tickers = () => {
             })
              setMultiplyList([])
         }
-    }, [multiplyList, options, onChange, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
+    }, [multiplyList, options, onChange,onChangeTicker, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
     
 
     return (
