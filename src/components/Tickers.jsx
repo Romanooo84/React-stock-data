@@ -22,8 +22,8 @@ export const Tickers = () => {
     const [multiplyList, setMultiplyList] = useState([])
     const [changedTicker, setChangedTicker] = useState(false)
     const [liveList, setLivelList] = useState([])
-    const [onChangeTicker, setOnchangeTicker] = useState(true)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [activeSelect, setActiveSelect] = useState(null);
     const { Data, updateData } = useData();
 
     const customStyles = useMemo(() => ({
@@ -50,8 +50,8 @@ export const Tickers = () => {
     }), []);
 
     const onChange = useCallback((selectedOption, index) => {
+        console.log(index)
         updateData({ isStartPage: true })
-        setOnchangeTicker(true)
         setChangedTicker(true)
         const newTicker = selectedOption.value
         const previousTicker = index.name
@@ -63,29 +63,12 @@ export const Tickers = () => {
                 return ticker
             }
         })
-        console.log(1)
         setTickerList(newTickerList)
-        updateData({isStartPage: true})
     }, [tickerList, updateData])
-    
+
     const onInputChange = (event) => {
         setSearch(event.toLowerCase())
-        console.log(event.toLowerCase())
     }
-
-    const openMenu = useCallback((index) => {
-        if (search && search.length > 0 && selectRef.current === index) {
-            console.log(search.length)
-            console.log('open')
-            setIsMenuOpen(true)
-            return true
-        } else {
-            console.log(search)
-            console.log('close')
-            setIsMenuOpen(false)
-            return false;
-        }
-    }, [search])
 
     const onClick = useCallback((event) => {
         const ticker = event.target.name
@@ -132,7 +115,7 @@ export const Tickers = () => {
                     secondChartTicker: ticker,
                     isSecondChart: true,
                     isStartPage: true,
-                
+
                 }
             )
         }
@@ -142,8 +125,16 @@ export const Tickers = () => {
                 isSecondChart: false,
             })
         }
-    
+
     }, [updateData, Data.multiplyList]);
+
+    const handleFocus = (tickerCode) => {
+        setActiveSelect(tickerCode);
+    };
+
+    const handleBlur = () => {
+        setActiveSelect(null);
+    };
 
     useEffect(() => {
         if (Data.isStartPage && !Data.isSecondChart && !changedTicker) {
@@ -156,11 +147,10 @@ export const Tickers = () => {
         }
     }, [updateData, Data.isStartPage, Data.isSecondChart, changedTicker])
 
-   useEffect(() => {
-        
-       const intervalID = setInterval(() => {
+    useEffect(() => {
+        const intervalID = setInterval(() => {
             console.log(isMenuOpen)
-            if(changedTicker===false && !changedTicker && !isMenuOpen){
+            if(!isMenuOpen)
             multiplyData(tickerList)
                 .then(downloadedData => {
                     if (downloadedData && !Data.isDatepickerOpen) {
@@ -182,10 +172,10 @@ export const Tickers = () => {
                     }
                 }
                 );
-        }}, 5000);
-    
+        }, 5000);
+
         return () => clearInterval(intervalID);
-    }, [tickerList, Data.isDatepickerOpen, changedTicker, isMenuOpen]);
+    }, [tickerList, Data.isDatepickerOpen, isMenuOpen]);
 
     useEffect(() => {
         if (Data.secondChart === false) {
@@ -196,7 +186,7 @@ export const Tickers = () => {
     useEffect(() => {
         if (Data.isStartPage) {
             updateData({ 
-                isStartPage: false,
+                isStartPage: false
              })
             multiplyData(tickerList)
                 .then(downloadedData => {
@@ -217,29 +207,25 @@ export const Tickers = () => {
                     setLivelList(markup)
                 }
                 ).then(() => {
-                    let historicalList = []
-                    let promises = []
-                    for (let i = 0; i < tickerList.length; i++) {
-                        let promise = historicalData(tickerList[i], Data.endDate, Data.endDate)
-                            .then(data => {
-                                historicalList.push({ [tickerList[i]]: data })
-                            })
-                        promises.push(promise);
-                    }
-                    Promise.all(promises).then(() => {
-                        updateData({
-                            tickersHistoricalList: historicalList,
-                        });
-                    console.log('updated');
-    });
+                        let historicalList = []
+                        for (let i = 0; i < tickerList.length; i++) {
+                            historicalData(tickerList[i], '84-05-01', '91-05-01')
+                                .then(data => {
+                                    historicalList.push({ [tickerList[i]]: data })
+                                })
+                                .then(() => {
+                                    updateData({ 
+                                        tickersHistoricalList: historicalList,
+                                     })
+                                })
+                        }
                     }
                 );
         }
-    }, [tickerList, Data.isStartPage, updateData, Data.endDate]);
+    }, [tickerList, Data.isStartPage, updateData]);
 
     useEffect(() => {
-        console.log(searchTerm)
-        if (searchTerm && searchTerm.length > 2) {
+        if (search && search.length > 2) {
             const results = tickers.filter(item =>
                 item.Name.toLowerCase().includes(searchTerm) &&
                 item.Type !== 'ETF' &&
@@ -251,38 +237,37 @@ export const Tickers = () => {
                 value: item.Country === 'USA' ? `${item.Code}.US` : `${item.Code}.${item.Exchange}`,
                 label: `${item.Code}-${item.Name}`
             }));
-    
+
             setOptions(options);
         }
-    }, [searchTerm])
+    }, [search,searchTerm])
 
 
     useEffect(() => {
+        if(search&&search.length>0){
+            setIsMenuOpen(true)
+        }else{
+            setIsMenuOpen(false)
+        }
         setSearchTerm(search)
     }, [search])
 
-
     useEffect(() => {
-        if (multiplyList.length > 0 && Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3) {
-            console.log('afterupdate')
-            console.log(Data.tickersHistoricalList)
-            const markup = multiplyList.map((ticker, index) => { 
+        if ((multiplyList.length > 0 && Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3)) {
+            const markup = multiplyList.map((ticker, index) =>{ 
                 let historical
-                    for (let i = 0; i < Data.tickersHistoricalList.length; i++) {
-                        if (Data.tickersHistoricalList[i][ticker.code]) {
-                            
-                            historical=Data.tickersHistoricalList[i][ticker.code]
-                            break;
-                        }
+                for (let i=0; i<Data.tickersHistoricalList.length; i++){
+                    if (Data.tickersHistoricalList[i][ticker.code]) {
+                        historical = Data.tickersHistoricalList[i][ticker.code];
+                        break;  
+                    }
                 }
-                    let live
-                    live =liveList[index]
-                    setOnchangeTicker(false)
+                const live = liveList[index]
                 return(
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
                             <div className={css.slectDiv}>
-                            <Select className={css.selectTicker} styles={customStyles} ref={selectRef} menuIsOpen={openMenu(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                            <Select className={css.selectTicker} styles={customStyles} onBlur={handleBlur} onFocus={() => handleFocus(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
                             </div>
                             <div className={css.dataDiv}>
                                 <div className={css.simpleDatadiv}>{ticker.close!=='NA'? parseFloat(ticker.close).toFixed(2):'Brak Danych'}</div>
@@ -300,7 +285,7 @@ export const Tickers = () => {
                             <TickerData  key={index} downloadedHistoricalData={historical} downloadedLiveData={live} endDate={Data.endDate}  file={'Tickers'}/>
                             </div>
                         </div>
-            
+
                 </div>
             )});
             setList(markup);
@@ -308,10 +293,9 @@ export const Tickers = () => {
                 isLoading: false,
                 multiplyList
             })
-             setMultiplyList([])
         }
-    }, [multiplyList, options, onChange,onChangeTicker, openMenu, onClick, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
-    
+    }, [multiplyList, options, onChange, isMenuOpen, onClick,activeSelect, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
+
 
     return (
         <div className={css.mainDiv}> 
@@ -326,5 +310,4 @@ export const Tickers = () => {
             )}     
         </div>
 );
-            
 }
