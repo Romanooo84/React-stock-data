@@ -294,7 +294,7 @@ export const Tickers = () => {
                 multiplyList
             })
         }
-    }, [multiplyList, options, onChange, isMenuOpen, onClick,activeSelect, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
+    }, [multiplyList, options, onChange, onClick,activeSelect, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
 
 
     return (
