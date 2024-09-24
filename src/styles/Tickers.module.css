@@ -72,6 +72,10 @@
     color: red;
 }
 
+.loaderDiv{
+    height: 100vh;
+}
+
 
 @media screen and (min-width: 320px) {
 }

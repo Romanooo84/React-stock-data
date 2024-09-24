@@ -305,7 +305,7 @@ export const Tickers = () => {
     return (
         <div className={css.mainDiv}> 
             {Data.isLoading ===true ? (
-                <div>
+                <div className={css.loaderDiv}>
                 <Loader2 className={css.tickersDiv}/>
                 </div>
             ) : (

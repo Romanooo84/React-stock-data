@@ -445,7 +445,11 @@ export const Chart = () => {
             <div className={css.slectDiv}>
                 <Select className={css.slect} styles={customStyles} ref={selectRef} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
                 <div className={css.dataDiv}>
-                    <p>{parseFloat(downloadedLiveData.change_p).toFixed(2)}%</p>
+                     <p>
+                        {isNaN(parseFloat(downloadedLiveData.change_p)) 
+                            ? ' Brak danych' 
+                            : parseFloat(downloadedLiveData.change_p).toFixed(2) + '%'}
+                    </p>
                 </div>
             </div>
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={Data.endDate} file={'Chart'}/>
