@@ -164,6 +164,7 @@ export const Tickers = () => {
                             }
                             results = results.filter(item => item.Code === (newTicker))
                             data.Name = (results[0].Name)
+                                
                             return data
                         })
                         setMultiplyList(markup);
@@ -305,7 +306,7 @@ export const Tickers = () => {
     return (
         <div className={css.mainDiv}> 
             {Data.isLoading ===true ? (
-                <div className={css.loaderDiv}>
+                <div>
                 <Loader2 className={css.tickersDiv}/>
                 </div>
             ) : (

@@ -1,10 +1,22 @@
+@media screen and (max-width: 768px){
+
+    .mainDiv {
+        display: flex;
+        justify-content: space-between;
+        width: 340px;
+        flex-direction: column;
+    }
+
+}
+
 
 @media screen and (min-width: 768px) and (max-width: 1159px) {
 
     .mainDiv{
         display: flex;
-        flex-wrap: wrap;
         justify-content: space-between;
+        width: 720px;
+        flex-direction: column;
     }
 
 }

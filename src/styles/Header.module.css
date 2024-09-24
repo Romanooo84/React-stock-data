@@ -16,12 +16,6 @@ header{
     align-items: center;
 }
 
-.paragrph{
-    font-size: 12px;
-    color:#88b3c2;
-    font-weight: 500;
-}
-
 .headerButton{
     width: 60px;
     border: none;
@@ -44,6 +38,68 @@ header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 360px;
 }
+
+@media screen and (max-width: 768px) {
+
+    header{
+        min-width: 340px;
+    }   
+    .mainDiv {
+            width: 340px;
+        }
+    .visuallyHidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        border: 0;
+        padding: 0;
+        white-space: nowrap;
+        clip-path: inset(100%);
+        clip: rect(0 0 0 0);
+        overflow: hidden;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1159px) {
+.mainDiv {
+        width: 720px;
+    }
+
+.paragrph {
+    font-size: 12px;
+    color: #88b3c2;
+    font-weight: 500;
+}
+}
+
+@media screen and (min-width: 1159px) {
+    .mainDiv {
+        width: 1100px;
+    }
+
+    .paragrph {
+        font-size: 18px;
+        color: #88b3c2;
+        font-weight: 500;
+    }
+    .activePageButton {
+            width: 120px;
+            font-weight: 800;
+            font-size: 20px;
+    }
+
+    .headerButton {
+            width: 120px;
+            font-size: 17px;
+    }
+
+    svg{
+        height: 35px;
+        width: 34px;
+    }
+}
+
+
 

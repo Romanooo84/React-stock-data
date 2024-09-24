@@ -9,7 +9,7 @@ import Select from 'react-select';
 import { MdShowChart } from "react-icons/md";
 import { Datepicker } from '@mobiscroll/react';
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { useData } from "hooks/dataContext";
@@ -35,8 +35,7 @@ export const Chart = () => {
     const [options, setOptions] = useState([]);
     const [dataset, setDataset] = useState([]);
     const { Data, updateData } = useData();
-    
-    const selectRef = useRef(null);
+
     
 
     const customStyles = useMemo(() => ({
@@ -100,9 +99,11 @@ export const Chart = () => {
       
 
     const onChange = (selectedOption) => {
-       updateData({
+        const tempChartName = selectedOption.label.split('-')[1]
+        updateData({
         ticker:selectedOption.value,
-        tickerName:selectedOption.label,
+        tickerName: selectedOption.label,
+        chartName:tempChartName ,
         isSecondChart: false,
         newChart:true
        })
@@ -162,7 +163,7 @@ export const Chart = () => {
         } else  {
             results = results.filter(item => item.Country.includes('USA'))
         }
-        results = results.filter(item => item.Code===(newTicker))
+            results = results.filter(item => item.Code === (newTicker))
         updateData({
             ticker: ticker,
             tickerName:results[0].Name,
@@ -374,22 +375,23 @@ export const Chart = () => {
     }, [search])
 
     useEffect(() => {
-        if (search && search.length > 2) {
-            const results = tickers.filter(item =>
-                item.Name.toLowerCase().includes(searchTerm) &&
-                item.Type !== 'ETF' &&
-                item.Type !== 'FUND' &&
-                item.Type !== 'BOND' &&
-                item.Type !== 'Mutual Fund'
-            );
-            const options = results.map(item => ({
-                value: item.Country === 'USA' ? `${item.Code}.US` : `${item.Code}.${item.Exchange}`,
-                label: `${item.Code}-${item.Name}`
-            }));
+    if (search.length > 2) {
+        const results = tickers.filter(item =>
+            item.Name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            item.Type !== 'ETF' &&
+            item.Type !== 'FUND' &&
+            item.Type !== 'BOND' &&
+            item.Type !== 'Mutual Fund'
+        );
 
-            setOptions(options);
-        }
-    }, [search,searchTerm])
+        const newOptions = results.map(item => ({
+            value: item.Country === 'USA' ? `${item.Code}.US` : `${item.Code}.${item.Exchange}`,
+            label: `${item.Code} - ${item.Name}`
+        }));
+
+        setOptions(newOptions);
+    }
+}, [search, searchTerm]);
 
 
     useEffect(()=>{
@@ -443,7 +445,7 @@ export const Chart = () => {
     return (
         <div className={css.mainDiv}>   
             <div className={css.slectDiv}>
-                <Select className={css.slect} styles={customStyles} ref={selectRef} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
+                <Select className={css.slect} styles={customStyles} noOptionsMessage={() => search.length < 3 ? 'Enter at least 3 characters' : 'No options available'} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
                 <div className={css.dataDiv}>
                      <p>
                         {isNaN(parseFloat(downloadedLiveData.change_p)) 

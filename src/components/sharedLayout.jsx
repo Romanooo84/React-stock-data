@@ -5,7 +5,7 @@ import css from '../styles/SharedLayout.module.css'
 
 export const SharedLayout = () => {
   return (
-    <div>
+    <div className={css.mainDiv}>
       <Header />
       <main className={css.main}>
         <Outlet />

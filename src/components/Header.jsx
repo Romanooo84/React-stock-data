@@ -50,7 +50,7 @@ export const Header=()=>{
                 <div className ={css.mainDiv}>
                     <div className={css.logoDiv}>
                     <FcComboChart />
-                    <p className={css.paragrph}>Stock-Market-Data</p>
+                    <p className={`${css.visuallyHidden} ${css.paragrph}`}>Stock-Market-Data</p>
                     </div>
                     <div>
                         {buttons}
