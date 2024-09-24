@@ -294,7 +294,8 @@ export const Chart = () => {
             let tempBarHighYAxis = downloadedHistoricalData.map((axis) => axis.high);
             let tempBarVolumeYAxis = downloadedHistoricalData.map((axis) => axis.volume);
             const tempDate = new Date(downloadedLiveData.timestamp * 1000);
-            const formattedDate = tempDate.toISOString().split('T')[0];  
+            let formattedDate
+            tempDate!=='Invalid Date' ? formattedDate = "No Data"  : formattedDate = tempDate.toISOString().split('T')[0]
             if(formattedDate===Data.endDate){
                     const close = downloadedLiveData.close
                     tempXAxis.push(formattedDate)

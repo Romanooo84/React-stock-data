@@ -61,6 +61,17 @@
    
 
 @media screen and (min-width: 1159px){
+    .CloseOpen  {
+        height: 60px;
+        width: 150px;
+    }
+
+    .HighLow{
+        height: 60px;
+        width: 150px;
+    }
+
+
     .tickermainDiv {
         display: flex;
         width: 270px;
@@ -117,4 +128,9 @@
         height: 50px;
         width: 110px;
     }
+
+    .dataDiv {
+        width: 500px;
+    }
+
 }

@@ -4,19 +4,22 @@ import css from '../styles/TickerData.module.css'
 export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDate, file }) => {
     const [actualDate, setActualDate] = useState()
     useEffect(() => {
-        if (downloadedLiveData.code) {
+        if (downloadedLiveData.code && downloadedLiveData.timestamp !=='NA') {
            const tempDate = new Date(downloadedLiveData.timestamp * 1000);
            const formattedDate = tempDate.toISOString().split('T')[0];
             if (formattedDate === endDate) {
                 setActualDate(true)
             }
             else{setActualDate(false)}
+        } 
+        else {
+            setActualDate(false)
         }
     },[downloadedLiveData.code, endDate, downloadedLiveData.timestamp])
     if (file==='Chart'){
     return (
         <div>
-            {actualDate && downloadedHistoricalData.length>0 ? (    
+            {actualDate==='ok' && downloadedHistoricalData.length>0 ? (    
                 <div className={css.mainDiv}>
                     <div className={css.dateDiv}>
                         <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>
@@ -57,7 +60,7 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
                     <div className={css.mainDiv}>
                         <div className={css.dateDiv}>
                             <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>
-                            <p className={css.paragraphDate}>{endDate}</p>
+                            <p className={css.paragraphDate}>{downloadedHistoricalData[downloadedHistoricalData.length-1].date}</p>
                         </div>
                         <div className={css.dataDiv}>      
                             <div className={css.partDiv}>
