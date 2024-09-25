@@ -15,6 +15,7 @@
         padding-bottom: 15vw;
         position: sticky;
         z-index: 0;
+        overflow: hidden;
     }
 }
 
