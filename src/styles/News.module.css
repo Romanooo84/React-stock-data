@@ -5,6 +5,10 @@
     overflow-x: hidden; 
 }
 
+.mainDiv{
+    min-height: 110vh;
+}
+
 .newsDiv {
     padding-bottom: 20px;
     border-bottom: 2px solid blue;
