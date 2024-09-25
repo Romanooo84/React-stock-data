@@ -23,7 +23,7 @@ export const Contact = () => {
                     </div>  
                 </div>
                 <div className={css.about}>
-                    <div>
+                    <div className={css.aboutElement}>
                         <h1>Skills:</h1>
                         <ul>
                             <li>Knowledge of English - good</li>
@@ -45,7 +45,7 @@ export const Contact = () => {
                         </ul>
                     </div>
 
-                    <div>
+                    <div className={css.aboutElement}>
                         <h1>Hobby:</h1>
                         <ul>
                             <li>Automotive</li>
@@ -60,7 +60,7 @@ export const Contact = () => {
                 </div>
             </div>
             <div className={css.about}>
-                <div>
+            <div className={css.aboutElement}>
                     <h1>Education:</h1>
                         <ul>
                             <li><h3>2004-2009</h3></li>
@@ -76,7 +76,7 @@ export const Contact = () => {
                             </div>
                         </ul>
                 </div>
-                <div>
+                <div className={css.aboutElement}>
                     <h1>Courses:</h1>
                         <ul>
                             <li><h3>2018-2019</h3></li>
@@ -85,7 +85,7 @@ export const Contact = () => {
                             <p>Fullstack Developer (HTML+CSS, JavaScript, React, Node.js)</p>
                         </ul>
                 </div>
-                <div>
+                <div className={css.aboutElement}>
                     <h1>Work Experience:</h1>
                         <ul>
                             <li><h3>01.06.2021 – Present</h3></li>

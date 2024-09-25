@@ -108,3 +108,38 @@ img{
 .Courses{
     width: 300px
 }
+
+@media screen and (max-width: 767px) {
+   .itsMe{
+    width: 340px;
+    padding: 5px;
+   }
+
+   .adressPicture{
+    width: 330px;
+    padding: 3px;
+   
+   }
+
+   .about{
+    width: 330px;
+    padding: 0px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+   }
+
+   .namePhoneEmail{
+    width: 330px;
+    padding: 0;
+    flex-direction: column;
+   }
+
+   .namePhoneEmailPart{
+    align-items: center;
+   }
+
+   .aboutElement{
+    width: 80%;
+   }
+}
