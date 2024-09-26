@@ -1,35 +1,52 @@
 .modalOverlay {
-    position: fixed;         /* Ustawia modal w stałej pozycji */
-    top: 0;                  /* Wyrównuje modal do górnej krawędzi */
-    left: 0;                 /* Wyrównuje modal do lewej krawędzi */
-    right: 0;                /* Rozciąga modal na całą szerokość */
-    bottom: 0;               /* Rozciąga modal na całą wysokość */
-    background-color: rgba(3, 12, 41, 0.85); /* Ciemne tło z przezroczystością */
-    display: flex;           /* Używamy flexbox do centrowania zawartości */
-    justify-content: center; /* Centruje zawartość w poziomie */
-    align-items: flex-start;     /* Centruje zawartość w pionie */
-    z-index: 1000;           /* Zapewnia, że modal jest na wierzchu */
+    position: fixed;         
+    top: 0;              
+    left: 0;             
+    right: 0;               
+    bottom: 0;               
+    background-color: rgba(3, 12, 41, 0.85); 
+    display: flex;          
+    justify-content: center;
+    align-items: flex-start;    
+    z-index: 1000;      
   }
   
   .modalContent {
-    background-color: white; /* Tło dla modala */
+    background-color: white;
     top: 8vh;
-    padding: 20px;           /* Margines wewnętrzny */
-    border-radius: 8px;      /* Zaokrąglenie rogów */
-    width: 80%;              /* Szerokość modala */
-    max-width: 600px;        /* Maksymalna szerokość modala */
-    max-height: 80vh;        /* Maksymalna wysokość modala (80% wysokości okna) */      
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Cień dla lepszego efektu */
-    position: relative;      /* Ustawia pozycję względną dla przycisku zamykania */
+    padding: 20px;       
+    border-radius: 8px;                  
+    max-height: 85%;             
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    position: relative;     
   }
   
   .closeButton {
-    position: absolute;      /* Ustawia przycisk zamykania */
-    top: 10px;               /* Odstęp od górnej krawędzi */
-    right: 10px;             /* Odstęp od prawej krawędzi */
-    background: none;        /* Tło bez koloru */
-    border: none;            /* Bez obramowania */
-    font-size: 24px;         /* Rozmiar czcionki */
-    cursor: pointer;         /* Wskaźnik ręki */
+    position: absolute;  
+    top: 10px;               
+    right: 10px;            
+    background: none;      
+    border: none;           
+    font-size: 24px;       
+    cursor: pointer;        
+  }
+
+  @media screen and (max-width: 767px) {
+    .modalContent{
+      width: 320px; 
+    }
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1159px) {
+
+    .modalContent{
+      width: 500px; 
+    }
+  }
+
+  @media screen and (min-width: 1159px) {
+    .modalContent{
+      width: 750px; 
+    }
   }
   

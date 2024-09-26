@@ -16,6 +16,7 @@
         position: sticky;
         z-index: 0;
         overflow: hidden;
+        justify-content: center;
     }
 }
 
@@ -29,6 +30,7 @@
         flex-wrap: wrap;
         position: sticky;
         z-index: 0;
+        justify-content: center;
     }
     .mainDiv{
         align-items: center
@@ -44,6 +46,7 @@
         flex-wrap: wrap;
         position: sticky;
         z-index: 0;
+        justify-content: center;
     }
 
 }

@@ -23,15 +23,21 @@ header{
     color:#88b3c2;
     font-weight: 600;
     font-size: 13px;
+    transition: transform 0.725s, color 0.5s;
+}
+
+.headerButton:hover{
+    color: rgb(0, 225, 255);
+    transform: scale(1.1); 
 }
 
 .activePageButton{
     width: 60px;
     border: none;
     background: none;
-    color:#4d9cb9;
+    color:#4acad8;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .mainDiv{

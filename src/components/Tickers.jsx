@@ -15,7 +15,7 @@ import { useData } from "hooks/dataContext";
 export const Tickers = () => {
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US', 'GSPC.INDX'])
-    const [search, setSearch] = useState(null)
+    const [search, setSearch] = useState([null])
     const [searchTerm, setSearchTerm] = useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
@@ -30,12 +30,14 @@ export const Tickers = () => {
             ...provided,
             minHeight: 10,
             borderTop: 'none',
-            borderBottom: 'none',
+            borderBottom: '3px solid transparent',
             borderLeft: '0px solid transparent',
             borderRight: '0px solid transparent',
-            boxShadow: state.isFocused ? 'none' : 'none',
+            boxShadow: state.isFocused ? 'none' : 'none', 
+            transition: `border-color 1.25s, transform 1s`,
+
             '&:hover': {
-                borderBottom: '2px solid blue',
+                borderBottom: '3px solid blue',
             },
         }),
         dropdownIndicator: (provided) => ({
@@ -272,7 +274,7 @@ export const Tickers = () => {
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
                             <div className={css.slectDiv}>
-                            <Select className={css.selectTicker} styles={customStyles} onBlur={handleBlur} onFocus={() => handleFocus(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                            <Select className={css.selectTicker} styles={customStyles} onBlur={handleBlur} noOptionsMessage={() => search.length < 3 ? 'Enter at least 3 characters' : 'No options available'} onFocus={() => handleFocus(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
                             </div>
                             <div className={css.dataDiv}>
                                 <div className={css.simpleDatadiv}>{ticker.close!=='NA'? parseFloat(ticker.close).toFixed(2):'Brak Danych'}</div>
@@ -300,7 +302,7 @@ export const Tickers = () => {
             })
             setMultiplyList([])
         }
-    }, [multiplyList, options, onChange, onClick,activeSelect, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
+    }, [multiplyList, options, onChange, search.length, onClick,activeSelect, customStyles, Data.secondChartTicker, Data.isSecondChart, updateData, Data.endDate, Data.tickersHistoricalList, liveList]);
 
 
     return (

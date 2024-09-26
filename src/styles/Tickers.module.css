@@ -76,6 +76,15 @@
     height: 100vh;
 }
 
+.button{
+    transition: transform 0.750s;
+}
+
+.button:hover {
+    transform: scale(1.1);
+}
+
+
 
 @media screen and (min-width: 320px) {
 }

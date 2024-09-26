@@ -43,12 +43,14 @@ export const Chart = () => {
             ...provided,
             minHeight: 10,
             borderTop: 'none',
-            borderBottom: 'none',
+            borderBottom: '3px solid transparent',
             borderLeft: '0px solid transparent',
             borderRight: '0px solid transparent',
             boxShadow: state.isFocused ? 'none' : 'none', 
+            transition: `border-color 1.25s, transform 1s`,
+
             '&:hover': {
-                borderBottom: '2px solid blue',
+                borderBottom: '3px solid blue',
             },
         }),
         dropdownIndicator: (provided) => ({

@@ -1,18 +1,67 @@
+.details{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    
+}
+
 .mainDiv{
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.716); 
+    border-radius: 15px;
+    font-family: 'Oswald';
+   
 }
 
 .dateDiv{
+    font-style: italic;
     display: flex;
     background: #ace4e6;
     width: 100%;
     justify-content: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 .dataDiv{
     display: flex;
     background: rgb(12, 96, 185, 0.67);
+    justify-content: space-around;
+    width: 100%;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.inputDiv{
+    display: flex;
+    justify-content: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 20px
+}
+
+.slect {
+    border-radius: 5px;
+    box-shadow: 0px 10px 9px -5px rgba(66, 68, 90, 1);
+    background-color: transparent;
+    transition: border-bottom 0.3s ease;
+    font-family: Oswald;
+    font-size: 20px;
+    text-align: center;
+    width: 300px;
+}
+
+@media screen and (min-width: 1159px) {
+    .dataDiv{
+        gap: 30px;
+        width: 750px;
+    }
+
+    p{
+        font-family: Oswald;
+        font-size: 17px;
+    }
+
 }

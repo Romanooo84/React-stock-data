@@ -6,7 +6,7 @@ import css from '../styles/News.module.css'
 import { createDate } from "hooks/createDate";
 import { Datepicker } from '@mobiscroll/react';
 
-export const News=()=>{
+export const News=({Page})=>{
 
     const [text, setText] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,9 +83,8 @@ export const News=()=>{
         setIsLoading(false)
     }, [dataNews, openModal])
     
-
     return (
-        <div className={css.mainDiv}>
+        <div className={Page === 'mainPage' ? css.mainDiv : css.mainDivNewsPage}>
             <div className={css.datepickerDiv}>
                 <Datepicker className={css.datepicker} placeholder={`${endDate}`} onChange={onDateChange} controls={['calendar']} touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>
             </div>

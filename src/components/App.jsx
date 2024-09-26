@@ -11,7 +11,7 @@ export const App = () => {
       <Route path="React-stock-data/" element={<SharedLayout />}>
         <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<MainPage />} />
-        <Route path="news" element={<AlleNews />} />
+        <Route path="news" element={<AlleNews/>} />
         <Route path="details" element={<Details />} />
         <Route path="contact" element={<Contact />} />
       </Route>

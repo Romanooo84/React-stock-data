@@ -12,7 +12,7 @@ export const  MainPage=()=>{
     <div className={css.mainDiv}>
       <Tickers/>
       <Chart />
-      <News/>
+      <News Page={'mainPage'}/>
     </div>
   );
 }
