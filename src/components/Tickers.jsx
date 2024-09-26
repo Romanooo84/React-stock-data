@@ -15,7 +15,7 @@ import { useData } from "hooks/dataContext";
 export const Tickers = () => {
     const [list, setList] = useState()
     const [tickerList, setTickerList] = useState(['AAPL.US', 'EUR.FOREX', 'MSFT.US', 'GSPC.INDX'])
-    const [search, setSearch] = useState([null])
+    const [search, setSearch] = useState([])
     const [searchTerm, setSearchTerm] = useState(null)
     const [options, setOptions] = useState([]);
     const [multiplyList, setMultiplyList] = useState([])
@@ -151,6 +151,7 @@ export const Tickers = () => {
 
     useEffect(() => {
         const intervalID = setInterval(() => {
+            console.log(isMenuOpen)
             if(!isMenuOpen)
                 multiplyData(tickerList)
                 .then(downloadedData => {
@@ -250,10 +251,10 @@ export const Tickers = () => {
 
 
     useEffect(() => {
-        if(search&&search.length>0){
+        if (search && search.length > 0) {
             setIsMenuOpen(true)
             setSearchTerm(search)
-        }else if (search&&search.length===0){
+        }else if ((search&&search.length===0)||search===''){
             setIsMenuOpen(false)
             setSearchTerm(search)
         }
