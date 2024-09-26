@@ -25,7 +25,7 @@ export const Header=()=>{
             if (button!==pageTitle.toLowerCase()) {
                 let upperLetter=button.charAt(0).toUpperCase()+button.slice(1)
                 return (
-                    <Link key={index} to={`/React-stock-data/${button}`}>
+                    <Link key={index} to={`/${button}`}>
                     <button className={css.headerButton} onClick={onClick}>{upperLetter}</button>
                     </Link> 
                 )
@@ -33,7 +33,7 @@ export const Header=()=>{
             else {
                 let upperLetter=button.charAt(0).toUpperCase()+button.slice(1)
                 return (
-                    <Link key={index} to={`/React-stock-data/${button}`}>
+                    <Link key={index} to={`/${button}`}>
                     <button className={css.activePageButton}>{upperLetter}</button>
                     </Link> 
                 )
