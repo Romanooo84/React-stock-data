@@ -447,9 +447,9 @@ export const Chart = () => {
     return (
         <div className={css.mainDiv}>   
             <div className={css.slectDiv}>
-                <Select className={css.slect} styles={customStyles} noOptionsMessage={() => search.length < 3 ? 'Enter at least 3 characters' : 'No options available'} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
+                <Select className={css.slect} styles={customStyles} noOptionsMessage={() => options.length < 1 ? 'Enter at least 3 characters' : 'No options available'} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
                 <div className={css.dataDiv}>
-                     <p>
+                     <p className={parseFloat(ticker.change_p).toFixed(2) >0 ? `${css.green} ${css.simpleDatadiv}` : `${css.red} ${css.simpleDatadiv}`}>
                         {isNaN(parseFloat(downloadedLiveData.change_p)) 
                             ? ' Brak danych' 
                             : parseFloat(downloadedLiveData.change_p).toFixed(2) + '%'}

@@ -53,6 +53,14 @@
     font-size: 12px;
 }
 
+.red{
+    color:red
+}
+
+.green{
+    color:green
+}
+
 .icon {
     position: relative;
     z-index: -100;

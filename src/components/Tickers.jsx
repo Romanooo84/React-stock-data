@@ -270,15 +270,16 @@ export const Tickers = () => {
                     }
                 }
                 const live = liveList[index]
+
                 return(
                 <div className={css.tickersDiv} key={index} name={index}>
                         <div className={css.inputDataDiv}>
                             <div className={css.slectDiv}>
-                            <Select className={css.selectTicker} styles={customStyles} onBlur={handleBlur} noOptionsMessage={() => search.length < 3 ? 'Enter at least 3 characters' : 'No options available'} onFocus={() => handleFocus(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
+                            <Select className={css.selectTicker} styles={customStyles} onBlur={handleBlur} noOptionsMessage={() => options.length < 1 ? 'Enter at least 3 characters' : 'No options available'} onFocus={() => handleFocus(ticker.code)} name={ticker.code} value={{ label: `${ticker.code} - ${ticker.Name}`, value: ticker.code }} options={options} onChange={onChange} onInputChange={onInputChange}/>
                             </div>
                             <div className={css.dataDiv}>
                                 <div className={css.simpleDatadiv}>{ticker.close!=='NA'? parseFloat(ticker.close).toFixed(2):'Brak Danych'}</div>
-                                <div className={css.simpleDatadiv}>{ticker.change_p!=='NA'? `${parseFloat(ticker.change_p).toFixed(2)}%`:""}</div>
+                                <div className={parseFloat(ticker.change_p).toFixed(2) >0? `${css.green} ${css.simpleDatadiv}` : `${css.red} ${css.simpleDatadiv}`}>{ticker.change_p!=='NA'? `${parseFloat(ticker.change_p).toFixed(2)}%`:""}</div>
                             </div>
                             <div className={css.buttonsDiv}>
                                 <button className={css.button} id='CreateGraph' name={ticker.code} onClick={onClick}><BiLineChart className={`${css.icon} ${css.iconCreate}`}/></button>

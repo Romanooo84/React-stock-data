@@ -36,6 +36,19 @@ p {
     margin: 5px
 }
 
+.simpleDatadiv {
+    font-family: Oswald;
+    font-size: 20px;
+}
+
+.red{
+    color:red
+}
+
+.green{
+    color:green
+}
+
 input {
     border: 3px solid transparent;
     border-radius: 5px;
