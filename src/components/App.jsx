@@ -1,3 +1,4 @@
+import { Currency } from 'pages/Currency';
 import { MainPage } from '../pages/MainPage';
 import { AlleNews } from '../pages/news';
 import { SharedLayout } from './sharedLayout';
@@ -11,8 +12,9 @@ export const App = () => {
       <Route path="/React-stock-data/" element={<SharedLayout />}>
         <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<MainPage />} />
-        <Route path="news" element={<AlleNews/>} />
         <Route path="details" element={<Details />} />
+        <Route path="news" element={<AlleNews/>} />
+        <Route path="currency" element={<Currency />} />
         <Route path="contact" element={<Contact />} />
       </Route>
     </Routes>

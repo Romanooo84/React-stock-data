@@ -18,7 +18,7 @@ export const Header=()=>{
     
 
     useEffect(()=>{
-        const buttonsList = ['home', 'details', 'news', 'contact']
+        const buttonsList = ['home', 'details', 'currency', 'news', 'contact']
         const path=location.pathname.split('/')
         const pageTitle = path[path.length-1]
         const markup=buttonsList.map((button, index)=>{
