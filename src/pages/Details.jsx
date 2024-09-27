@@ -1,8 +1,10 @@
 import { useData } from 'hooks/dataContext';
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState} from "react";
 import { createDate } from "hooks/createDate";
 import { Datepicker } from '@mobiscroll/react';
 import { historicalData as functionHistoricalData} from "hooks/downloadData";
+import { TickerTable } from 'components/TickersTable';
+import { useCustomStyles} from 'hooks/customStyles';
 import tickers from '../data/ticers'
 import Select from 'react-select';
 import css from '../styles/Details.module.css'
@@ -15,73 +17,7 @@ export const Details = () => {
   const [options, setOptions] = useState([]);
   const [update, setUpdate] = useState(false)
 
-
-  const TickerTable = ({historicalData}) => {
-    if (historicalData&&historicalData.length>0)
-      {
-    let temphistoricalData= [...historicalData].reverse();
-    const markup=temphistoricalData.map((data, index) => (
-      <div className={css.mainDiv}key={index}>
-        <div className={css.dateDiv}>
-          <p>Date: </p>
-          <p>{data.date}</p>
-        </div>
-        <div className={css.dataDiv}>
-          <div className={css.partDataDiv}>
-            <p>Open: </p>
-            <p>{data.open}</p>
-          </div>
-          <div className={css.partDataDiv}>
-            <p>Close: </p>
-            <p>{data.close}</p>
-          </div>
-          <div className={css.partDataDiv}>
-            <p>High: </p>
-            <p>{data.high}</p>
-          </div>
-          <div className={css.partDataDiv}>
-            <p>Low: </p>
-            <p>{data.low}</p>
-          </div>
-          <div className={css.partDataDiv}>
-            <p>Volume: </p>
-            <p>{data.volume}</p>
-          </div>
-        </div>
-        </div>
-      
-    ));
-    return(markup)
-    } else{
-      setUpdate(true)
-    }
-  };
-
-
-  const customStyles = useMemo(() => ({
-    control: (provided, state) => ({
-        ...provided,
-        minHeight: 10,
-        borderTop: 'none',
-        borderBottom: '3px solid transparent',
-        borderLeft: '0px solid transparent',
-        borderRight: '0px solid transparent',
-        boxShadow: state.isFocused ? 'none' : 'none', 
-        transition: `border-color 1.25s, transform 1s`,
-
-        '&:hover': {
-            borderBottom: '3px solid blue',
-        },
-    }),
-    dropdownIndicator: (provided) => ({
-        ...provided,
-        display: 'none' 
-    }),
-    indicatorSeparator: (provided) => ({
-        ...provided,
-        display: 'none'
-    })
-}), []);
+  const customStyles = useCustomStyles();
 
 const onChange = (selectedOption) => {
   const tempChartName = selectedOption.label.split('-')[1]
@@ -154,7 +90,7 @@ useEffect(() => {
        <Select className={css.slect} styles={customStyles} noOptionsMessage={() => options.length < 1 ? 'Enter at least 3 characters' : 'No options available'} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
        <Datepicker className={css.datepicker}  onChange={onDateChange} placeholder={`${Data.startDate} - ${Data.endDate}`}controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
        </div>
-      <TickerTable historicalData={historicalData}/>
+      <TickerTable historicalData={historicalData} setUpdate={setUpdate}/>
     </div>
   );
 };

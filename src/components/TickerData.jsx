@@ -19,7 +19,7 @@ export const TickerData = ({ downloadedHistoricalData, downloadedLiveData, endDa
     if (file==='Chart'){
     return (
         <div>
-            {actualDate==='ok' && downloadedHistoricalData.length>0 ? (    
+            {actualDate && downloadedHistoricalData.length>0 ? (    
                 <div className={css.mainDiv}>
                     <div className={css.dateDiv}>
                         <p className={css.paragraphDate}>{downloadedHistoricalData[0].date}</p>

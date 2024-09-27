@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback, useMemo } from "react"
+import { useState, useEffect, useCallback} from "react"
 import Select from 'react-select';
 import tickers from '../data/ticers'
 import { Loader2 } from "./loader2";
 import { TickerData } from "./TickerData";
 import { multiplyData, historicalData } from '../hooks/downloadData';
+import { useCustomStyles } from "hooks/customStyles";
 import { BiLineChart } from "react-icons/bi";
 import { BiSolidAddToQueue } from "react-icons/bi";
 import { RiDeleteBack2Fill } from "react-icons/ri";
@@ -25,30 +26,7 @@ export const Tickers = () => {
     const [activeSelect, setActiveSelect] = useState(null);
     const { Data, updateData } = useData();
 
-    const customStyles = useMemo(() => ({
-        control: (provided, state) => ({
-            ...provided,
-            minHeight: 10,
-            borderTop: 'none',
-            borderBottom: '3px solid transparent',
-            borderLeft: '0px solid transparent',
-            borderRight: '0px solid transparent',
-            boxShadow: state.isFocused ? 'none' : 'none', 
-            transition: `border-color 1.25s, transform 1s`,
-
-            '&:hover': {
-                borderBottom: '3px solid blue',
-            },
-        }),
-        dropdownIndicator: (provided) => ({
-            ...provided,
-            display: 'none'
-        }),
-        indicatorSeparator: (provided) => ({
-            ...provided,
-            display: 'none'
-        })
-    }), []);
+    const customStyles = useCustomStyles()
 
     const onChange = useCallback((selectedOption, index) => {
         updateData({ isStartPage: true })
