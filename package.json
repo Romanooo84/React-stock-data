@@ -2,7 +2,7 @@
     "name": "react_stock_data",
     "version": "0.1.0",
     "private": true,
-    "homepage": "/",
+    "homepage": "https://goitacademy.github.io/React-stock-data/",
     "dependencies": {
         "@mobiscroll/react": "npm:@mobiscroll/react-next-trial@^5.31.2",
         "axios": "^1.7.4",
