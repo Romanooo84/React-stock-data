@@ -1,7 +1,9 @@
 import tickers from '../data/ticers'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
+import Select from 'react-select';
 import { useData } from "hooks/dataContext";
 import { multiplyData} from 'hooks/downloadData';
+import css from '../styles/Currency.module.css'
 
 
 export const Currency =()=>{
@@ -10,16 +12,26 @@ export const Currency =()=>{
     const [tickerList, setTickerList]=useState([])
     const [liveList, setLivelList]=useState([])
     const [start, setStart] = useState(false)
+    const [page, setPage]=useState(0)
+    const [Buttons, setButtons] = useState()
+    const [Currency, setCurrency] = useState([])
+    const [itemsOnPage, setItemsOnPage] = useState(50)
+
+    const options =useMemo(() =>[
+                        { value: 20, label: 20 },
+                        { value: 50, label: 50 },
+                        { value: 100, label: 100 }, 
+                    ],[])
+    
     useEffect(()=>{
-    let tempTickers = tickers.filter((ticker)=>ticker.Type === "Currency" && ticker.Exchange === 'FOREX' && ticker.Currency==='USD')
-    tempTickers = tempTickers.map((ticker)=>[`${ticker.Code}.${ticker.Exchange}`])
-    setTickerList(tempTickers)
-    setStart(true)},[])
+        let tempTickers = tickers.filter((ticker)=>ticker.Type === "Currency")
+        tempTickers = tempTickers.slice(page, page + itemsOnPage).map((ticker) => `${ticker.Code}.${ticker.Exchange}`);
+        setTickerList(tempTickers)
+        setStart(true)},[page, itemsOnPage])
 
     useEffect(() => {
         if(start && tickerList && tickerList.length>0){
             let markup
-            console.log(tickerList)
             multiplyData(tickerList)
                 .then(downloadedData => {
                     markup = downloadedData.map(data => {
@@ -43,10 +55,74 @@ export const Currency =()=>{
     }, [tickerList,Data.startDate, Data.endDate, setLivelList, start]);
 
     useEffect(()=>{
-        console.log(liveList)
-    },[liveList])
+        const tempButtons = 
+        <div>
+            {page===0? (<button>{page+1}</button>
+                ):(
+                 <>
+                    <button onClick={()=>setPage(page-1)}>{page}</button>
+                    <div>...</div>
+                    <button>{page+1}</button> 
+                 </>
+                 )
+            }
+            <div>...</div>
+            <button onClick={()=>setPage(page+1)}>{page+2}</button>
+            <Select options={options} onChange={(e)=>setItemsOnPage(e.value)} placeholder={itemsOnPage}></Select>
+        </div>
+        setButtons(tempButtons)
+    },[liveList, page, options, itemsOnPage])
     
+    useEffect(()=>{ 
+        console.log(liveList)
+        let tempCurrency = liveList.map((data)=>
+            <div className={css.List} key={data.code}>
+                <div className={css.tickerName}>
+                    <p>{data.Name}</p>
+                    <p>{data.code}</p>
+                </div>
+                <div className={css.tickerData}>
+                    <div>
+                        <p>Change</p>
+                        <p>{data.change}</p>
+                        <p>{data.change_p} %</p>
+                    </div>
+                    <div>
+                        <p>Close</p>
+                        <p>{data.close}</p>
+                    </div>
+                    <div>
+                        <p>Previus Close</p>
+                        <p>{data.previousClose}</p>
+                    </div>
+                    <div>
+                        <p>Open</p>
+                        <p>{data.open}</p>
+                    </div>
+                    <div>
+                        <p>High</p>
+                        <p>{data.high}</p>
+                    </div>
+                    <div>
+                        <p>Low</p>
+                        <p>{data.low}</p>
+                    </div>
+                    <div>
+                        <p>Time</p>
+                        <p>{data.timestamp}</p>
+                    </div>
+                </div>
+            </div>
+        )
+        setCurrency(tempCurrency)
+        },[liveList])
+
     return(
-        <div>Currency</div>
+        <div>
+            {Buttons}
+            {Currency}
+            {Buttons}
+        </div>
+
     )
 }

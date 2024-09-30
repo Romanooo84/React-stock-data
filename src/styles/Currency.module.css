@@ -1,0 +1,12 @@
+.List{
+    display: flex;
+    flex-direction: column;  
+}
+
+.tickerName{
+    display: flex;
+}
+
+.tickerData{
+    display: flex;
+}
