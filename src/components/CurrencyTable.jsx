@@ -10,16 +10,16 @@ export const CurrencyTable =({liveList})=> {
                     {data.code}
                 </th>
                 <td>
-                    {data.change}
+                    {data.change === 'NA' ? '--' : data.change}
                     <br/>
-                    {data.change_p} %
+                    {data.change_p === 'NA' ? '--' : data.change_p} %
                 </td>
-                <td>{data.close}</td>
-                <td>{data.previousClose}</td>
-                <td>{data.open}</td>
-                <td>{data.high}</td>   
-                <td>{data.low}</td>
-                <td>{data.timestamp}</td>        
+                <td>{data.close === 'NA' ? '--' : data.close }</td>
+                <td>{data.previousClose === 'NA' ? '--' : data.previousClose }</td>
+                <td>{data.open === 'NA' ? '--' : data.open}</td>
+                <td>{data.open=== 'NA' ? '--' : data.open}</td>   
+                <td>{data.open === 'NA' ? '--' : data.open}</td>
+                <td>{data.open === 'NA' ? '--' : data.open}</td>        
             </tr>
             )
     return(

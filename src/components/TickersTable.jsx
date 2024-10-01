@@ -6,12 +6,12 @@ export const TickerTable = ({setUpdate, historicalData}) => {
     let temphistoricalData= [...historicalData].reverse();
     const markup=temphistoricalData.map((data, index) => (
       <tr  key={index}>
-          <th className={css.dateDiv} scope='col'>{data.date}</th>
-          <td className={css.dataDiv} >{data.open}</td>
-          <td className={css.dataDiv} >{data.close}</td>
-          <td className={css.dataDiv} >{data.high}</td>
-          <td className={css.dataDiv} >{data.low}</td> 
-          <td className={css.dataDiv} >{data.volume}</td>
+          <th className={css.dateDiv} scope='col'>{data.date === 'NA' ? '--' : data.date}</th>
+          <td className={css.dataDiv} >{data.open === 'NA' ? '--' : data.open}</td>
+          <td className={css.dataDiv} >{data.close === 'NA' ? '--' : data.close}</td>
+          <td className={css.dataDiv} >{data.high === 'NA' ? '--' : data.high}</td>
+          <td className={css.dataDiv} >{data.low === 'NA' ? '--' : data.low}</td> 
+          <td className={css.dataDiv} >{data.volume === 'NA' ? '--' : data.volume}</td>
       </tr>       
     ));
     return(
