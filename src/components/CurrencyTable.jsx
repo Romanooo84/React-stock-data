@@ -1,4 +1,4 @@
-import css from '../styles/Currency.module.css'
+//import css from '../styles/Currency.module.css'
 
 export const CurrencyTable =({liveList})=> {
     if (liveList.length>0){
