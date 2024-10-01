@@ -4,6 +4,7 @@ import Select from 'react-select';
 import { useData } from "hooks/dataContext";
 import { multiplyData } from 'hooks/downloadData';
 import { Loader2 } from "../components/loader2";
+import {CurrencyTable} from '../components/CurrencyTable'
 import css from '../styles/Currency.module.css'
 
 
@@ -15,11 +16,31 @@ export const Currency =()=>{
     const [start, setStart] = useState(false)
     const [page, setPage]=useState(0)
     const [Buttons, setButtons] = useState()
-    const [Currency, setCurrency] = useState([])
     const [sortedCurrencyByName, setSortedCurrencyByName] = useState([])
     const [itemsOnPage, setItemsOnPage] = useState(50)
     const [noOfItems, setNoOfItems] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+
+    const customStyles =useMemo(() => ({
+          control: (provided, state) => ({
+            ...provided,
+            minHeight: 10,
+            borderTop: 'none',
+            borderBottom: '3px solid transparent',
+            borderLeft: '0px solid transparent',
+            borderRight: '0px solid transparent',
+            boxShadow: state.isFocused ? 'none' : 'none',
+            transition: `border-color 1.25s, transform 1s`,
+            '&:hover': {
+              borderBottom: '3px solid blue',
+            },
+          }),
+          indicatorSeparator: (provided) => ({
+            ...provided,
+            display: 'none',
+          }),
+        }), []);
+      
 
     const options =useMemo(() =>[
                         { value: 20, label: 20 },
@@ -114,67 +135,16 @@ export const Currency =()=>{
         setButtons(tempButtons);
     }
 }, [liveList, page, options, itemsOnPage, sortedCurrencyByName, tickerList, noOfItems]);
-
-    
-    useEffect(()=>{ 
-        if (liveList.length>0){
-        let tempCurrency = liveList.map((data)=>
-            <div className={css.List} key={data.code}>
-                <div className={css.tickerName}>
-                    <p>{data.Name}</p>
-                    <p>{data.code}</p>
-                </div>
-                <div className={css.tickerData}>
-                    <div>
-                        <p>Change</p>
-                        <p>{data.change}</p>
-                        <p>{data.change_p} %</p>
-                    </div>
-                    <div>
-                        <p>Close</p>
-                        <p>{data.close}</p>
-                    </div>
-                    <div>
-                        <p>Previus Close</p>
-                        <p>{data.previousClose}</p>
-                    </div>
-                    <div>
-                        <p>Open</p>
-                        <p>{data.open}</p>
-                    </div>
-                    <div>
-                        <p>High</p>
-                        <p>{data.high}</p>
-                    </div>
-                    <div>
-                        <p>Low</p>
-                        <p>{data.low}</p>
-                    </div>
-                    <div>
-                        <p>Time</p>
-                        <p>{data.timestamp}</p>
-                    </div>
-                </div>
-            </div>
-        )
-        setCurrency(tempCurrency)
-        }},[liveList])
-
+ 
     return (
             isLoading?
                 ( <Loader2 className = { css.tickersDiv } />): (
                 <div>
                     {Buttons}
-                    <Select options={options} onChange={(e) => setItemsOnPage(e.value)} 
-                                placeholder={itemsOnPage}>
-                        </Select>
-                        <Select 
-                                options={sortedCurrencyByName} 
-                                onChange={onCurrencyChange} 
-                                placeholder={"Set Currency"}>
-                            </Select>
-                        {Currency}
-                        {Buttons}
+                    <Select options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={itemsOnPage}></Select>
+                    <Select options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
+                    <CurrencyTable liveList={liveList.length > 0 ? liveList : []} />
+                    {Buttons}
                 </div>
             )
     )

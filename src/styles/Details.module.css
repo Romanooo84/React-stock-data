@@ -17,21 +17,22 @@
 
 .dateDiv{
     font-style: italic;
-    display: flex;
     background: #ace4e6;
-    width: 100%;
-    justify-content: center;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-radius: 10px;
 }
 
 .dataDiv{
-    display: flex;
     background: rgb(12, 96, 185, 0.67);
-    justify-content: space-around;
-    width: 100%;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+}
+
+.dataDiv:nth-child(2){ 
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.dataDiv:last-child{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .inputDiv{
@@ -55,13 +56,19 @@
 
 @media screen and (min-width: 1159px) {
     .dataDiv{
-        gap: 30px;
-        width: 750px;
+        width: 120px;
+        font-family: Oswald;
+        font-size: 20px;
+        text-align: center;
     }
 
-    p{
+    .dateDiv{
+        font-style: italic;
+        background: #ace4e6;
+        border-radius: 10px;
         font-family: Oswald;
-        font-size: 17px;
+        font-size: 20px;
+        width: 150px;
     }
 
 }
