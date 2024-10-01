@@ -115,7 +115,7 @@ export const Currency =()=>{
         if (tickerList && tickerList.length > 0) {
         const tempButtons = (
             itemsOnPage < noOfItems ? (
-                <div>
+                <div className={css.buttonsDiv}>
                     {page === 0 ? (
                         <button>{page + 1}</button>
                     ) : (
@@ -137,15 +137,19 @@ export const Currency =()=>{
 }, [liveList, page, options, itemsOnPage, sortedCurrencyByName, tickerList, noOfItems]);
  
     return (
-            isLoading?
+        <div className={css.mainDiv}>
+           { isLoading?
                 ( <Loader2 className = { css.tickersDiv } />): (
-                <div>
+                <div >
                     {Buttons}
-                    <Select options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={itemsOnPage}></Select>
-                    <Select options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
+                    <div className={css.selectDiv}>
+                    <Select className={css.select} options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={itemsOnPage}></Select>
+                    <Select className={css.select} options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
+                    </div>
                     <CurrencyTable liveList={liveList.length > 0 ? liveList : []} />
                     {Buttons}
                 </div>
-            )
+            )}
+        </div>
     )
 }

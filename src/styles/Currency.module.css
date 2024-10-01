@@ -1,3 +1,7 @@
+.mainDiv{
+    min-height: 110vh;
+}
+
 .List{
     display: flex;
     flex-direction: column;  
@@ -9,4 +13,19 @@
 
 .tickerData{
     display: flex;
+}
+
+.buttonsDiv{
+    display: flex;
+    justify-content: center;
+}
+
+.selectDiv{
+    display: flex;
+    justify-content: space-evenly;  
+}
+
+.select{
+    width: 200px;
+    text-align: center;
 }

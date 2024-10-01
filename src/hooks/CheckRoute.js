@@ -3,9 +3,7 @@ import { useData } from "hooks/dataContext";
 
 const CheckRoute = ({ element: Component, redirectTo = '/' }) => {
     const {Data} = useData();
-    console.log(Data)
-    if (!Data.historicalData) {
-        console.log("Redirecting to:", redirectTo);
+    if (!Data.historicalData || Data.historicalData.length===0) {
         return <Navigate to={redirectTo} />;
     }
     return Component;
