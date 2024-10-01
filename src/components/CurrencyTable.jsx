@@ -18,30 +18,27 @@ export const CurrencyTable =({liveList})=> {
                 <td>{data.previousClose}</td>
                 <td>{data.open}</td>
                 <td>{data.high}</td>   
-                <td>{data.low}</td>      
+                <td>{data.low}</td>
+                <td>{data.timestamp}</td>        
             </tr>
             )
     return(
-        <div>
-            <div>
-                <p>{liveList[0].timestamp}</p>
-            </div>
         <table>
-            <thead>
-            <tr>
-                <th scope="rowgroup">Currency</th>
-                <th scope="col">Change</th>
-                <th scope="col">Close</th>
-                <th scope="col">Previus Close</th>
-                <th scope="col">Open</th>
-                <th scope="col">High</th>
-                <th scope="col">Low</th>
-            </tr>
-            </thead>
-            <tbody>
-            {markup}
-            </tbody>
+        <thead>
+          <tr>
+            <th scope="rowgroup">Currency</th>
+            <th scope="col">Change</th>
+            <th scope="col">Close</th>
+            <th scope="col">Previus Close</th>
+            <th scope="col">Open</th>
+            <th scope="col">High</th>
+            <th scope="col">Low</th>
+            <th scope="col">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+         {markup}
+        </tbody>
       </table>
-      </div>
   
 )}}
