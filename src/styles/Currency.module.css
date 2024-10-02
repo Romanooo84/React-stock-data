@@ -23,9 +23,11 @@
 .selectDiv{
     display: flex;
     justify-content: space-evenly;  
+    padding: 15px
+    
 }
 
 .select{
-    width: 200px;
+    width: 220px;
     text-align: center;
 }

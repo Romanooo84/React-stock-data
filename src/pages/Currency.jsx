@@ -43,9 +43,9 @@ export const Currency =()=>{
       
 
     const options =useMemo(() =>[
-                        { value: 20, label: 20 },
-                        { value: 50, label: 50 },
-                        { value: 100, label: 100 }, 
+                        { value: 20, label: `Tickers on page 20` },
+                        { value: 50, label: `Tickers on page 50` },
+                        { value: 100, label: `Tickers on page 100` }, 
     ], [])
 
     const onCurrencyChange = (e) => {
@@ -61,12 +61,12 @@ export const Currency =()=>{
         }
     
     useEffect(() => {
-        let tempTickers = tickers.filter((ticker) => ticker.Type === "Currency");
+        let tempTickers = tickers.filter((ticker) => ticker.Type === "Currency" && ticker.Exchange !== "CC");
         setNoOfItems(tempTickers.length)
         let newTickerTable = tempTickers.map((ticker) => {
             const splitName = ticker.Name.split('/'); 
             const currencyCode = ticker.Code.slice(0, 3);
-            const isSpecialCurrency = ["ARS", "USD", "EGP", "KES"].includes(currencyCode);
+            const isSpecialCurrency = ["ARS", "USD", "EGP", "KES", 'KWD', 'AED'].includes(currencyCode);
             return {
                 fullCode: ticker.Code,
                 fullName: ticker.Name,
@@ -86,9 +86,9 @@ export const Currency =()=>{
         }, []);
     
     useEffect(()=>{
-        let tempTickers = tickers.filter((ticker)=>ticker.Type === "Currency")
+        let tempTickers = tickers.filter((ticker)=>ticker.Type === "Currency" && ticker.Exchange !== "CC")
         tempTickers = tempTickers
-                        .slice(page, page + itemsOnPage)
+                        .slice(page*itemsOnPage, page*itemsOnPage + itemsOnPage)
                         .map((ticker) => `${ticker.Code}.${ticker.Exchange}`);
         setTickerList(tempTickers)
         setStart(true)},[page, itemsOnPage])
@@ -143,10 +143,9 @@ export const Currency =()=>{
            { isLoading?
                 ( <Loader2 className = { css.tickersDiv } />): (
                 <div >
-                    {Buttons}
                     <div className={css.selectDiv}>
-                    <Select className={css.select} options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={itemsOnPage}></Select>
-                    <Select className={css.select} options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
+                        <Select className={css.select} options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
+                        <Select className={css.select} options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={`Tickers on page ${itemsOnPage}`}></Select>   
                     </div>
                     <CurrencyTable liveList={liveList.length > 0 ? liveList : []} />
                     {Buttons}
