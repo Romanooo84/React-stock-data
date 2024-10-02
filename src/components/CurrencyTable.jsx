@@ -14,12 +14,13 @@ export const CurrencyTable = ({ liveList }) => {
   }, [liveList]);
 
   const keyList = useMemo(() => {
-    return ['change', 'change_p', 'close', 'high', 'low', 'open', 'previousClose', 'timestamp'];
+    return ['change', 'change_p', 'close','previousClose','open', 'high', 'low'];
   }, []);
 
   const sortData = (e) => {
-    const buttonName = e.target.parentNode.id
-    let sortType = e.target.parentNode.name
+    console.log(e.target)
+    const buttonName = e.currentTarget.id
+    let sortType = e.currentTarget.name
     setSortedButton(buttonName)
     let sortedList
     sortedList = [...list].map(item => ({
@@ -59,15 +60,14 @@ export const CurrencyTable = ({ liveList }) => {
         <td className={css.dataCells}>{renderCell(parseFloat(data.open).toFixed(4))}</td>
         <td className={css.dataCells}>{renderCell(parseFloat(data.high).toFixed(4))}</td>
         <td className={css.dataCells}>{renderCell(parseFloat(data.low).toFixed(4))}</td>
-        <td className={css.dataCells}>{renderCell(data.timestamp)}</td>
       </tr>
     ));
 
     const tableLabels =  keyList.map((key) => {
       return (
-        <th scope="col" key={key+1000}>
+        <th scope="col" key={key+1}>
           <div className={css.thLabel}>
-          {key === 'change_p' ? 'change %' : key}
+          {key === 'change_p' ? 'change %' : key === 'previousClose' ? 'prev close' : key}
           <button className={css.button} id={key} name={sortType} onClick={sortData}>
           {sortedButton === key ? sortIcon : <TiArrowSortedUp className={css.icon}/>}
           </button>

@@ -1,5 +1,6 @@
 .mainDiv{
     min-height: 110vh;
+    min-width: 320px
 }
 
 .List{
@@ -28,6 +29,21 @@
 }
 
 .select{
-    width: 220px;
     text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .tableDiv{
+            display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+    }
+
+@media screen and (min-width: 768px) and (max-width: 1159px) {}
+
+@media screen and (min-width: 1159px) {
+    .select {
+            width: 220px;
+        }
 }

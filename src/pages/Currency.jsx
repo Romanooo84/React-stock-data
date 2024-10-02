@@ -142,12 +142,12 @@ export const Currency =()=>{
         <div className={css.mainDiv}>
            { isLoading?
                 ( <Loader2 className = { css.tickersDiv } />): (
-                <div >
+                <div className={css.tableDiv} >
                     <div className={css.selectDiv}>
                         <Select className={css.select} options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
                         <Select className={css.select} options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={`Tickers on page ${itemsOnPage}`}></Select>   
                     </div>
-                    <CurrencyTable liveList={liveList.length > 0 ? liveList : []} />
+                        <CurrencyTable className={css.table} liveList={liveList.length > 0 ? liveList : []} />
                     {Buttons}
                 </div>
             )}
