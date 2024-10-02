@@ -1,10 +1,13 @@
 import {useMemo, useState, useEffect} from "react";
+import { TiArrowSortedDown } from "react-icons/ti";
+import { TiArrowSortedUp } from "react-icons/ti";
 import css from '../styles/CurrencyTable.module.css'
 
 export const CurrencyTable = ({ liveList }) => {
   const [list, setList] = useState(liveList);
   const [sortedButton, setSortedButton]=useState(null)
   const [sortType, setSortType]=useState('SortUp')
+  const [sortIcon, setSortIcon]=useState(<TiArrowSortedDown  className={css.icon}/>)
 
   useEffect(() => {
     setList(liveList); 
@@ -15,27 +18,31 @@ export const CurrencyTable = ({ liveList }) => {
   }, []);
 
   const sortData = (e) => {
-    const buttonName = e.target.name;
-    const sortType = e.target.textContent
+    const buttonName = e.target.parentNode.id
+    let sortType = e.target.parentNode.name
     setSortedButton(buttonName)
     let sortedList
     sortedList = [...list].map(item => ({
       ...item,
       [buttonName]: item[buttonName] === 'NA' ? 0 : Number(item[buttonName])
     }));
-
     if (sortType=== 'SortUp'){
               sortedList= sortedList.sort((a, b) => b[buttonName] - a[buttonName])
-              setSortType('SortDown')
-            }else{
+              setSortIcon(<TiArrowSortedDown  className={css.icon}/>)
+              sortType='SortDown'
+              setSortType(sortType)
+            }else if (sortType=== 'SortDown'){
               sortedList = sortedList.sort((a, b) => a[buttonName] - b[buttonName])
-              setSortType('SortUp')
+              setSortIcon(<TiArrowSortedUp className={css.icon}/>)
+              sortType='SortUp'
+              setSortType(sortType)        
             }
+    
     setList(sortedList);
   };
 
   const renderCell = (data) => {
-    return data === 'NA' ? 0 : data;
+    return data === 'NaN' ? 0 : data 
   };
 
   const dataCells = 
@@ -58,11 +65,11 @@ export const CurrencyTable = ({ liveList }) => {
 
     const tableLabels =  keyList.map((key) => {
       return (
-        <th scope="col" key={key}>
+        <th scope="col" key={key+1000}>
           <div className={css.thLabel}>
           {key === 'change_p' ? 'change %' : key}
-          <button name={key} onClick={sortData}>
-          {sortedButton === key ? sortType : 'SortUp'}
+          <button className={css.button} id={key} name={sortType} onClick={sortData}>
+          {sortedButton === key ? sortIcon : <TiArrowSortedUp className={css.icon}/>}
           </button>
           </div>
         </th>

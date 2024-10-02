@@ -40,6 +40,7 @@ th{
 
 .thLabel{
     display: flex;
+    min-width: 100px;
 }
 
 th:last-of-type{
@@ -62,5 +63,20 @@ th:nth-of-type(2){
 
 .green{
     color:rgba(0, 128, 0, 0.774)
+}
+
+.button{
+    width: 25px;
+    height: 25px;
+    background-color: transparent;
+    border: none;
+    text-align: center;
+}
+
+.icon{
+    position: relative;
+    z-index: -1000;
+    width: 20px;
+    height: 20px;
 }
 
