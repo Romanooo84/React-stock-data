@@ -122,13 +122,13 @@ export const Currency =()=>{
                         <button>{page + 1}</button>
                     ) : (
                         <>
-                            <button onClick={() => setPage(page - 1)}>{page}</button>
+                            <button onClick={() => setPage(page - 1)}>Prev</button>
                             <div>...</div>
                             <button>{page + 1}</button>
                         </>
                     )}
                     <div>...</div>
-                    <button onClick={() => setPage(page + 1)}>{page + 2}</button>
+                    <button onClick={() => setPage(page + 1)}>Next</button>
                 </div>
             ) : (
                <></>
