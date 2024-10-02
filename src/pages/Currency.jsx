@@ -65,11 +65,13 @@ export const Currency =()=>{
         setNoOfItems(tempTickers.length)
         let newTickerTable = tempTickers.map((ticker) => {
             const splitName = ticker.Name.split('/'); 
+            const currencyCode = ticker.Code.slice(0, 3);
+            const isSpecialCurrency = ["ARS", "USD", "EGP", "KES"].includes(currencyCode);
             return {
                 fullCode: ticker.Code,
                 fullName: ticker.Name,
-                code: ticker.Code.slice(0, 3),
-                name: ticker.Code.slice(0, 3) === 'USD' ? splitName[0] : splitName[1] 
+                code: currencyCode,
+                name: isSpecialCurrency ? splitName[0] : splitName[1]
             };
             })
             .filter((ticker, index, self) => {

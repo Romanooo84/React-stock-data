@@ -202,14 +202,13 @@ export const Chart = () => {
                         setDownloadedLiveData(data);
                     }
                 });
-
-        historicalData(Data.ticker, Data.startDate, Data.endDate)
-            .then(data => {
-                if (data) {
-                    setDownloadedHistoricalData(data);
-                }
-            });
-        }
+                historicalData(Data.ticker, Data.startDate, Data.endDate)
+                .then(data => {
+                    if (data) {
+                        setDownloadedHistoricalData(data);
+                    }
+                });
+            }
         }, [Data.endDate, Data.isSecondChart, Data.secondChart, Data.startDate, Data.ticker, updateData, Data.newChart]);
 
 
@@ -276,7 +275,7 @@ export const Chart = () => {
             let tempBarVolumeYAxis = downloadedHistoricalData.map((axis) => axis.volume);
             const tempDate = new Date(downloadedLiveData.timestamp * 1000);
             let formattedDate
-            tempDate!=='Invalid Date' ? formattedDate = "No Data"  : formattedDate = tempDate.toISOString().split('T')[0]
+            tempDate ==='Invalid Date' ? formattedDate = "--"  : formattedDate = tempDate.toISOString().split('T')[0]
             if(formattedDate===Data.endDate){
                     const close = downloadedLiveData.close
                     tempXAxis.push(formattedDate)
@@ -429,7 +428,7 @@ export const Chart = () => {
                 <div className={css.dataDiv}>
                      <p className={parseFloat(downloadedLiveData.change_p) >0 ? `${css.green} ${css.simpleDatadiv}` : `${css.red} ${css.simpleDatadiv}`}>
                         {isNaN(parseFloat(downloadedLiveData.change_p)) 
-                            ? ' Brak danych' 
+                            ? ' -- %' 
                             : parseFloat(downloadedLiveData.change_p).toFixed(2) + '%'}
                     </p>
                 </div>

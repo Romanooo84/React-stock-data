@@ -129,7 +129,6 @@ export const Tickers = () => {
 
     useEffect(() => {
         const intervalID = setInterval(() => {
-            console.log(isMenuOpen)
             if(!isMenuOpen)
                 multiplyData(tickerList)
                 .then(downloadedData => {
