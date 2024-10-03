@@ -13,16 +13,18 @@ import css from '../styles/Currency.module.css'
 export const Currency =()=>{
 
     const { Data } = useData();
-    const [tickerList, setTickerList]=useState([])
+    const [tickerList, setTickerList] = useState([])
+    const [currencyList, setCurrencyList] = useState([])
     const [liveList, setLivelList]=useState([])
-    const [start, setStart] = useState(false)
+    const [start, setStart] = useState(true)
     const [page, setPage]=useState(0)
     const [Buttons, setButtons] = useState()
     const [sortedCurrencyByName, setSortedCurrencyByName] = useState([])
     const [itemsOnPage, setItemsOnPage] = useState(50)
     const [noOfItems, setNoOfItems] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
-    const [isSorting, setIsSorting]= useState(false)
+    const [isSorting, setIsSorting] = useState(false)
+    const [isCurrency, setIsCurrency] = useState(false)
 
     const customStyles =useMemo(() => ({
           control: (provided, state) => ({
@@ -59,7 +61,8 @@ export const Currency =()=>{
             const ticker = `${tempTickers[i].Code}.FOREX`
             newTickersList.push(ticker)
         }
-        setTickerList(newTickersList)
+        setCurrencyList(newTickersList)
+        setIsCurrency(true)
         setStart(true)
         }
     
@@ -88,13 +91,21 @@ export const Currency =()=>{
             setSortedCurrencyByName(newTickerTable); 
         }, []);
     
-    useEffect(()=>{
-        let tempTickers = tickers.filter((ticker)=>ticker.Type === "Currency" && ticker.Exchange !== "CC")
-        tempTickers = tempTickers
-                        .slice(page*itemsOnPage, page*itemsOnPage + itemsOnPage)
-                        .map((ticker) => `${ticker.Code}.${ticker.Exchange}`);
-        setTickerList(tempTickers)
-        setStart(true)},[page, itemsOnPage])
+    useEffect(() => {
+        if (!isCurrency) {
+            console.log(1)
+            let tempTickers = tickers.filter((ticker) => ticker.Type === "Currency" && ticker.Exchange !== "CC")    
+                                     .slice(page*itemsOnPage, page*itemsOnPage + itemsOnPage)
+                                     .map((ticker) => `${ticker.Code}.${ticker.Exchange}`);
+            setTickerList(tempTickers)
+        } else if (currencyList.length>itemsOnPage){
+            let tempTickers=currencyList.slice(page * itemsOnPage, page * itemsOnPage + itemsOnPage)
+            setTickerList(tempTickers)
+        } else {
+            setTickerList(currencyList)
+        }
+        setStart(true)
+    }, [page, itemsOnPage, isCurrency, currencyList])
 
     useEffect(() => {
         if (start && tickerList && tickerList.length > 0) {
@@ -118,7 +129,7 @@ export const Currency =()=>{
 
     useEffect(() => {
         const intervalID = setInterval(() => {
-            if (!isSorting) {
+            if (!isSorting || !start) {
                 multiplyData(tickerList).then(downloadedData => {
                     const markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
@@ -132,7 +143,7 @@ export const Currency =()=>{
         }, 5000);
     
         return () => clearInterval(intervalID);
-    }, [tickerList, isSorting, setLivelList]);
+    }, [tickerList, isSorting, setLivelList, start]);
 
 
     useEffect(() => {
