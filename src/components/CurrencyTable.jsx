@@ -26,7 +26,7 @@ export const CurrencyTable = ({ liveList, setIsSorting, setTickerList }) => {
     setSortedButton(buttonName);
     sortedList = [...list].map(item => ({
       ...item,
-      [buttonName]: item[buttonName] === 'NA' ? 0 : Number(item[buttonName]),
+      [buttonName]: item[buttonName] === 'NA' ? 0.0000 : Number(item[buttonName]),
     }));
     if (sortType === 'SortUp') {
       sortedList = sortedList.sort((a, b) => b[buttonName] - a[buttonName]);
@@ -51,7 +51,7 @@ export const CurrencyTable = ({ liveList, setIsSorting, setTickerList }) => {
   };
 
   const renderCell = (data) => {
-    return data === 'NaN' ? 0 : data;
+    return data === 'NaN' ? 0.0000 : data;
   };
 
   const dataCells = list.map((data) => (
