@@ -22,6 +22,7 @@ export const Currency =()=>{
     const [itemsOnPage, setItemsOnPage] = useState(50)
     const [noOfItems, setNoOfItems] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [isSorting, setIsSorting]= useState(false)
 
     const customStyles =useMemo(() => ({
           control: (provided, state) => ({
@@ -116,6 +117,25 @@ export const Currency =()=>{
     }, [tickerList,Data.startDate, Data.endDate, setLivelList, start]);
 
     useEffect(() => {
+        const intervalID = setInterval(() => {
+            if (!isSorting) {
+                multiplyData(tickerList).then(downloadedData => {
+                    const markup = downloadedData.map(data => {
+                        const newTicker = data.code.split('.')[0];
+                        let results = tickers.filter(item => item.Code.includes(newTicker));
+                        data.Name = results[0]?.Name || data.Name; 
+                        return data;
+                    });
+                    setLivelList(markup);
+                });
+            }
+        }, 5000);
+    
+        return () => clearInterval(intervalID);
+    }, [tickerList, isSorting, setLivelList]);
+
+
+    useEffect(() => {
         if (tickerList && tickerList.length > 0) {
         const tempButtons = (
             itemsOnPage < noOfItems ? (
@@ -147,7 +167,7 @@ export const Currency =()=>{
                         <Select className={css.select} options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
                         <Select className={css.select} options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={`Tickers on page ${itemsOnPage}`}></Select>   
                     </div>
-                        <CurrencyTable liveList={liveList.length > 0 ? liveList : []} />
+                        <CurrencyTable setTickerList= {setTickerList} setIsSorting={setIsSorting} liveList={liveList.length > 0 ? liveList : []} />
                     {Buttons}
                 </div>
             )}

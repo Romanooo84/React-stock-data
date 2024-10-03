@@ -40,20 +40,6 @@ table{
     border-spacing: 7px;
 }
 
-@keyframes apear-slow {
-    0% {
-      opacity: 0;
-    }
-
-    50% {
-        opacity: 0.1
-      }
-
-    100% {
-      opacity: 1
-    }
-  }
-
 th{
     background-color: rgb(118, 196, 228);
     box-shadow: 0px 10px 9px -5px rgba(66, 68, 90, 1);
@@ -79,13 +65,19 @@ th:nth-of-type(2){
     border-bottom-left-radius: 10px;
 }
 
-.red{
-    color:rgba(255, 0, 0, 0.682)
+.red {
+    color: rgba(255, 0, 0, 0.682);
+    animation: red-color 1s cubic-bezier(0.23, 1, 0.32, 1), rotate-slow 3s cubic-bezier(0.23, 1, 0.32, 1);
+    background-color: rgb(12, 96, 185, 0.67);
 }
 
-.green{
-    color:rgba(0, 128, 0, 0.774)
+.green {
+    color: rgba(0, 128, 0, 0.774);
+    animation: green-color 1s cubic-bezier(0.23, 1, 0.32, 1), rotate-slow 3s cubic-bezier(0.23, 1, 0.32, 1);
+    background-color: rgb(12, 96, 185, 0.67);
 }
+
+
 
 .button{
     background-color: transparent;
@@ -105,17 +97,48 @@ td:hover{
     transform: scale(1.1);
 }
 
-@keyframes rotate-slow {
+@keyframes apear-slow {
     0% {
-      transform: rotateX(0deg);
-      opacity: 0.1;
+      opacity: 0;
     }
 
+    50% {
+        opacity: 0.1
+      }
+
     100% {
-      transform: rotateX(720deg);
-      opacity: 1;
+      opacity: 1
     }
   }
+
+  @keyframes rotate-slow {
+    0% {
+        transform: rotateX(0deg);
+        opacity: 0.1;
+    }
+    100% {
+        transform: rotateX(720deg);
+        opacity: 1;
+    }
+}
+
+@keyframes green-color {
+    0% {
+        background-color: rgba(0, 128, 0, 0.774);
+    }
+    100% {
+        background-color: rgb(12, 96, 185, 0.67);
+    }
+}
+
+@keyframes red-color {
+    0% {
+        background-color: rgba(255, 0, 0, 0.682);
+    }
+    100% {
+        background-color: rgb(12, 96, 185, 0.67);
+    }
+}
 
 @media screen and (max-width: 768px) {
 

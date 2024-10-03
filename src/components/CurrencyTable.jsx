@@ -2,12 +2,12 @@ import { useMemo, useState, useEffect } from "react";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import css from '../styles/CurrencyTable.module.css';
 
-export const CurrencyTable = ({ liveList }) => {
+export const CurrencyTable = ({ liveList, setIsSorting, setTickerList }) => {
   const [list, setList] = useState(liveList);
   const [sortedButton, setSortedButton] = useState(null);
   const [sortType, setSortType] = useState('SortUp');
   const [sortIcon, setSortIcon] = useState(<TiArrowSortedDown className={css.icon} />);
-  const [animationKey, setAnimationKey] = useState(0); // To force re-animation
+  const [animationKey, setAnimationKey] = useState(0);
 
   useEffect(() => {
     setList(liveList);
@@ -18,16 +18,16 @@ export const CurrencyTable = ({ liveList }) => {
   }, []);
 
   const sortData = (e) => {
+    setIsSorting(true)
     const buttonName = e.currentTarget.id;
     let sortType = e.currentTarget.name;
-    setSortedButton(buttonName);
     let sortedList;
-
+    
+    setSortedButton(buttonName);
     sortedList = [...list].map(item => ({
       ...item,
       [buttonName]: item[buttonName] === 'NA' ? 0 : Number(item[buttonName]),
     }));
-
     if (sortType === 'SortUp') {
       sortedList = sortedList.sort((a, b) => b[buttonName] - a[buttonName]);
       setSortIcon(<TiArrowSortedDown className={css.icon} />);
@@ -37,12 +37,17 @@ export const CurrencyTable = ({ liveList }) => {
       setSortIcon(<TiArrowSortedUp className={css.icon} />);
       sortType = 'SortUp';
     }
+    let tempTickerList=sortedList.map((ticker)=>ticker.code)
+    setTickerList(tempTickerList)
     setSortType(sortType);
-
-    // Force re-animation by changing animation key
     setAnimationKey(prevKey => prevKey + 1);
-
     setList(sortedList);
+    
+    const timer = setTimeout(() => {
+      setIsSorting(false)
+      console.log(1)
+    }, 5000); 
+    return () => clearTimeout(timer);
   };
 
   const renderCell = (data) => {
