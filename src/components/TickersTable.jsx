@@ -6,12 +6,12 @@ export const TickerTable = ({setUpdate, historicalData}) => {
     let temphistoricalData= [...historicalData].reverse();
     const markup=temphistoricalData.map((data, index) => (
       <tr  key={index}>
-          <th className={css.dateDiv} scope='col'>{data.date === 'NA' ? '--' : data.date}</th>
-          <td className={css.dataDiv} >{data.open === 'NA' ? '--' : data.open}</td>
-          <td className={css.dataDiv} >{data.close === 'NA' ? '--' : data.close}</td>
-          <td className={css.dataDiv} >{data.high === 'NA' ? '--' : data.high}</td>
-          <td className={css.dataDiv} >{data.low === 'NA' ? '--' : data.low}</td> 
-          <td className={css.dataDiv} >{data.volume === 'NA' ? '--' : data.volume}</td>
+          <th className={css.dateDiv} scope='col'><p>{data.date === 'NA' ? '--' : data.date}</p></th>
+          <td className={css.dataDiv} ><p className={css.thParagraph}>{data.open === 'NA' ? '--' : data.open}</p></td>
+          <td className={css.dataDiv} ><p className={css.thParagraph}>{data.close === 'NA' ? '--' : data.close}</p></td>
+          <td className={css.dataDiv} ><p className={css.thParagraph}>{data.high === 'NA' ? '--' : data.high}</p></td>
+          <td className={css.dataDiv} ><p className={css.thParagraph}>{data.low === 'NA' ? '--' : data.low}</p></td> 
+          <td className={css.dataDiv} ><p className={css.thParagraph}>{data.volume === 'NA' ? '--' : data.volume}</p></td>
       </tr>       
     ));
     return(

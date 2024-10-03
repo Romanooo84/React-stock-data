@@ -5,6 +5,8 @@ import { useData } from "hooks/dataContext";
 import { multiplyData } from 'hooks/downloadData';
 import { Loader2 } from "../components/loader2";
 import {CurrencyTable} from '../components/CurrencyTable'
+import { PiArrowFatLinesRightFill } from "react-icons/pi";
+import { PiArrowFatLinesLeftFill } from "react-icons/pi";
 import css from '../styles/Currency.module.css'
 
 
@@ -119,16 +121,14 @@ export const Currency =()=>{
             itemsOnPage < noOfItems ? (
                 <div className={css.buttonsDiv}>
                     {page === 0 ? (
-                        <button>{page + 1}</button>
+                        <div className={css.pageNoDiv}>{page + 1}</div>
                     ) : (
                         <>
-                            <button onClick={() => setPage(page - 1)}>Prev</button>
-                            <div>...</div>
-                            <button>{page + 1}</button>
+                            <button className={css.button} onClick={() => setPage(page - 1)}><PiArrowFatLinesLeftFill className={css.icon}/></button>
+                            <div className={css.pageNoDiv}>{page + 1}</div>
                         </>
                     )}
-                    <div>...</div>
-                    <button onClick={() => setPage(page + 1)}>Next</button>
+                    <button className={css.button} onClick={() => setPage(page + 1)}><PiArrowFatLinesRightFill className={css.icon}/></button>
                 </div>
             ) : (
                <></>
@@ -147,7 +147,7 @@ export const Currency =()=>{
                         <Select className={css.select} options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
                         <Select className={css.select} options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={`Tickers on page ${itemsOnPage}`}></Select>   
                     </div>
-                        <CurrencyTable className={css.table} liveList={liveList.length > 0 ? liveList : []} />
+                        <CurrencyTable liveList={liveList.length > 0 ? liveList : []} />
                     {Buttons}
                 </div>
             )}

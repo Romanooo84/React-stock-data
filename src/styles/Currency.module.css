@@ -17,33 +17,119 @@
 }
 
 .buttonsDiv{
+    margin-top: 15px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    width: 150px;
 }
 
 .selectDiv{
     display: flex;
+    gap:5px;
     justify-content: space-evenly;  
     padding: 15px
     
 }
 
+.button{
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer
+}
+
+.button:hover {
+    transform: scale(1.3);
+}
+
 .select{
     text-align: center;
+    box-shadow: 0px 10px 9px -5px rgba(66, 68, 90, 1);
+    
+}
+
+.tableDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.pageNoDiv{
+    color: rgb(42, 122, 165);
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.icon{
+    color: rgb(42, 122, 165);
+    box-shadow: 0px 10px 9px -5px rgba(66, 68, 90, 1);
+    border-radius: 5px;
 }
 
 @media screen and (max-width: 768px) {
     .tableDiv{
             display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
+            flex-direction: column;
+            align-items: center;
+        }
+    .icon{
+        width: 20px;
+        height: 20px;
     }
 
-@media screen and (min-width: 768px) and (max-width: 1159px) {}
+    .button{
+        width: 20px;
+        height: 20px;
+    }
+
+    .pageNoDiv{
+        font-size: 15px;
+        font-family: Oswald;
+    }
+    }
+
+@media screen and (min-width: 768px) and (max-width: 1159px) {
+    .select {
+        width: 220px;
+    }
+
+    .icon{
+        width: 30px;
+        height: 30px;
+    }
+
+    .button{
+        width: 30px;
+        height: 30px;
+    }
+
+    .pageNoDiv{
+        font-size: 15px;
+        font-family: Oswald;
+    }
+}
+
 
 @media screen and (min-width: 1159px) {
     .select {
-            width: 220px;
-        }
+        width: 220px;
+    }
+
+    .icon{
+        width: 30px;
+        height: 30px;
+    }
+
+    .button{
+        width: 30px;
+        height: 30px;
+    }
+
+    .pageNoDiv{
+        font-size: 15px;
+        font-family: Oswald;
+    }
 }

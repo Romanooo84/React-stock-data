@@ -19,10 +19,12 @@
     font-style: italic;
     background: #ace4e6;
     border-radius: 10px;
+    text-align: center;
 }
 
 .dataDiv{
     background: rgb(12, 96, 185, 0.67);
+    text-align: center;
 }
 
 .dataDiv:nth-child(2){ 
@@ -53,6 +55,24 @@
     text-align: center;
     width: 300px;
 }
+
+.thParagraph{
+    animation: apear-slow 3s cubic-bezier( 0.23, 1, 0.32, 1 );
+}
+
+@keyframes apear-slow {
+    0% {
+      opacity: 0;
+    }
+
+    60% {
+        opacity: 0.4
+      }
+
+    100% {
+      opacity: 1
+    }
+  }
 
 @media screen and (min-width: 1159px) {
     .dataDiv{

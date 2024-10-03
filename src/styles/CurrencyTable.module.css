@@ -32,8 +32,31 @@
     margin: 2px;
 }
 
+.thParagraph{
+    animation: apear-slow 3s cubic-bezier( 0.23, 1, 0.32, 1 );
+}
+
+table{
+    border-spacing: 7px;
+}
+
+@keyframes apear-slow {
+    0% {
+      opacity: 0;
+    }
+
+    50% {
+        opacity: 0.1
+      }
+
+    100% {
+      opacity: 1
+    }
+  }
+
 th{
     background-color: rgb(118, 196, 228);
+    box-shadow: 0px 10px 9px -5px rgba(66, 68, 90, 1);
 }
 
 .thLabel{
@@ -71,6 +94,28 @@ th:nth-of-type(2){
     align-items: center;
     flex-direction: column;
 }
+
+td{
+    animation: rotate-slow 3s cubic-bezier( 0.23, 1, 0.32, 1 );
+    box-shadow: 0px 10px 9px -5px rgba(66, 68, 90, 1);
+    transition: transform 0.5s;
+}
+
+td:hover{
+    transform: scale(1.1);
+}
+
+@keyframes rotate-slow {
+    0% {
+      transform: rotateX(0deg);
+      opacity: 0.1;
+    }
+
+    100% {
+      transform: rotateX(720deg);
+      opacity: 1;
+    }
+  }
 
 @media screen and (max-width: 768px) {
 
@@ -154,20 +199,21 @@ th:nth-of-type(2){
 @media screen and (min-width: 768px) and (max-width: 1159px) {
     .nameCells {
             width: 200px;
-            height: 70px;
+            height: 60px;
         }
 
-    .paragraph{
-        font-size: 15px;
-    }
-
-    .paragraphBottom{
-        font-size: 15px;
-    }
+        .paragraph{
+            font-size: 14px;
+        }
+    
+        .paragraphBottom{
+            font-size: 15px;
+        }
 
     th{
         font-size: 15px;
     }
+
     .thLabel{
         width: 70px;
     }
@@ -199,7 +245,7 @@ th:nth-of-type(2){
 
     .nameCells{
         width: 250px;
-        height: 80px;
+        height: 60px;
         font-size: 20px;
     }
 
@@ -215,6 +261,14 @@ th:nth-of-type(2){
     .icon{
         width: 25px;
         height: 25px;
+    }
+
+    .paragraph{
+        font-size: 14px;
+    }
+
+    .paragraphBottom{
+        font-size: 15px;
     }
 }
 
