@@ -92,8 +92,8 @@ export const Currency =()=>{
         }, []);
     
     useEffect(() => {
+        setStart(true)
         if (!isCurrency) {
-            console.log(1)
             let tempTickers = tickers.filter((ticker) => ticker.Type === "Currency" && ticker.Exchange !== "CC")    
                                      .slice(page*itemsOnPage, page*itemsOnPage + itemsOnPage)
                                      .map((ticker) => `${ticker.Code}.${ticker.Exchange}`);
@@ -104,7 +104,6 @@ export const Currency =()=>{
         } else {
             setTickerList(currencyList)
         }
-        setStart(true)
     }, [page, itemsOnPage, isCurrency, currencyList])
 
     useEffect(() => {
@@ -159,6 +158,7 @@ export const Currency =()=>{
                             <div className={css.pageNoDiv}>{page + 1}</div>
                         </>
                     )}
+                    
                     <button className={css.button} onClick={() => setPage(page + 1)}><PiArrowFatLinesRightFill className={css.icon}/></button>
                 </div>
             ) : (
