@@ -15,6 +15,7 @@ export const Currency =()=>{
     const { Data } = useData();
     const [tickerList, setTickerList] = useState([])
     const [currencyList, setCurrencyList] = useState([])
+    const [downloadedData, setDownloadedData] = useState([])
     const [liveList, setLivelList]=useState([])
     const [start, setStart] = useState(true)
     const [page, setPage]=useState(0)
@@ -54,6 +55,9 @@ export const Currency =()=>{
     ], [])
 
     const onCurrencyChange = (e) => {
+        setIsSorting(false)
+        setIsCurrency(true)
+        setStart(true)
         let tempTickers = tickers.filter((ticker) => ticker.Code.slice(0, 3).includes(e.value) && (ticker.Type === "Currency"))
         setNoOfItems(tempTickers.length)
         let newTickersList = []
@@ -62,8 +66,7 @@ export const Currency =()=>{
             newTickersList.push(ticker)
         }
         setCurrencyList(newTickersList)
-        setIsCurrency(true)
-        setStart(true)
+        setTickerList(newTickersList)
         }
     
     useEffect(() => {
@@ -92,8 +95,8 @@ export const Currency =()=>{
         }, []);
     
     useEffect(() => {
+        setStart(true)
         if (!isCurrency) {
-            console.log(1)
             let tempTickers = tickers.filter((ticker) => ticker.Type === "Currency" && ticker.Exchange !== "CC")    
                                      .slice(page*itemsOnPage, page*itemsOnPage + itemsOnPage)
                                      .map((ticker) => `${ticker.Code}.${ticker.Exchange}`);
@@ -104,12 +107,12 @@ export const Currency =()=>{
         } else {
             setTickerList(currencyList)
         }
-        setStart(true)
     }, [page, itemsOnPage, isCurrency, currencyList])
 
     useEffect(() => {
         if (start && tickerList && tickerList.length > 0) {
             setIsLoading(true)
+            setStart(false)
             let markup
             multiplyData(tickerList)
                 .then(downloadedData => {
@@ -120,7 +123,6 @@ export const Currency =()=>{
                         return data
                     })
                     setLivelList(markup)
-                    setStart(false)
                     setIsLoading(false)
                 }
                 )
@@ -129,7 +131,7 @@ export const Currency =()=>{
 
     useEffect(() => {
         const intervalID = setInterval(() => {
-            if (!isSorting || !start) {
+            if (!start || !isSorting) {
                 multiplyData(tickerList).then(downloadedData => {
                     const markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
@@ -137,14 +139,19 @@ export const Currency =()=>{
                         data.Name = results[0]?.Name || data.Name; 
                         return data;
                     });
-                    setLivelList(markup);
+                    setDownloadedData(markup)   
                 });
             }
-        }, 5000);
+        }, 15000);
     
         return () => clearInterval(intervalID);
-    }, [tickerList, isSorting, setLivelList, start]);
+    }, [tickerList, setDownloadedData, start, isSorting]);
 
+    useEffect(()=>{  
+        if(!isSorting){
+                setLivelList(downloadedData)};
+           },[setLivelList ,downloadedData, isSorting])
+  
 
     useEffect(() => {
         if (tickerList && tickerList.length > 0) {
@@ -159,6 +166,7 @@ export const Currency =()=>{
                             <div className={css.pageNoDiv}>{page + 1}</div>
                         </>
                     )}
+                    
                     <button className={css.button} onClick={() => setPage(page + 1)}><PiArrowFatLinesRightFill className={css.icon}/></button>
                 </div>
             ) : (
@@ -176,9 +184,9 @@ export const Currency =()=>{
                 <div className={css.tableDiv} >
                     <div className={css.selectDiv}>
                         <Select className={css.select} options={sortedCurrencyByName} styles={customStyles} onChange={onCurrencyChange} placeholder={"Set Currency"}></Select>
-                        <Select className={css.select} options={options}  styles={customStyles} onChange={(e) => setItemsOnPage(e.value)} placeholder={`Tickers on page ${itemsOnPage}`}></Select>   
+                        <Select className={css.select} options={options}  styles={customStyles} onChange={(e) => {setIsSorting(false);setItemsOnPage(e.value);}}placeholder={`Tickers on page ${itemsOnPage}`}></Select>   
                     </div>
-                        <CurrencyTable setTickerList= {setTickerList} setIsSorting={setIsSorting} liveList={liveList.length > 0 ? liveList : []} />
+                         <CurrencyTable isSorting={isSorting} setTickerList= {setTickerList} setIsSorting={setIsSorting} liveList={liveList.length> 0 ? liveList : []} />
                     {Buttons}
                 </div>
             )}

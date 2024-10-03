@@ -2,12 +2,13 @@ import { useMemo, useState, useEffect } from "react";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import css from '../styles/CurrencyTable.module.css';
 
-export const CurrencyTable = ({ liveList, setIsSorting, setTickerList }) => {
+export const CurrencyTable = ({ liveList, setIsSorting, setTickerList, isSorting }) => {
   const [list, setList] = useState(liveList);
   const [sortedButton, setSortedButton] = useState(null);
   const [sortType, setSortType] = useState('SortUp');
   const [sortIcon, setSortIcon] = useState(<TiArrowSortedDown className={css.icon} />);
   const [animationKey, setAnimationKey] = useState(0);
+  const [intervalCounter, setIntervalCounter]=useState(0)
 
   useEffect(() => {
     setList(liveList);
@@ -42,12 +43,13 @@ export const CurrencyTable = ({ liveList, setIsSorting, setTickerList }) => {
     setSortType(sortType);
     setAnimationKey(prevKey => prevKey + 1);
     setList(sortedList);
-    
+    setIntervalCounter(prevValue => prevValue + 1)
     const timer = setTimeout(() => {
-      setIsSorting(false)
-      console.log(1)
-    }, 7000); 
-    return () => clearTimeout(timer);
+      intervalCounter ===0 && setIsSorting(false)
+      setIntervalCounter(prevValue => prevValue - 1)
+    }, 20000); 
+    return () => {clearTimeout(timer);
+    }
   };
 
   const renderCell = (data) => {
