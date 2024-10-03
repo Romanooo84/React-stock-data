@@ -46,7 +46,7 @@ export const CurrencyTable = ({ liveList, setIsSorting, setTickerList }) => {
     const timer = setTimeout(() => {
       setIsSorting(false)
       console.log(1)
-    }, 5000); 
+    }, 7000); 
     return () => clearTimeout(timer);
   };
 
