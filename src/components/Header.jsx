@@ -1,5 +1,6 @@
 import { FcComboChart } from "react-icons/fc"
-import { CiMenuKebab } from "react-icons/ci";
+import { RiMenuFold3Fill } from "react-icons/ri";
+import { RiMenuFold4Fill } from "react-icons/ri";
 import { useData } from 'hooks/dataContext';
 import { Link, useLocation  } from "react-router-dom"
 import { useState, useEffect, useCallback } from "react";
@@ -14,6 +15,7 @@ export const Header=()=>{
 
     const onClick = useCallback(() => {
         updateData({ isStartPage: true });
+        setIsMenuOpen(false)
     }, [updateData]);
 
     useEffect(() => {
@@ -56,14 +58,15 @@ export const Header=()=>{
             <div className ={css.mainDiv}>
                 <div className ={css.mainDiv}>
                     <div className={css.logoDiv}>
-                    <FcComboChart />
-                    <p className={`${css.visuallyHidden} ${css.paragrph}`}>Stock-Market-Data</p>
+                        <FcComboChart size={20} />
+                    <p className={ css.paragrph}>Stock-Market-Data</p>
                     </div>
                     <div className={` ${isMenuOpen ? css.menu : css.menuHidden} `}>
                         {buttons}
+                        <FcComboChart size={50} />
                     </div>
                     <button className={`${css.hamburgerHidden} ${css.hamburgerButton}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                        <CiMenuKebab className={`${css.hamburgerMenu}`} />
+                        {!isMenuOpen ? (<RiMenuFold3Fill className={`${css.hamburgerMenu}`}/>) : (<RiMenuFold4Fill className={`${css.hamburgerMenu}`} />)}
                     </button>
                 </div>
             </div>
