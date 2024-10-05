@@ -71,13 +71,13 @@ th:nth-of-type(2){
 
 .red {
     color: rgba(255, 0, 0, 0.682);
-    animation: red-color 1s cubic-bezier(0.23, 1, 0.32, 1), rotate-slow 3s cubic-bezier(0.23, 1, 0.32, 1);
+    animation: red-color 1s cubic-bezier(0.23, 1, 0.32, 1) rotate-slow 3s ease-in-out;
     background-color: rgb(12, 96, 185, 0.67);
 }
 
 .green {
     color: rgba(0, 128, 0, 0.774);
-    animation: green-color 1s cubic-bezier(0.23, 1, 0.32, 1), rotate-slow 3s cubic-bezier(0.23, 1, 0.32, 1);
+    animation: green-color 1s cubic-bezier(0.23, 1, 0.32, 1) rotate-slow 3s ease-in-out;
     background-color: rgb(12, 96, 185, 0.67);
 }
 
@@ -92,8 +92,9 @@ th:nth-of-type(2){
 }
 
 td{
-    animation: rotate-slow 3s cubic-bezier( 0.23, 1, 0.32, 1 );
+    animation: rotate-slow 2s ease-in-out;
     box-shadow: 0px 10px 9px -5px rgba(66, 68, 90, 1);
+    transform-style: preserve-3d;
     transition: transform 0.5s;
 }
 
@@ -101,19 +102,6 @@ td:hover{
     transform: scale(1.1);
 }
 
-@keyframes apear-slow {
-    0% {
-      opacity: 0;
-    }
-
-    50% {
-        opacity: 0.1
-      }
-
-    100% {
-      opacity: 1
-    }
-  }
 
   @keyframes apear-slow-label {
     0% {
@@ -123,18 +111,7 @@ td:hover{
     100% {
       opacity: 1
     }
-  }
-
-  @keyframes rotate-slow {
-    0% {
-        transform: rotateX(0deg);
-        opacity: 0.1;
     }
-    100% {
-        transform: rotateX(720deg);
-        opacity: 1;
-    }
-}
 
 @keyframes green-color {
     0% {
@@ -142,6 +119,44 @@ td:hover{
     }
     100% {
         background-color: rgb(12, 96, 185, 0.67);
+    }
+}
+
+@keyframes rotate-slow {
+    0% {
+        transform-origin: top;
+        transform: perspective(300px) rotate3d(0.8, 0.5, 0, 90deg);
+        
+    }
+
+    20% {
+        transform-origin: top;
+        transform: perspective(350px) rotate3d(0.9, -0.3, -0.1, -50deg);
+    }
+
+    40% {
+        transform-origin: top;
+        transform: perspective(370px) rotate3d(1, 0.15, 0, 35deg);
+    }
+
+    55% {
+        transform-origin: top;
+        transform: perspective(400px) rotate3d(0.7, 0.1, 0.1, -20deg);
+    }
+
+    75% {
+        transform-origin: top;
+        transform: perspective(400px) rotate3d(1, -0.05, 0, 15deg);
+    }
+
+    90% {
+        transform-origin: top;
+        transform: perspective(450px) rotate3d(1, 0, 0, -5deg);
+    }
+
+    100% {
+        transform-origin: top;
+        transform: perspective(5000px) rotate3d(50, 0, 0, 2deg);
     }
 }
 
