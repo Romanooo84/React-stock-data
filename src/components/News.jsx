@@ -80,7 +80,7 @@ export const News=({Page})=>{
             </div>
         )} );
         setText(markup);
-        //setIsLoading(false)
+        setIsLoading(false)
     }, [dataNews, openModal])
     
     return (

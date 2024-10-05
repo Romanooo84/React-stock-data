@@ -109,3 +109,10 @@
         box-shadow: .2em -.2em 0px 1px currentcolor;
       }
     }
+
+        @media screen and (max-width: 768px) {
+          .loaderDiv{
+            left: -5vw;
+            position: absolute;
+          }
+        }
