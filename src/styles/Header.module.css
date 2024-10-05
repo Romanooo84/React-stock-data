@@ -46,14 +46,43 @@ header{
     justify-content: space-between;
 }
 
+.hamburgerMenu{
+    width: 30px;
+    height: 30px;
+    color: #4acad8;
+}
+
 @media screen and (max-width: 768px) {
 
     header{
         min-width: 340px;
     }   
+
+    .headerButton{
+        width: 300px;
+        border: none;
+        background: none;
+        color:#88b3c2;
+        font-weight: 600;
+        font-size: 20px;
+        transition: transform 0.725s, color 0.5s;
+        text-align: center;
+    }
+
+
+    .activePageButton{
+        width: 300px;
+        border: none;
+        background: none;
+        color:#4acad8;
+        font-weight: 600;
+        font-size: 35px;
+        text-align: center;
+    }
     .mainDiv {
-            width: 340px;
-        }
+         width: 340px;
+    }
+
     .visuallyHidden {
         position: absolute;
         width: 1px;
@@ -65,7 +94,49 @@ header{
         clip-path: inset(100%);
         clip: rect(0 0 0 0);
         overflow: hidden;
+        opacity: 0.5; 
+        transform: translateX(100vw); 
+        transition: opacity 1s ease-in-out, transform 1s ease-in-out; 
     }
+
+        .menuHidden {
+            position: absolute;
+            display: flex;
+            top: 70px;
+            background-color: white;
+            height: 100vh;
+            width: 360px;
+            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            opacity: 0.5;
+            transform: translateX(100vw);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        }
+
+    .menu {
+        position: absolute;
+        display: flex;
+        top: 70px;
+        background-color: white;
+        height: 100vh;
+        width: 360px;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        transition: opacity 1s ease-out, transform 1s ease-in-out;
+        opacity: 1;
+        transform: translateX(0px); 
+    }
+
+
+
+    .hamburgerButton{
+        background-color: transparent;
+    }
+
 }
 
 @media screen and (min-width: 768px) and (max-width: 1159px) {
@@ -83,9 +154,24 @@ header{
         width: 80px;
     }
 
-         .activePageButton {
-             width: 80px;
-         }
+    .activePageButton {
+        width: 80px;
+    }
+
+    .hamburgerHidden{   
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        border: 0;
+        padding: 0;
+        white-space: nowrap;
+        clip-path: inset(100%);
+        clip: rect(0 0 0 0);
+        overflow: hidden;
+        opacity: 0;
+    }
+
 }
 
 @media screen and (min-width: 1159px) {
@@ -107,6 +193,19 @@ header{
     .headerButton {
             width: 120px;
             font-size: 17px;
+    }
+
+     .hamburgerHidden{   
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        border: 0;
+        padding: 0;
+        white-space: nowrap;
+        clip-path: inset(100%);
+        clip: rect(0 0 0 0);
+        overflow: hidden;
     }
 
     svg{
