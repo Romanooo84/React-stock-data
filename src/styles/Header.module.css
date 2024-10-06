@@ -106,7 +106,7 @@ header{
         padding-top: 30px;
         border-radius: 20px;
         top: 57px;
-      overflow: hidden;
+        overflow-x: hidden;
     }
 
     .menu {
