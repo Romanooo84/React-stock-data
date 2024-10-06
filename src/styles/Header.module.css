@@ -93,10 +93,9 @@ header{
         top: 70px;
         background-color: white;
         height: 100vh;
-        width: 360px;
+        width: 160px;
         flex-wrap: wrap;
         flex-direction: column;
-        align-items: center;
         gap: 30px;
         opacity: 0.9;
         transform-origin: 450px;
