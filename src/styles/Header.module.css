@@ -115,10 +115,9 @@ header{
         top: 57px;
         background-color: white;
         height: 110vh;
-        width: 140px;
+        width: 160px;
         flex-wrap: wrap;
         flex-direction: column;
-        align-items: center;
         gap: 30px;
         transform-origin: 450px;
         transition: opacity 1s ease-in-out, transform 0.5s ease-in;
