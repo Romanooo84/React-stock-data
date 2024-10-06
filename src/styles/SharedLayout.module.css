@@ -3,6 +3,11 @@
     flex-wrap: wrap;
     min-height: 100vh;
     overflow-x: hidden;
+    
+}
+
+.main{
+    padding-top: 50px;
 }
 
 @media screen and (min-width: 320px) {

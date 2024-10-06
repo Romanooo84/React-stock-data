@@ -2,7 +2,7 @@ header{
     background: linear-gradient(#04184b 10%, #144ea0 50%, #04184b 90%);
     box-shadow: 0 5px 5px rgba(0, 0, 0, .66);
     padding: 10px;
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -62,7 +62,7 @@ header{
 
     .headerButton{
         width: 100px;
-        border: 1px solid #4acad8;
+        border: 1px solid #100768;
         border-radius: 10px;
         background: none;
         color:#4a77d8;
@@ -71,6 +71,7 @@ header{
         transition: transform 0.725s, color 0.5s;
         text-align: center;
         box-shadow: 0px 5px 15px rgba(13, 5, 49, 0.522);
+        cursor: pointer
     }
 
 
@@ -84,11 +85,11 @@ header{
         text-align: center;
     }
     .mainDiv {
-         width: 340px;
+         width: 360px;
     }
 
     .menuHidden {
-        position: absolute;
+        position: fixed;
         display: flex;
         top: 70px;
         background-color: white;
@@ -99,9 +100,9 @@ header{
         align-items: center;
         gap: 30px;
         opacity: 0.9;
-        transform-origin: 450px;
-        transform: perspective(4000px) rotate3d(0.1, 1, 0, 90deg) translateX(74vw) translateY(10vw);
-        transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        transform-origin: 350px;
+        transform: perspective(1000px) rotate3d(0, 1, 0, 90deg) translateX(50vw) translateY(30vw);
+        transition: opacity 1s ease-in-out, transform 1.5s ease-in-out;
         box-shadow: 0px 0px 30px rgba(13, 5, 49, 0.522);
         padding-top: 30px;
         border-radius: 20px;
@@ -110,7 +111,7 @@ header{
     }
 
     .menu {
-        position: absolute;
+        position: fixed;
         display: flex;
         top: 57px;
         background-color: white;
@@ -120,7 +121,7 @@ header{
         flex-direction: column;
         align-items: center;
         gap: 30px;
-        transform-origin: 450px;
+        transform-origin: 350px;
         transition: opacity 1s ease-in-out, transform 1s ease-in;
         opacity: 1;
         transform: perspective(4000px) rotate3d(1, 0, 0, 0deg) translateX(0vw) translateY(0vw);
@@ -139,8 +140,8 @@ header{
     .hamburgerButton{
             background: none;
             border: none;
+            cursor: pointer
     }
-
 
 
 }
@@ -178,6 +179,19 @@ header{
         opacity: 0;
     }
 
+    .visuallyHidden{
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        border: 0;
+        padding: 0;
+        white-space: nowrap;
+        clip-path: inset(100%);
+        clip: rect(0 0 0 0);
+        overflow: hidden;
+        opacity: 0;
+    }
         svg {
             height: 30px;
             width: 34px;
@@ -223,4 +237,19 @@ header{
         height: 30px;
         width: 34px;
     }
+
+    .visuallyHidden{
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        border: 0;
+        padding: 0;
+        white-space: nowrap;
+        clip-path: inset(100%);
+        clip: rect(0 0 0 0);
+        overflow: hidden;
+        opacity: 0;
+    }
+
 }

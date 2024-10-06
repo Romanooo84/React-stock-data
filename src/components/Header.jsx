@@ -63,7 +63,7 @@ export const Header=()=>{
                     </div>
                     <div className={` ${isMenuOpen ? css.menu : css.menuHidden} `}>
                         {buttons}
-                        <FcComboChart size={50} />
+                        <FcComboChart className={ css.visuallyHidden} size={50} />
                     </div>
                     <button className={`${css.hamburgerHidden} ${css.hamburgerButton}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
                         {!isMenuOpen ? (<RiMenuFold3Fill className={`${css.hamburgerMenu}`}/>) : (<RiMenuFold4Fill className={`${css.hamburgerMenu}`} />)}
