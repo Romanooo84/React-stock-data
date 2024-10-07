@@ -1,7 +1,7 @@
 header{
     background: linear-gradient(#04184b 10%, #144ea0 50%, #04184b 90%);
     box-shadow: 0 5px 5px rgba(0, 0, 0, .66);
-    padding: 10px;
+    height: 55px;
     position: fixed;
     top: 0;
     left: 0;
@@ -62,15 +62,16 @@ header{
 
     .headerButton{
         width: 100px;
-        border: 1px solid #100768;
-        border-radius: 10px;
+        /*border: 1px solid #100768;*/
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
         background: none;
         color:#4a77d8;
         font-weight: 600;
         font-size: 20px;
         transition: transform 0.725s, color 0.5s;
         text-align: center;
-        box-shadow: 0px 5px 15px rgba(13, 5, 49, 0.522);
+        box-shadow: 0px 7px 5px rgba(13, 5, 49, 0.522);
         cursor: pointer
     }
 
@@ -85,7 +86,7 @@ header{
         text-align: center;
     }
     .mainDiv {
-         width: 360px;
+         width: 340px;
     }
 
     .menuHidden {
@@ -143,6 +144,9 @@ header{
             cursor: pointer
     }
 
+    .headerButton:hover{
+        color: rgb(26, 0, 99); 
+    }
 
 }
 
