@@ -32,6 +32,23 @@ export const historicalData = async (ticker, startDate, endDate) => {
 
 }
 
+export const test= async () => {
+  console.log('test')
+  const url = `http://localhost:3000/listen`
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const downloadedData = await response.json();
+    return downloadedData;
+  } catch (error) {
+    console.error("Data error:", error);
+    return null; 
+  }
+
+}
+
 export const multiplyData = async (data) => {
   let tickerList = [];
   for (let i = 0; i < data.length; i++) {

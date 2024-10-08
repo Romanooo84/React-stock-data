@@ -1,4 +1,4 @@
-import { liveData, historicalData } from "hooks/downloadData";
+import { liveData, historicalData, test } from "hooks/downloadData";
 import { linearRegression } from "hooks/math";
 import { createDate } from "hooks/createDate";
 import { TickerData } from "./TickerData";
@@ -132,6 +132,9 @@ export const Chart = () => {
 
     useEffect(()=>{
         if (Data.startDate===null){
+            console.log('test')
+            test()
+                .then(data=>console.log(data))
         let beginigEndDate = new Date();
         let beginigstartDate = new Date(beginigEndDate);
         beginigstartDate.setDate(beginigstartDate.getDate() - 30);
