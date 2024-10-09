@@ -18,12 +18,6 @@ export const Header=()=>{
         setIsMenuOpen(false)
     }, [updateData]);
 
-    useEffect(() => {
-        console.log(isMenuOpen)
-    },[isMenuOpen])
-    
-    
-
     useEffect(()=>{
         const buttonsList = ['home', 'details', 'currency', 'news', 'contact']
         const path=location.pathname.split('/')

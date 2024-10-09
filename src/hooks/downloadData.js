@@ -1,7 +1,5 @@
-import { token } from './data';
-
 export const liveData= async (ticker)=>{
-  const url= `https://eodhd.com/api/real-time/${ticker}?api_token=${token}&fmt=json`
+  const url= `http://romanpisarski.pl/live?ticker=${ticker}`
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -16,25 +14,8 @@ export const liveData= async (ticker)=>{
 
 }
 
-export const historicalData = async (ticker, startDate, endDate) => {
-  const url = `https://eodhd.com/api/eod/${ticker}?from=${startDate}&to=${endDate}&period=d&api_token=${token}&fmt=json`
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const downloadedData = await response.json();
-    return downloadedData;
-  } catch (error) {
-    console.error("Data error:", error);
-    return null; 
-  }
-
-}
-
-export const test= async () => {
-  console.log('test')
-  const url = `http://localhost:3000/listen`
+export const historicalData= async (ticker, startDate, endDate) => {
+  const url = `http://romanpisarski.pl/historical?ticker=${ticker}&from=${startDate}&to=${endDate}`
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -52,17 +33,10 @@ export const test= async () => {
 export const multiplyData = async (data) => {
   let tickerList = [];
   for (let i = 0; i < data.length; i++) {
-    if (i === 0) {
-      tickerList = [`${data[i]}?s=`];
-    } else if (i === 1)  {
       tickerList.push(`${data[i]}`);
-    }
-    else {
-      tickerList.push(`,${data[i]}`);
-    }
   }
-  const tickers = tickerList.join('');
-  const url= `https://eodhd.com/api/real-time/${tickers}&api_token=${token}&fmt=json`
+  const tickers = tickerList
+  const url= `http://romanpisarski.pl/multiple?tickers=${tickers}`
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -76,7 +50,7 @@ export const multiplyData = async (data) => {
   }
 };
 
-export const getExchanges = async () => {
+/*export const getExchanges = async () => {
  
   try {
     const response = await fetch(`https://eodhd.com/api/exchanges-list/?api_token=${token}&fmt=json`);
@@ -105,10 +79,10 @@ export const getTickers = async (data) => {
     console.error("Data error:", error);
   }}
   return(ticerList)
-};
+};*/
 
 export const newsData = async (ticker, quanity, startDate, endDate)=>{
-  const url= `https://eodhd.com/api/news?${ticker}S&from=${startDate}&to=${endDate} &offset=0&limit=${quanity}&api_token=${token}&fmt=json`
+  const url= `http://romanpisarski.pl/news?ticker=${ticker}&from=${startDate}&to=${endDate}&offset=0&limit=${quanity}`
   try {
     const response = await fetch(url);
     if (!response.ok) {

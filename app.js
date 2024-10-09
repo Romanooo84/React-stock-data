@@ -1,62 +1,87 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const port = '3000' // Możesz ustawić inny port, jeśli chcesz
+require('dotenv').config()
+const cors = require('cors')
+const logger = require('morgan')
+const {historicalData, liveData, multipleData, newsData} = require('./server/downloads')
 
-const token = '65fd2d716aebf2.80647901'; // Twój token
+const port = '3000' 
 
-const historicalData = async (ticker, startDate, endDate) => {
-  const url = `https://eodhd.com/api/eod/${ticker}?from=${startDate}&to=${endDate}&period=d&api_token=${token}&fmt=json`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const downloadedData = await response.json();
-    return downloadedData;
-  } catch (error) {
-    console.error("Data error:", error);
-    return null; 
-  }
-};
+const token = process.env.TOKEN;
 
-// Serwowanie plików statycznych z katalogu 'build/static' pod ścieżką '/React-stock-data/static'
+const corsOptions = {
+  origin:[`https://www.romanpisarski.pl`]
+}
+
+logger.format('custom', ':remote-addr :method :url :status :response-time ms');
+
+//app.use(logger('custom'))
+app.use(cors(corsOptions))
+
 app.use('/React-stock-data/static', express.static(path.join(__dirname, 'build', 'static')));
 
-// Serwowanie plików statycznych z katalogu 'build' pod ścieżką '/React-stock-data'
 app.use('/React-stock-data', express.static(path.join(__dirname, 'build')));
 
-app.get('/listen', async (req, res) => {
-  console.log("otrzymałem zapytanie");
+app.get('/historical', async (req, res) => {
 
-  // Odczytanie parametrów zapytania
   const queryParameters = req.query;
+  const {ticker, from, to}= queryParameters
 
   try {
-    // Przykładowe wywołanie funkcji historicalData
-    const data = await historicalData('AAPL.US', '20-08-2024', '23-08-2024');
 
-    // Tworzenie obiektu z danymi do wysłania w odpowiedzi
-    const responseData = {
-      query: queryParameters,
-      historicalData: data
-    };
+    const data = await historicalData(ticker, from, to);
+    res.json(data);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych historycznych' });
+  }
+});
 
-    // Wysłanie odpowiedzi
-    res.json(responseData);
+app.get('/live', async (req, res) => {
+
+  const queryParameters = req.query;
+  const {ticker}= queryParameters
+
+  try {
+    const data = await liveData(ticker);
+    res.json(data);
   } catch (error) {
     console.error("Błąd przy pobieraniu danych historycznych:", error);
     res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych historycznych' });
   }
 });
 
+app.get('/multiple', async (req, res) => {
 
-// Wszystkie inne ścieżki mają zwracać index.html z Reacta
+  const queryParameters = req.query;
+  const {tickers}= queryParameters
+  try {
+    const data = await multipleData(tickers);
+    res.json(data);
+  } catch (error) {
+    console.error("Błąd przy pobieraniu danych historycznych:", error);
+    res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych historycznych' });
+  }
+});
+
+app.get('/news', async (req, res) => {
+
+  const queryParameters = req.query;
+  const {ticker, limit, from, to}= queryParameters
+  try {
+    const data = await newsData(ticker, limit, from, to);
+    res.json(data);
+  } catch (error) {
+    console.error("Błąd przy pobieraniu danych historycznych:", error);
+    res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych historycznych' });
+  }
+});
+
 app.get('/React-stock-data/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-// Uruchomienie serwera
 app.listen(port, () => {
   console.log(`Serwer działa na http://localhost:${port}/React-stock-data/`);
 });
