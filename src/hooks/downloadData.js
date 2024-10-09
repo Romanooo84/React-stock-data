@@ -1,5 +1,5 @@
 export const liveData= async (ticker)=>{
-  const url= `http://romanpisarski.pl/live?ticker=${ticker}`
+  const url= `https://romanpisarski.pl/live?ticker=${ticker}`
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -15,7 +15,7 @@ export const liveData= async (ticker)=>{
 }
 
 export const historicalData= async (ticker, startDate, endDate) => {
-  const url = `http://romanpisarski.pl/historical?ticker=${ticker}&from=${startDate}&to=${endDate}`
+  const url = `https://romanpisarski.pl/historical?ticker=${ticker}&from=${startDate}&to=${endDate}`
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -36,7 +36,7 @@ export const multiplyData = async (data) => {
       tickerList.push(`${data[i]}`);
   }
   const tickers = tickerList
-  const url= `http://romanpisarski.pl/multiple?tickers=${tickers}`
+  const url= `https://romanpisarski.pl/multiple?tickers=${tickers}`
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -82,7 +82,7 @@ export const getTickers = async (data) => {
 };*/
 
 export const newsData = async (ticker, quanity, startDate, endDate)=>{
-  const url= `http://romanpisarski.pl/news?ticker=${ticker}&from=${startDate}&to=${endDate}&offset=0&limit=${quanity}`
+  const url= `https://romanpisarski.pl/news?ticker=${ticker}&from=${startDate}&to=${endDate}&offset=0&limit=${quanity}`
   try {
     const response = await fetch(url);
     if (!response.ok) {
