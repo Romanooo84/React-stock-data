@@ -19,9 +19,9 @@ logger.format('custom', ':remote-addr :method :url :status :response-time ms');
 //app.use(logger('custom'))
 app.use(cors(corsOptions))
 
-app.use('/static', express.static(path.join(__dirname, 'build', 'static')));
+app.use('/React-stock-data/static', express.static(path.join(__dirname, 'build', 'static')));
 
-app.use('/', express.static(path.join(__dirname, 'build')));
+app.use('/React-stock-data/', express.static(path.join(__dirname, 'build')));
 
 app.get('/historical', async (req, res) => {
 
