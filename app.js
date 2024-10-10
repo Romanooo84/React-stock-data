@@ -21,7 +21,7 @@ app.use(cors(corsOptions))
 
 app.use('/React-stock-data/static', express.static(path.join(__dirname, 'build', 'static')));
 
-app.use('/React-stock-data/', express.static(path.join(__dirname, 'build')));
+app.use('/React-stock-data', express.static(path.join(__dirname, 'build')));
 
 app.get('/historical', async (req, res) => {
 
