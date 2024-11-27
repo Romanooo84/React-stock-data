@@ -4,7 +4,7 @@ const app = express();
 require('dotenv').config()
 const cors = require('cors')
 const logger = require('morgan')
-const {historicalData, liveData, multipleData, newsData} = require('./server/downloads')
+const {historicalData, liveData, multipleData, newsData, nearObjecDetails} = require('./server/downloads')
 
 const port = '3000' 
 
@@ -75,6 +75,19 @@ app.get('/news', async (req, res) => {
   } catch (error) {
     console.error("Błąd przy pobieraniu danych historycznych:", error);
     res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych historycznych' });
+  }
+});
+
+app.get('/nasa/neodetails', async (req, res) => {
+
+  const queryParameters = req.query;
+  const {id, startDate, endDate}= queryParameters
+  try {
+    const data = await newsData(id, startDate, endDate);
+    res.json(data);
+  } catch (error) {
+    console.error("Błąd przy pobieraniu NEO:", error);
+    res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych NEO' });
   }
 });
 
