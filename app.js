@@ -11,7 +11,7 @@ const port = '3000'
 const token = process.env.TOKEN;
 
 const corsOptions = {
-  origin:[`https://www.romanpisarski.pl`]
+  origin: ['https://www.romanpisarski.pl', 'http://localhost:5173'],
 }
 
 logger.format('custom', ':remote-addr :method :url :status :response-time ms');
@@ -42,6 +42,7 @@ app.get('/live', async (req, res) => {
 
   const queryParameters = req.query;
   const {ticker}= queryParameters
+  console.log('test')
 
   try {
     const data = await liveData(ticker);
@@ -82,8 +83,9 @@ app.get('/nasa/neodetails', async (req, res) => {
 
   const queryParameters = req.query;
   const {id, startDate, endDate}= queryParameters
+  console.log('nasa')
   try {
-    const data = await newsData(id, startDate, endDate);
+    const data = await nearObjecDetails(id, startDate, endDate);
     res.json(data);
   } catch (error) {
     console.error("Błąd przy pobieraniu NEO:", error);

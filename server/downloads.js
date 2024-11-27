@@ -64,6 +64,7 @@ const multipleData = async (data) => {
     try {
       const response = await fetch(url);
       if (!response.ok) {
+        console.log('bład')
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const downloadedData = await response;
@@ -75,9 +76,29 @@ const multipleData = async (data) => {
   
   }
 
+ const nearObjecDetails =async (objectId, startDate, endDate) =>{
+    const url =`https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=${objectId}&EPHEM_TYPE=VECTORS&CENTER=500@0&START_TIME=${startDate}&STOP_TIME=${endDate}&STEP_SIZE=1d&OUT_UNITS=KM-S&VEC_TABLE=2&REF_PLANE=ECLIPTIC`
+    console.log(url)
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const downloadedData = await response.text();
+      console.log(downloadedData)
+      return downloadedData
+      ; 
+    } catch (error) {
+        console.error("Data error:", error);
+        return []
+    }
+  }
+
   module.exports = {
     historicalData,
     liveData, 
     multipleData, 
-    newsData
+    newsData,
+    nearObjecDetails
     }
