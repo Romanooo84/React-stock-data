@@ -4,14 +4,14 @@ const app = express();
 require('dotenv').config()
 const cors = require('cors')
 const logger = require('morgan')
-const {historicalData, liveData, multipleData, newsData, nearObjecDetails} = require('./server/downloads')
+const {historicalData, liveData, multipleData, newsData, NEOList} = require('./server/downloads')
 
 const port = '3000' 
 
 const token = process.env.TOKEN;
 
 const corsOptions = {
-  origin: ['https://www.romanpisarski.pl', 'http://localhost:5173'],
+  origin: ['https://www.romanpisarski.pl', 'http://localhost:5173', 'https://romanooo84.github.io'],
 }
 
 logger.format('custom', ':remote-addr :method :url :status :response-time ms');
@@ -19,9 +19,9 @@ logger.format('custom', ':remote-addr :method :url :status :response-time ms');
 //app.use(logger('custom'))
 app.use(cors(corsOptions))
 
-app.use('/React-stock-data/static', express.static(path.join(__dirname, 'build', 'static')));
+app.use('/static', express.static(path.join(__dirname, 'build', 'static')));
 
-app.use('/React-stock-data', express.static(path.join(__dirname, 'build')));
+app.use('/', express.static(path.join(__dirname, 'build')));
 
 app.get('/historical', async (req, res) => {
 
@@ -93,7 +93,22 @@ app.get('/nasa/neodetails', async (req, res) => {
   }
 });
 
-app.get('/React-stock-data/*', (req, res) => {
+app.get('/nasa/neolist', async (req, res) => {
+
+  const queryParameters = req.query;
+  const {date}= queryParameters
+  console.log('nasa')
+  try {
+    const data = await NEOList(date);
+    res.json(data);
+  } catch (error) {
+    console.error("Błąd przy pobieraniu NEO:", error);
+    res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych NEO' });
+  }
+});
+
+
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
