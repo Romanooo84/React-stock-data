@@ -76,8 +76,17 @@ const multipleData = async (data) => {
   
   }
 
- const nearObjecDetails =async (objectId, startDate, endDate) =>{
-    const url =`https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='${objectId}'&EPHEM_TYPE=VECTORS&CENTER=500@0&START_TIME=${startDate}&STOP_TIME=${endDate}&STEP_SIZE=1d&OUT_UNITS=KM-S&VEC_TABLE=2&REF_PLANE=ECLIPTIC`
+
+  const nearObjecDetails =async (objectId, startDate, endDate) =>{
+    
+    let url
+    if (objectId==='399')
+      {
+	  url =`https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=399&EPHEM_TYPE=VECTORS&CENTER=500@0&START_TIME=${startDate}&STOP_TIME=${endDate}&STEP_SIZE=1d&OUT_UNITS=AU-D&VEC_TABLE=2&REF_PLANE=ECLIPTIC`
+    }
+    else{
+    url =`https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=27${objectId}27&EPHEM_TYPE=VECTORS&CENTER=500@0&START_TIME=${startDate}&STOP_TIME=${endDate}&STEP_SIZE=1d&OUT_UNITS=AU-D&VEC_TABLE=2&REF_PLANE=ECLIPTIC`
+    }
     console.log(url)
     try {
       const response = await fetch(url);

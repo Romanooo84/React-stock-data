@@ -4,7 +4,7 @@ const app = express();
 require('dotenv').config()
 const cors = require('cors')
 const logger = require('morgan')
-const {historicalData, liveData, multipleData, newsData, NEOList} = require('./server/downloads')
+const {historicalData, liveData, multipleData, newsData, NEOList, nearObjecDetails} = require('./server/downloads')
 
 const port = '3000' 
 
