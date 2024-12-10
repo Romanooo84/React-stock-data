@@ -5,6 +5,7 @@ require('dotenv').config()
 const cors = require('cors')
 const logger = require('morgan')
 const {historicalData, liveData, multipleData, newsData, NEOList, nearObjecDetails} = require('./server/downloads')
+const {countCoorodinates } = require ('./server/opertations/coordinates')
 
 const port = '3000' 
 
@@ -106,6 +107,21 @@ app.get('/nasa/neolist', async (req, res) => {
     res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych NEO' });
   }
 });
+
+app.get('/nasa/test', async (req, res) => {
+
+
+  console.log('test')
+  try {
+    const data = await countCoorodinates();
+    console.log(data)
+    res.json(data);
+  } catch (error) {
+    console.error("Błąd przy pobieraniu NEO:", error);
+    res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych NEO' });
+  }
+});
+
 
 
 app.get('/*', (req, res) => {

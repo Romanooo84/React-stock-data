@@ -80,17 +80,24 @@ const multipleData = async (data) => {
   const nearObjecDetails =async (objectId, startDate, endDate) =>{
     
     let url
-   if (objectId === '399' || objectId === '301' || objectId === '199' || objectId === '299' || objectId === '599' || objectId === '699' || objectId === '799' || objectId === '899' || objectId === '499' || objectId === '10') {
-  	url = `https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=${objectId}&EPHEM_TYPE=VECTORS&CENTER=500@0&START_TIME=${startDate}&STOP_TIME=${endDate}&STEP_SIZE=1d&OUT_UNITS=AU-D&VEC_TABLE=2&REF_PLANE=ECLIPTIC`;
-   } else {
-  	url = `https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='DES=${objectId}'&OBJ_DATA=%27YES%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTOR%27&CENTER=%27500@399%27&START_TIME=${startDate}&STOP_TIME=${endDate}&STEP_SIZE=%271%20d%27&QUANTITIES=%271,9,20,23,24,29%27`;
-   }
+    if (objectId==='399')
+      {
+	  url =`https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=399&EPHEM_TYPE=VECTORS&CENTER=500@0&START_TIME=${startDate}&STOP_TIME=${endDate}&STEP_SIZE=1d&OUT_UNITS=AU-D&VEC_TABLE=2&REF_PLANE=ECLIPTIC`
+    }
+    else{
+    url =`https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='DES=${objectId}'&OBJ_DATA=%27YES%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500@399%27&START_TIME=${startDate}&STOP_TIME=${endDate}STEP_SIZE=%271%20d%27&QUANTITIES=%271,9,20,23,24,29%27`
+    }
+
+    https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='DES=${objectId}'&OBJ_DATA=%27YES%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500@399%27&START_TIME=${startDate}&STOP_TIME=${endDate}STEP_SIZE=%271%20d%27&QUANTITIES=%271,9,20,23,24,29%27
+    console.log(url)
     try {
       const response = await fetch(url);
       if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
       const downloadedData = await response.text();
+      console.log(downloadedData)
       return downloadedData
       ; 
     } catch (error) {
@@ -100,7 +107,8 @@ const multipleData = async (data) => {
   }
 
  const NEOList =async (date) =>{
-    const url =`https://ssd-api.jpl.nasa.gov/cad.api?dist-max=3LD&date-min=${date}&sort=dist`
+    const url =`https://ssd-api.jpl.nasa.gov/cad.api?dist-max=0.1LD&date-min=${date}&sort=dist`
+    console.log(url)
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -108,6 +116,7 @@ const multipleData = async (data) => {
       }
       
       const downloadedData = await response.json();
+      console.log(downloadedData)
       return downloadedData
       ; 
     } catch (error) {
@@ -115,7 +124,6 @@ const multipleData = async (data) => {
         return []
     }
   }
-
 
 
   module.exports = {
