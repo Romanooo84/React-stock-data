@@ -11,13 +11,30 @@ const port = '3000'
 
 const token = process.env.TOKEN;
 
+let asteroidData = []
+
+const downloadCoorodinates = async ()=>{
+  console.log('start')
+try {
+  asteroidData = await countCoorodinates();
+  console.log(asteroidData)
+  return
+} catch (error) {
+  console.error("Błąd przy pobieraniu asteroid:", error);
+  return null
+}
+}
+
+downloadCoorodinates()
+
+
+
 const corsOptions = {
   origin: ['https://www.romanpisarski.pl', 'http://localhost:5173', 'https://romanooo84.github.io'],
 }
 
 logger.format('custom', ':remote-addr :method :url :status :response-time ms');
 
-//app.use(logger('custom'))
 app.use(cors(corsOptions))
 
 app.use('/static', express.static(path.join(__dirname, 'build', 'static')));
@@ -43,7 +60,6 @@ app.get('/live', async (req, res) => {
 
   const queryParameters = req.query;
   const {ticker}= queryParameters
-  console.log('test')
 
   try {
     const data = await liveData(ticker);
@@ -109,11 +125,8 @@ app.get('/nasa/neolist', async (req, res) => {
 });
 
 app.get('/nasa/test', async (req, res) => {
-
-
-  console.log('test')
   try {
-    const data = await countCoorodinates();
+    const data = asteroidData
     res.json(data);
   } catch (error) {
     console.error("Błąd przy pobieraniu NEO:", error);
@@ -128,5 +141,5 @@ app.get('/*', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Serwer działa na http://localhost:${port}/React-stock-data/`);
+  console.log(`Serwer działa na http://localhost:${port}/`);
 });
