@@ -145,7 +145,6 @@ const countCoorodinates = async (planetID='no planet', distance=0)=>{
       const newXObjectCoordinate = (item.coordinates.x-item.earthCoordinates.x)
       const newYObjectCoordinate = (item.coordinates.y-item.earthCoordinates.y)
       const newZObjectCoordinate = (item.coordinates.z-item.earthCoordinates.z)
-      console.log(newXObjectCoordinate )
 
       const obectDistanceByCoordinatesKM = astronomicalUnitKM *Math.sqrt(newXObjectCoordinate*2+newYObjectCoordinate*2+newZObjectCoordinate*2)
       const proportion = distanceKM/obectDistanceByCoordinatesKM

@@ -114,7 +114,6 @@ app.get('/nasa/test', async (req, res) => {
   console.log('test')
   try {
     const data = await countCoorodinates();
-    console.log(data)
     res.json(data);
   } catch (error) {
     console.error("Błąd przy pobieraniu NEO:", error);
