@@ -1,4 +1,5 @@
-const token = process.env.TOKEN;
+//const token = process.env.TOKEN;
+const nasaToken = process.env.NASATOKEN;
 
 const historicalData = async (ticker, startDate, endDate) => {
     const url = `https://eodhd.com/api/eod/${ticker}?from=${startDate}&to=${endDate}&period=d&api_token=${token}&fmt=json`;
@@ -114,8 +115,23 @@ const multipleData = async (data) => {
         console.error("Data error:", error);
         return []
     }
-  }
-
+}
+ const NEODetails =async (id) =>{
+   const url = `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=lN1IavfdnYKexgM5x9HxXfyiUhozAq5xXiLa7dsI`
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const downloadedData = await response.json();
+      return downloadedData
+      ; 
+    } catch (error) {
+        console.error("Data error:", error);
+        return []
+    }
+}
 
 
   module.exports = {
@@ -124,5 +140,6 @@ const multipleData = async (data) => {
     multipleData, 
     newsData,
     nearObjecDetails,
-    NEOList
+    NEOList,
+    NEODetails 
     }

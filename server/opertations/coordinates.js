@@ -1,4 +1,4 @@
-const { nearObjecDetails, NEOList } = require( "../downloads")
+const { nearObjecDetails, NEOList, NEODetails } = require( "../downloads")
 const { createDate }  = require( "./createDate")
 
 
@@ -45,7 +45,9 @@ const  fetchNearObjectDetails= async(markup)=> {
   const objectDataList =[]
   for (let i = 0; i < markup.length; i++) {
       try {
-          const neoDetails= await nearObjecDetails(`${markup[i].id}`, `${markup[i].nearDate}`, `${markup[i].today}`)
+          const neoDetails = await nearObjecDetails(`${markup[i].id}`, `${markup[i].nearDate}`, `${markup[i].today}`)
+          const asteroidDetails = await NEODetails(`${markup[i].id}`)
+        console.log(asteroidDetails)
           const objectCoordinates = coordinates(neoDetails, markup[i].id)
           const earthDetails = await nearObjecDetails(`399`, `${markup[i].nearDate}`, `${markup[i].today}`);
           const earthCoordinates = coordinates(earthDetails,'399')
@@ -54,8 +56,10 @@ const  fetchNearObjectDetails= async(markup)=> {
             data: neoDetails,
             coordinates: objectCoordinates,
             earthCoordinates: earthCoordinates,
-            dist_min:markup[i].dist_min
+            dist_min: markup[i].dist_min,
+            asteroidDetails
           });
+
           
       } catch (error) {
           console.error(`Error fetching details for ID ${markup[i]}:`, error);
@@ -66,7 +70,8 @@ const  fetchNearObjectDetails= async(markup)=> {
             earthCoordinates: {x:0,
             y:0,
             z:0,},
-            dist_min:markup[i].dist_min
+            dist_min: markup[i].dist_min,
+            asteroidDetails:null
           });
       }
   }
@@ -153,7 +158,7 @@ const countCoorodinates = async (planetID='no planet', distance=0)=>{
       const scaledYObject =  newYObjectCoordinate*proportion*astronomicalUnitKM
       const scaledZObject =  newZObjectCoordinate*proportion*astronomicalUnitKM
 
-      const scaledCoordinates={x:scaledXObject, y:scaledYObject, z:scaledZObject, id:item.id}
+      const scaledCoordinates={x:scaledXObject, y:scaledYObject, z:scaledZObject, id:item.id, asteroidInfo: item.asteroidDetails, data:item.data}
       return (scaledCoordinates)
     })
     return objectCorodinatesKM
@@ -177,7 +182,7 @@ const countCoorodinates = async (planetID='no planet', distance=0)=>{
       const scaledYObject =  newYObjectCoordinate*proportion*astronomicalUnitKM
       const scaledZObject = newZObjectCoordinate * proportion * astronomicalUnitKM
 
-      const scaledCoordinates= { x: scaledXObject, y: scaledYObject, z: scaledZObject, id: data.id }
+      const scaledCoordinates= { x: scaledXObject, y: scaledYObject, z: scaledZObject, id: data.id, data:item.data }
       return [scaledCoordinates]
   }
   } catch (error) {

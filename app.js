@@ -14,10 +14,8 @@ const token = process.env.TOKEN;
 let asteroidData = []
 
 const downloadCoorodinates = async ()=>{
-  console.log('start')
 try {
   asteroidData = await countCoorodinates();
-  console.log(asteroidData)
   return
 } catch (error) {
   console.error("Błąd przy pobieraniu asteroid:", error);
@@ -127,6 +125,7 @@ app.get('/nasa/neolist', async (req, res) => {
 app.get('/nasa/test', async (req, res) => {
   try {
     const data = asteroidData
+    console.log(data)
     res.json(data);
   } catch (error) {
     console.error("Błąd przy pobieraniu NEO:", error);
