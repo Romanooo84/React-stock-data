@@ -1,13 +1,14 @@
 import { useData } from 'hooks/dataContext';
 import { useEffect, useState} from "react";
 import { createDate } from "hooks/createDate";
-import { Datepicker } from '@mobiscroll/react';
 import { historicalData as functionHistoricalData} from "hooks/downloadData";
 import { TickerTable } from 'components/TickersTable';
 import { useCustomStyles} from 'hooks/customStyles';
 import tickers from '../data/ticers'
 import Select from 'react-select';
 import css from '../styles/Details.module.css'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export const Details = () => {
   const { Data, updateData} = useData();
@@ -88,7 +89,7 @@ useEffect(() => {
     <div className={css.details}>
        <div className={css.inputDiv}>
        <Select className={css.slect} styles={customStyles} noOptionsMessage={() => options.length < 1 ? 'Enter at least 3 characters' : 'No options available'} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
-       <Datepicker className={css.datepicker}  onChange={onDateChange} placeholder={`${Data.startDate} - ${Data.endDate}`}controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
+       <DatePicker className={css.datepicker}  onChange={onDateChange} placeholder={`${Data.startDate} - ${Data.endDate}`}controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
        </div>
       <TickerTable historicalData={historicalData} setUpdate={setUpdate}/>
     </div>

@@ -4,7 +4,8 @@ import { Loader2 } from "./loader2";
 import {Modal} from './Modal';
 import css from '../styles/News.module.css'
 import { createDate } from "hooks/createDate";
-import { Datepicker } from '@mobiscroll/react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export const News=({Page})=>{
 
@@ -86,7 +87,7 @@ export const News=({Page})=>{
     return (
         <div className={Page === 'mainPage' ? css.mainDiv : css.mainDivNewsPage}>
             <div className={css.datepickerDiv}>
-                <Datepicker className={css.datepicker} placeholder={`${endDate}`} onChange={onDateChange} controls={['calendar']} touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>
+                <DatePicker className={css.datepicker} placeholder={`${endDate}`} onChange={onDateChange} controls={['calendar']} touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>
             </div>
             { isLoading ? (
                 <Loader2/>

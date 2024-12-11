@@ -8,12 +8,12 @@ import tickers from '../data/ticers'
 import css from '../styles/Chart.module.css'
 import Select from 'react-select';
 import { MdShowChart } from "react-icons/md";
-import { Datepicker } from '@mobiscroll/react';
-import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { useEffect, useState, useMemo } from "react";
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { useData } from "hooks/dataContext";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 ChartJS.register(CategoryScale, LinearScale,BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -36,6 +36,9 @@ export const Chart = () => {
     const [options, setOptions] = useState([]);
     const [dataset, setDataset] = useState([]);
     const { Data, updateData } = useData();
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [isDatepickerOpen, setIsDatepickerOpen] = useState(false);
 
     
 
@@ -89,14 +92,18 @@ export const Chart = () => {
        })
     }
 
-    const onDateChange = (selectedOption) => {
-        const startDate=createDate(selectedOption.value[0])
-        const endDate = createDate(selectedOption.value[1])
+    const onDateChange = (dates) => {
+        console.log(dates)
+        const [start, end] = dates;
+       setStartDate(start);
+       setEndDate(end);
+       if (endDate!==null){
         updateData({
-            startDate,
+           startDate,
             endDate
         }
          )
+        }
      }
 
     const onInputChange = (event) => {
@@ -435,7 +442,15 @@ export const Chart = () => {
             </div>
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={Data.endDate} file={'Chart'}/>
             <div className={css.datepickerDiv}>
-                <Datepicker className={css.datepicker} onOpen={() => updateData({ isDatepickerOpen: true })} onClose={() => updateData({ isDatepickerOpen: false, newChart: true})} placeholder={`${xAxis[0]} - ${xAxis[xAxis.length-1]}`} onChange={onDateChange} controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
+            <DatePicker
+                className={css.datepicker}
+                selected={startDate}
+                onChange={onDateChange }
+                startDate={startDate}
+                endDate={endDate}
+                selectsRange
+                inline
+                />
                 {Data.isRegression!==true?
                     (<button className={css.button} id='addRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconAdd}`} /></button>):
                     (<button className={css.button} id='removeRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconRemove}`}/></button>)
