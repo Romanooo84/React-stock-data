@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/React-stock-data/static/css/main.c3b08edb.css",
-    "main.js": "/React-stock-data/static/js/main.b248e4a0.js",
+    "main.css": "/React-stock-data/static/css/main.c28b0c17.css",
+    "main.js": "/React-stock-data/static/js/main.ab58bacb.js",
     "static/media/student-roman-small.jpg": "/React-stock-data/static/media/student-roman-small.fe3f7cddac5bbe4d61f5.jpg",
     "index.html": "/React-stock-data/index.html",
-    "main.c3b08edb.css.map": "/React-stock-data/static/css/main.c3b08edb.css.map",
-    "main.b248e4a0.js.map": "/React-stock-data/static/js/main.b248e4a0.js.map"
+    "main.c28b0c17.css.map": "/React-stock-data/static/css/main.c28b0c17.css.map",
+    "main.ab58bacb.js.map": "/React-stock-data/static/js/main.ab58bacb.js.map"
   },
   "entrypoints": [
-    "static/css/main.c3b08edb.css",
-    "static/js/main.b248e4a0.js"
+    "static/css/main.c28b0c17.css",
+    "static/js/main.ab58bacb.js"
   ]
 }
