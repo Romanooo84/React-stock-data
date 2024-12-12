@@ -6,6 +6,7 @@ const cors = require('cors')
 const logger = require('morgan')
 const {historicalData, liveData, multipleData, newsData, NEOList, nearObjecDetails} = require('./server/downloads')
 const {countCoorodinates } = require ('./server/opertations/coordinates')
+const cron = require('node-cron');
 
 const port = '3000' 
 
@@ -25,9 +26,12 @@ try {
 }
 }
 
+cron.schedule('0 0 * * *', () => {
+  console.log('Rozpoczęcie pobierania danych o asteroidach o godzinie 00:00');
+  downloadCoorodinates();
+});
+
 downloadCoorodinates()
-
-
 
 const corsOptions = {
   origin: ['https://www.romanpisarski.pl', 'http://localhost:5173', 'https://romanooo84.github.io'],
