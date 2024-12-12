@@ -1,6 +1,6 @@
 import { liveData, historicalData} from "hooks/downloadData";
 import { linearRegression } from "hooks/math";
-import { createDate } from "hooks/createDate";
+import { createDate} from "hooks/createDate";
 import { TickerData } from "./TickerData";
 import { useCustomStyles } from "hooks/customStyles";
 import {chartOptions,  barchartOptions, barVolumeChartOptions } from "data/chartOptions";
@@ -38,7 +38,7 @@ export const Chart = () => {
     const { Data, updateData } = useData();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [isDatepickerOpen, setIsDatepickerOpen] = useState(false);
+    const [isDatepickerOpen, setIsDatepickerOpen] = useState(true);
 
     
 
@@ -93,18 +93,32 @@ export const Chart = () => {
     }
 
     const onDateChange = (dates) => {
-        console.log(dates)
         const [start, end] = dates;
        setStartDate(start);
        setEndDate(end);
-       if (endDate!==null){
-        updateData({
-           startDate,
-            endDate
-        }
-         )
-        }
+       if (end!==null){
+        setIsDatepickerOpen(true)
+       }
      }
+
+     useEffect(()=>{
+        if (isDatepickerOpen){
+            if (startDate===null|| startDate===undefined){
+                setStartDate(Data.startDate)
+                setEndDate(Data.endDate)
+            }
+            else{
+            const newStartDate=createDate(startDate)
+            const newEndDate=createDate(endDate)
+            updateData({
+               startDate:newStartDate,
+               endDate:newEndDate,
+               newChart:true
+                })
+            }
+            }
+       
+     },[startDate, endDate, updateData, isDatepickerOpen, Data.startDate, Data.endDate])
 
     const onInputChange = (event) => {
         setSearch(event.toLowerCase())
@@ -172,7 +186,8 @@ export const Chart = () => {
 
 
     useEffect(() => {
-        if (Data.isSecondChart === false && Data.newChart === true && Data.ticker !== null) {
+        if (Data.isSecondChart === false && Data.newChart === true && Data.ticker !== null && isDatepickerOpen===true) {
+            setIsDatepickerOpen(false)
             updateData({
                 chartTicker: null,
                 newChart: false
@@ -198,6 +213,7 @@ export const Chart = () => {
                                 }
                             });
                     }
+                    
                 });
         }
 
@@ -216,7 +232,7 @@ export const Chart = () => {
                     }
                 });
             }
-        }, [Data.endDate, Data.isSecondChart, Data.secondChart, Data.startDate, Data.ticker, updateData, Data.newChart]);
+        }, [Data.endDate, Data.isSecondChart, Data.secondChart, Data.startDate, Data.ticker, updateData, Data.newChart, isDatepickerOpen]);
 
 
     useEffect(() => {
@@ -427,6 +443,16 @@ export const Chart = () => {
         }
     },[updateData,addYAxis, yAxis, dataset, startData,  Data.isRegression, Data.SecondChartName, Data.secondChartName, Data.secondChartTicker, Data.chartTicker, Data.isSecondChart])
 
+    useEffect(() => {
+        const datePicker = document.querySelector('.react-datepicker');
+        if (datePicker) {
+            datePicker.style.border = 'none';
+        }
+        const datePickerHeader = document.querySelector('.react-datepicker__header ')
+        if (datePickerHeader) {
+            datePickerHeader.style.backgroundColor = '#34c1e9';
+        }
+    }, []);
   
     return (
         <div className={css.mainDiv}>   
@@ -443,13 +469,13 @@ export const Chart = () => {
             <TickerData downloadedHistoricalData={downloadedHistoricalData} downloadedLiveData={downloadedLiveData} endDate={Data.endDate} file={'Chart'}/>
             <div className={css.datepickerDiv}>
             <DatePicker
-                className={css.datepicker}
+                maxDate={new Date()}
                 selected={startDate}
                 onChange={onDateChange }
                 startDate={startDate}
                 endDate={endDate}
+                dateFormat="dd/MM/yyyy"
                 selectsRange
-                inline
                 />
                 {Data.isRegression!==true?
                     (<button className={css.button} id='addRegression' name='button' onClick={onClick}><MdShowChart className={`${css.icon} ${css.iconAdd}`} /></button>):

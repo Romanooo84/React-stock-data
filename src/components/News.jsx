@@ -13,8 +13,8 @@ export const News=({Page})=>{
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataNews, setDataNews]=useState([])
     const [modalNews, setModalNews]=useState()
-    const [startDate, setStartDate] = useState()
-    const [endDate, setEndDate] = useState()
+    const [startDate, setStartDate] = useState(new Date())
+    //const [endDate, setEndDate] = useState(null)
     const [isLoading, setIsLoading] =useState(true)
     
     const closeModal = () => {
@@ -39,31 +39,20 @@ export const News=({Page})=>{
     }
     },[dataNews])
 
-    const onDateChange = (selectedOption) => {
-        console.log(selectedOption)
-        const startDate=createDate(selectedOption.value)
-        const endDate = createDate(selectedOption.value)
-         setStartDate(startDate)
-         setEndDate(endDate )
+    const onDateChange = (date) => {
+        setStartDate(date);
      }
-
-
-    useEffect(()=>{
-        let date = new Date()
-        setStartDate(createDate(date))
-        setEndDate(createDate(date))
-    },[])
 
 
     useEffect(() => {
         if (startDate) {
             setIsLoading(true)
-             newsData('APPL',1000, startDate, endDate)
+             newsData('APPL',1000, createDate(startDate),createDate(startDate) )
             .then(data => {
                 setDataNews(data)
             });
         }        
-    }, [startDate, endDate]);
+    }, [startDate]);
 
     useEffect(()=>{
         const markup = dataNews.map((news, index) =>{
@@ -87,7 +76,12 @@ export const News=({Page})=>{
     return (
         <div className={Page === 'mainPage' ? css.mainDiv : css.mainDivNewsPage}>
             <div className={css.datepickerDiv}>
-                <DatePicker className={css.datepicker} placeholder={`${endDate}`} onChange={onDateChange} controls={['calendar']} touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>
+            <DatePicker
+                maxDate={new Date()}
+                selected={startDate}
+                onChange={onDateChange}
+                dateFormat="dd/MM/yyyy"
+                />
             </div>
             { isLoading ? (
                 <Loader2/>

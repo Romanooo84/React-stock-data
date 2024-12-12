@@ -17,6 +17,9 @@ export const Details = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [options, setOptions] = useState([]);
   const [update, setUpdate] = useState(false)
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [isDatepickerOpen, setIsDatepickerOpen] = useState(true);
 
   const customStyles = useCustomStyles();
 
@@ -30,15 +33,33 @@ const onChange = (selectedOption) => {
  setUpdate(true)
 }
 
-const onDateChange = (selectedOption) => {
-  const startDate=createDate(selectedOption.value[0])
-  const endDate = createDate(selectedOption.value[1])
-  updateData({
-      startDate,
-      endDate
-  })
-  setUpdate(true)
+const onDateChange = (dates) => {
+  const [start, end] = dates;
+ setStartDate(start);
+ setEndDate(end);
+ if (end!==null){
+  setIsDatepickerOpen(true)
+ }
 }
+
+useEffect(()=>{
+  if (isDatepickerOpen){
+      if (startDate===null|| startDate===undefined){
+          setStartDate(Data.startDate)
+          setEndDate(Data.endDate)
+      }
+      else{
+      const newStartDate=createDate(startDate)
+      const newEndDate=createDate(endDate)
+      updateData({
+         startDate:newStartDate,
+         endDate:newEndDate,
+         newChart:true
+          })
+      }
+      }
+ 
+},[startDate, endDate, updateData, isDatepickerOpen, Data.startDate, Data.endDate])
 
 const onInputChange = (event) => {
   setSearch(event.toLowerCase())
@@ -72,7 +93,8 @@ useEffect(() => {
 }, [search, searchTerm]);
 
 useEffect(() => {
-  if (update===true){
+  if (isDatepickerOpen===true){
+      setIsDatepickerOpen(false)
       functionHistoricalData(Data.ticker, Data.startDate, Data.endDate)
           .then(data => {
               if (data) {
@@ -82,14 +104,22 @@ useEffect(() => {
                         })
                     }
                   });
-              }}, [Data.endDate, Data.startDate, historicalData, updateData, Data.ticker, update]);
+    }}, [Data.endDate, Data.startDate, historicalData, updateData, Data.ticker, update, isDatepickerOpen]);
 
 
   return (
     <div className={css.details}>
        <div className={css.inputDiv}>
        <Select className={css.slect} styles={customStyles} noOptionsMessage={() => options.length < 1 ? 'Enter at least 3 characters' : 'No options available'} placeholder={Data.ticker} value={{ label: `${Data.ticker} - ${Data.chartName}`, value: Data.ticker }} name={Data.ticker} options={options} onChange={onChange} onInputChange={onInputChange} />
-       <DatePicker className={css.datepicker}  onChange={onDateChange} placeholder={`${Data.startDate} - ${Data.endDate}`}controls={['calendar']} select="range" touchUi={true} inputComponent="input" inputProps={{ id: 'startDate' }} max={new Date()}/>   
+       <DatePicker
+                maxDate={new Date()}
+                selected={startDate}
+                onChange={onDateChange }
+                startDate={startDate}
+                endDate={endDate}
+                dateFormat="dd/MM/yyyy"
+                selectsRange
+                />
        </div>
       <TickerTable historicalData={historicalData} setUpdate={setUpdate}/>
     </div>

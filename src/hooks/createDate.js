@@ -8,3 +8,15 @@ export function createDate(date) {
   }
   else{return null}
   }
+
+  export function countDate(value, when='after') {
+   const today = new Date()
+   const day = new Date(today)
+   //day.setDate(today.getDate() + when==='after'? value:-value)
+   const newDay=createDate(day)
+   return newDay
+  }
+  
+
+
+  

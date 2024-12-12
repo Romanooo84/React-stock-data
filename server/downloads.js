@@ -3,7 +3,6 @@ const token = process.env.TOKEN;
 
 const historicalData = async (ticker, startDate, endDate) => {
     const url = `https://eodhd.com/api/eod/${ticker}?from=${startDate}&to=${endDate}&period=d&api_token=${token}&fmt=json`;
-    console.log(url)
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -63,7 +62,6 @@ const multipleData = async (data) => {
 
   const newsData = async (ticker, quanity, startDate, endDate)=>{
     const url= `https://eodhd.com/api/news?${ticker}S&from=${startDate}&to=${endDate}&offset=0&limit=${quanity}&api_token=${token}&fmt=json`
-    console.log(url)
     try {
       const response = await fetch(url);
       if (!response.ok) {

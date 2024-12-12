@@ -47,7 +47,6 @@ const  fetchNearObjectDetails= async(markup)=> {
       try {
           const neoDetails = await nearObjecDetails(`${markup[i].id}`, `${markup[i].nearDate}`, `${markup[i].today}`)
           const asteroidDetails = await NEODetails(`${markup[i].id}`)
-        console.log(asteroidDetails)
           const objectCoordinates = coordinates(neoDetails, markup[i].id)
           const earthDetails = await nearObjecDetails(`399`, `${markup[i].nearDate}`, `${markup[i].today}`);
           const earthCoordinates = coordinates(earthDetails,'399')
