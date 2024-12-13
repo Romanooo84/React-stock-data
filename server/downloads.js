@@ -8,7 +8,7 @@ const historicalData = async (ticker, startDate, endDate) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const downloadedData = await response;
+      const downloadedData = await response.json();
       return downloadedData;
     } catch (error) {
       console.error("Data error:", error);
@@ -23,7 +23,7 @@ const liveData= async (ticker)=>{
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const downloadedData = await response;
+      const downloadedData = await response.json();
       return downloadedData;
     } catch (error) {
       console.error("Data error:", error);
@@ -52,7 +52,7 @@ const multipleData = async (data) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const downloadedData = await response;
+      const downloadedData = await response.json();
       return downloadedData;
     } catch (error) {
       console.error("Data error:", error);
@@ -68,13 +68,44 @@ const multipleData = async (data) => {
         console.log('bład')
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const downloadedData = await response;
+      const downloadedData = await response.json();
       return downloadedData;
     } catch (error) {
       console.error("Data error:", error);
       return null; 
     }
-  
+  }
+
+  const listOfExchanges = async ()=>{
+    const url= `https://eodhd.com/api/exchanges-list/?api_token=${token}&fmt=json`
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.log('bład')
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const downloadedData = await response.json();
+      return downloadedData;
+    } catch (error) {
+      console.error("Data error:", error);
+      return null; 
+    }
+  }
+
+  const listOfTickers = async (exchange)=>{
+    const url= `https://eodhd.com/api/exchange-symbol-list/${exchange}?api_token=${token}&fmt=json`
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.log(response.status)
+        return null
+      }
+      const downloadedData = await response.json();
+      return downloadedData;
+    } catch (error) {
+      console.error("Data error:", error);
+      return null; 
+    }
   }
 
 
@@ -139,6 +170,8 @@ const multipleData = async (data) => {
     liveData, 
     multipleData, 
     newsData,
+    listOfExchanges,
+    listOfTickers,
     nearObjecDetails,
     NEOList,
     NEODetails 

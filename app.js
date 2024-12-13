@@ -6,6 +6,7 @@ const cors = require('cors')
 const logger = require('morgan')
 const {historicalData, liveData, multipleData, newsData, NEOList, nearObjecDetails} = require('./server/downloads')
 const {countCoorodinates } = require ('./server/opertations/coordinates')
+const {tickerListDownload} = require ('./server/opertations/tickerListDownload')
 const cron = require('node-cron');
 
 const port = '3000' 
@@ -13,25 +14,46 @@ const port = '3000'
 const token = process.env.TOKEN;
 
 let asteroidData = []
+let tickersList = []
+
+
 
 const downloadCoorodinates = async ()=>{
-  console.log('pobieram dane')
-try {
-  asteroidData = await countCoorodinates();
-  console.log('dane pobrane')
-  return
-} catch (error) {
-  console.error("Błąd przy pobieraniu asteroid:", error);
-  return null
+  console.log('downloading coordinates')
+  try {
+    asteroidData = await countCoorodinates();
+    console.log('coordinates downloaded')
+    return
+  } catch (error) {
+    console.error("Error downloading coordinates:", error);
+    return null
+  }
 }
+
+const downloadTickerList = async()=>{
+  console.log('downloading tickers list')
+  try {
+    tickersList = await tickerListDownload();
+    console.log('ticker list downloaded')
+    return
+  } catch (error) {
+    console.error("Error downloading tickers list:", error);
+    return null
+  }
 }
+
+
+
 
 cron.schedule('0 0 * * *', () => {
   console.log('Rozpoczęcie pobierania danych o asteroidach o godzinie 00:00');
   downloadCoorodinates();
+  downloadTickerList()
 });
 
+downloadTickerList()
 downloadCoorodinates()
+
 
 const corsOptions = {
   origin: ['https://www.romanpisarski.pl', 'http://localhost:5173', 'https://romanooo84.github.io'],
@@ -93,6 +115,18 @@ app.get('/news', async (req, res) => {
   const {ticker, limit, from, to}= queryParameters
   try {
     const data = await newsData(ticker, limit, from, to);
+    res.json(data);
+  } catch (error) {
+    console.error("Błąd przy pobieraniu danych historycznych:", error);
+    res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych historycznych' });
+  }
+});
+
+app.get('/tickers', async (req, res) => {
+
+
+  try {
+    const data = tickersList;
     res.json(data);
   } catch (error) {
     console.error("Błąd przy pobieraniu danych historycznych:", error);

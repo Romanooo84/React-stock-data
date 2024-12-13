@@ -66,3 +66,18 @@ export const newsData = async (ticker, quanity, startDate, endDate)=>{
   }
 
 }
+
+export const tickers = async ()=>{
+  const url = 'https://romanpisarski.pl/tickers'
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const downloadedData = await response.json();
+    return downloadedData;
+  } catch (error) {
+    console.error("Data error:", error);
+    return null; 
+  }
+}
