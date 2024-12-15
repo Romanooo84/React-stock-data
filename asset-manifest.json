@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/React-stock-data/static/css/main.c28b0c17.css",
-    "main.js": "/React-stock-data/static/js/main.abc89618.js",
+    "main.js": "/React-stock-data/static/js/main.a078d001.js",
     "static/media/student-roman-small.jpg": "/React-stock-data/static/media/student-roman-small.fe3f7cddac5bbe4d61f5.jpg",
     "index.html": "/React-stock-data/index.html",
     "main.c28b0c17.css.map": "/React-stock-data/static/css/main.c28b0c17.css.map",
-    "main.abc89618.js.map": "/React-stock-data/static/js/main.abc89618.js.map"
+    "main.a078d001.js.map": "/React-stock-data/static/js/main.a078d001.js.map"
   },
   "entrypoints": [
     "static/css/main.c28b0c17.css",
-    "static/js/main.abc89618.js"
+    "static/js/main.a078d001.js"
   ]
 }
