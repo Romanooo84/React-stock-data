@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback} from "react"
 import Select from 'react-select';
-import tickers from '../data/ticers'
+//import tickers from '../data/ticers'
 import { Loader2 } from "./loader2";
 import { TickerData } from "./TickerData";
 import { multiplyData, historicalData } from '../hooks/downloadData';
@@ -25,6 +25,7 @@ export const Tickers = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [activeSelect, setActiveSelect] = useState(null);
     const { Data, updateData } = useData();
+    const [tickers, setTickers] = useState(null)
 
     const customStyles = useCustomStyles()
 
@@ -51,62 +52,66 @@ export const Tickers = () => {
     }
 
     const onClick = useCallback((event) => {
-        const ticker = event.target.name
-        const id = event.target.id
-        const newTicker = ticker.split('.')[0];
-        let country = ticker.split('.')[1];
-        let results = tickers.filter(item => item.Code.includes(newTicker));
-        if (id === 'CreateGraph') {
-            updateData(
-                {
-                    ticker: event.target.name,
+        if (tickers.length > 0) {
+            const ticker = event.target.name
+            const id = event.target.id
+            const newTicker = ticker.split('.')[0];
+            let country = ticker.split('.')[1];
+            let results = tickers.filter(item => {
+                try { return(item.Code.includes(newTicker)) }
+                catch(error){return('')}
+            });
+            if (id === 'CreateGraph') {
+                updateData(
+                    {
+                        ticker: event.target.name,
+                        isSecondChart: false,
+                        isRegression: false,
+                        newChart: true,
+                    }
+                )
+            }
+            else {
+                updateData(
+                    { secondChartName: event.target.name }
+                )
+            }
+            if (country !== 'US') {
+                results = results.filter(item => item.Exchange.includes(country));
+            } else {
+                results = results.filter(item => item.Country.includes('USA'))
+            }
+            results = results.filter(item => item.Code === (newTicker))
+            if (id === 'CreateGraph') {
+                updateData(
+                    {
+                        chartName: results[0].Name,
+                        chartTicker: ticker,
+                        isSecondChart: false,
+                        isRegression: false,
+                    }
+
+                )
+            }
+            else if (id === 'Add to Graph') {
+                updateData(
+                    {
+                        secondChartName: results[0].Name,
+                        secondChartTicker: ticker,
+                        isSecondChart: true,
+                        isStartPage: true,
+
+                    }
+                )
+            }
+            else if (id === 'Remove from Graph') {
+                setMultiplyList(Data.multiplyList)
+                updateData({
                     isSecondChart: false,
-                    isRegression: false,
-                    newChart: true,
-                }
-            )
+                })
+            }
         }
-        else {
-            updateData(
-                { secondChartName: event.target.name }
-            )
-        }
-        if (country !== 'US') {
-            results = results.filter(item => item.Exchange.includes(country));
-        } else {
-            results = results.filter(item => item.Country.includes('USA'))
-        }
-        results = results.filter(item => item.Code === (newTicker))
-        if (id === 'CreateGraph') {
-            updateData(
-                {
-                    chartName: results[0].Name,
-                    chartTicker: ticker,
-                    isSecondChart: false,
-                    isRegression: false,
-                }
-
-            )
-        }
-        else if (id === 'Add to Graph') {
-            updateData(
-                {
-                    secondChartName: results[0].Name,
-                    secondChartTicker: ticker,
-                    isSecondChart: true,
-                    isStartPage: true,
-
-                }
-            )
-        }
-        else if (id === 'Remove from Graph') {
-            setMultiplyList(Data.multiplyList)
-            updateData({
-                isSecondChart: false,
-            })
-        }
-
-    }, [updateData, Data.multiplyList]);
+    }, [updateData, Data.multiplyList, tickers]);
 
     const handleFocus = (tickerCode) => {
         setActiveSelect(tickerCode);
@@ -115,6 +120,10 @@ export const Tickers = () => {
     const handleBlur = () => {
         setActiveSelect(null);
     };
+
+    useEffect(() => {
+        setTickers(Data.tickers)
+    },[Data.tickers])
 
     useEffect(() => {
         if (Data.isStartPage && !Data.isSecondChart && !changedTicker) {
@@ -134,19 +143,27 @@ export const Tickers = () => {
                 .then(downloadedData => {
                     if (downloadedData && !Data.isDatepickerOpen) {
                         const markup = downloadedData.map(data => {
-                            const newTicker = data.code.split('.')[0];
-                            let country = data.code.split('.')[1];
-                            let results = tickers.filter(item => item.Code.includes(newTicker))
-                            if (country !== 'US') {
-                                results = results.filter(item => item.Exchange.includes(country));
-                            } else {
-                                results = results.filter(item => item.Country.includes('USA'))
+                        const newTicker = data.code.split('.')[0];
+                        let country = data.code.split('.')[1];
+                        let results = tickers.filter(item => {
+                            if (item && item.Code) {
+                                return (item.Code.includes(newTicker))
                             }
-                            results = results.filter(item => item.Code === (newTicker))
-                            data.Name = (results[0].Name)
-                                
-                            return data
-                        })
+                             return false;
+                        }
+                        )
+                        if (country !== 'US') {
+                            results = results.filter(item => item.Exchange.includes(country)
+                            );
+                            
+                        } else {
+                            results = results.filter(item => item.Country.includes('USA'))
+                        }
+                        results = results.filter(item => item.Code === (newTicker))
+                        data.Name = (results[0].Name)
+                    
+                        return data
+                    })
                         setMultiplyList(markup);
                         setLivelList(markup)
                     }
@@ -155,7 +172,7 @@ export const Tickers = () => {
         }, 5000);
 
         return () => clearInterval(intervalID);
-    }, [tickerList, Data.isDatepickerOpen, isMenuOpen]);
+    }, [tickerList, Data.isDatepickerOpen, isMenuOpen, tickers]);
 
     useEffect(() => {
         if (Data.secondChart === false) {
@@ -164,7 +181,7 @@ export const Tickers = () => {
     }, [Data.secondChart, updateData])
 
     useEffect(() => {
-        if (Data.isStartPage) {
+        if (Data.isStartPage && tickers!==null && tickers!==undefined) {
             updateData({ 
                 isStartPage: false
             })
@@ -174,16 +191,26 @@ export const Tickers = () => {
                     markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
                         let country = data.code.split('.')[1];
-                        let results = tickers.filter(item => item.Code.includes(newTicker))
+                        let results = tickers.filter(item => {
+                            if (item && item.Code) {
+                                return (item.Code.includes(newTicker))
+                            }
+                             return false;
+                        }
+                        )
                         if (country !== 'US') {
-                            results = results.filter(item => item.Exchange.includes(country));
+                            results = results.filter(item => item.Exchange.includes(country)
+                            );
+                            
                         } else {
                             results = results.filter(item => item.Country.includes('USA'))
                         }
                         results = results.filter(item => item.Code === (newTicker))
                         data.Name = (results[0].Name)
+                    
                         return data
                     })
+    
                     setLivelList(markup)
                 }
                 ).then(() => {
@@ -205,10 +232,10 @@ export const Tickers = () => {
                     }
                 );
         }
-    }, [tickerList, Data.isStartPage, updateData,Data.startDate, Data.endDate]);
+    }, [tickerList, Data.isStartPage, updateData,Data.startDate, Data.endDate, tickers]);
 
     useEffect(() => {
-        if (search && search.length > 2) {
+        if (search && search.length > 2 && tickers.length>0) {
             setMultiplyList(Data.multiplyList)
             const results = tickers.filter(item =>
                 item.Name.toLowerCase().includes(searchTerm) &&
@@ -224,7 +251,7 @@ export const Tickers = () => {
 
             setOptions(options);
         }
-    }, [search,searchTerm, Data.multiplyList])
+    }, [search,searchTerm, Data.multiplyList, tickers])
 
 
     useEffect(() => {
@@ -238,7 +265,7 @@ export const Tickers = () => {
     }, [search])
 
     useEffect(() => {
-        if ((multiplyList.length > 0 && Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3)) {
+        if ((multiplyList && multiplyList.length > 0 && Data.tickersHistoricalList && Data.tickersHistoricalList.length > 3)) {
             const markup = multiplyList.map((ticker, index) => { 
                 let historical
                 for (let i = 0; i < Data.tickersHistoricalList.length; i++){

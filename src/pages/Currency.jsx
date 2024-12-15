@@ -1,4 +1,4 @@
-import tickers from '../data/ticers'
+//import tickers from '../data/ticers'
 import { useEffect, useState, useMemo } from 'react'
 import Select from 'react-select';
 import { useData } from "hooks/dataContext";
@@ -8,6 +8,7 @@ import {CurrencyTable} from '../components/CurrencyTable'
 import { PiArrowFatLinesRightFill } from "react-icons/pi";
 import { PiArrowFatLinesLeftFill } from "react-icons/pi";
 import css from '../styles/Currency.module.css'
+
 
 
 export const Currency =()=>{
@@ -26,6 +27,7 @@ export const Currency =()=>{
     const [isLoading, setIsLoading] = useState(true)
     const [isSorting, setIsSorting] = useState(false)
     const [isCurrency, setIsCurrency] = useState(false)
+    const [tickers, setTickers] = useState(null)
 
     const customStyles =useMemo(() => ({
           control: (provided, state) => ({
@@ -58,7 +60,14 @@ export const Currency =()=>{
         setIsSorting(false)
         setIsCurrency(true)
         setStart(true)
-        let tempTickers = tickers.filter((ticker) => ticker.Code.slice(0, 3).includes(e.value) && (ticker.Type === "Currency"))
+        let tempTickers = tickers.filter((ticker) => {
+            try {
+                return(ticker.Code.slice(0, 3).includes(e.value) && (ticker.Type === "Currency"))
+            }
+            catch (error) {
+                return null
+            }
+        })
         setNoOfItems(tempTickers.length)
         let newTickersList = []
         for (let i = 0; i < tempTickers.length; i++) {
@@ -67,50 +76,82 @@ export const Currency =()=>{
         }
         setCurrencyList(newTickersList)
         setTickerList(newTickersList)
-        }
+    }
+    
+     useEffect(() => {
+        setTickers(Data.tickers)
+    },[Data.tickers])
     
     useEffect(() => {
-        let tempTickers = tickers.filter((ticker) => ticker.Type === "Currency" && ticker.Exchange !== "CC");
-        setNoOfItems(tempTickers.length)
-        let newTickerTable = tempTickers.map((ticker) => {
-            const splitName = ticker.Name.split('/'); 
-            const currencyCode = ticker.Code.slice(0, 3);
-            const isSpecialCurrency = ["ARS", "USD", "EGP", "KES", 'KWD', 'AED'].includes(currencyCode);
-            return {
-                fullCode: ticker.Code,
-                fullName: ticker.Name,
-                code: currencyCode,
-                name: isSpecialCurrency ? splitName[0] : splitName[1]
-            };
+        if (tickers !== undefined && tickers !== null) {
+            let tempTickers = tickers.filter((ticker) => {
+                try {
+                    return (ticker.Type === "Currency" && ticker.Exchange !== "CC")
+                }
+                catch (error)
+                {
+                    console.log('błąd')
+                    return null
+                }
+            });
+            setNoOfItems(tempTickers.length)
+            let newTickerTable = tempTickers.map((ticker) => {
+                const splitName = ticker.Name.split('/');
+                const currencyCode = ticker.Code.slice(0, 3);
+                const isSpecialCurrency = ["ARS", "USD", "EGP", "KES", 'KWD', 'AED'].includes(currencyCode);
+                return {
+                    fullCode: ticker.Code,
+                    fullName: ticker.Name,
+                    code: currencyCode,
+                    name: isSpecialCurrency ? splitName[0] : splitName[1]
+                };
             })
-            .filter((ticker, index, self) => {
-                return index === self.findIndex((t) => 
-                    t.code === ticker.code && t.fullName.includes('/') && t.fullName.length > 7
-                );
-            })
-            .map((ticker) => ({
+                .filter((ticker, index, self) => {
+                    return index === self.findIndex((t) =>
+                        t.code === ticker.code && t.fullName.includes('/') && t.fullName.length > 7
+                    );
+                })
+                .map((ticker) => ({
                     value: ticker.code, label: ticker.name
                 }))
-            setSortedCurrencyByName(newTickerTable); 
-        }, []);
+            setSortedCurrencyByName(newTickerTable);
+        }
+    }, [tickers]);
     
     useEffect(() => {
         setStart(true)
-        if (!isCurrency) {
-            let tempTickers = tickers.filter((ticker) => ticker.Type === "Currency" && ticker.Exchange !== "CC")    
-                                     .slice(page*itemsOnPage, page*itemsOnPage + itemsOnPage)
-                                     .map((ticker) => `${ticker.Code}.${ticker.Exchange}`);
-            setTickerList(tempTickers)
-        } else if (currencyList.length>itemsOnPage){
+        if (!isCurrency && tickers !== undefined && tickers !== null) {
+            let tempTickers = tickers
+            .filter((ticker) => {
+                try {
+                    // Ensure ticker has Type "Currency" and Exchange is not "CC"
+                    return (ticker.Type === "Currency" && ticker.Exchange !== "CC");
+                } catch (error) {
+                    console.log('Błąd');
+                    return false;
+                }
+            })
+            .slice(page * itemsOnPage, page * itemsOnPage + itemsOnPage) // Apply pagination slicing after filtering
+                .map((ticker) => {
+                    try {
+                        return(`${ticker.Code}.${ticker.Exchange}`)
+                    }
+                    catch (error) {
+                        return null
+                    }
+                }); // Map the filtered and sliced tickers to desired format
+
+    setTickerList(tempTickers);
+} else if (currencyList.length>itemsOnPage){
             let tempTickers=currencyList.slice(page * itemsOnPage, page * itemsOnPage + itemsOnPage)
             setTickerList(tempTickers)
         } else {
             setTickerList(currencyList)
         }
-    }, [page, itemsOnPage, isCurrency, currencyList])
+    }, [page, itemsOnPage, isCurrency, currencyList, tickers])
 
     useEffect(() => {
-        if (start && tickerList && tickerList.length > 0) {
+        if (start && tickerList && tickerList.length > 0 && tickers !== undefined && tickers !== null) {
             setIsLoading(true)
             setStart(false)
             let markup
@@ -118,7 +159,16 @@ export const Currency =()=>{
                 .then(downloadedData => {
                     markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
-                        let results = tickers.filter(item => item.Code.includes(newTicker))
+                        let results = tickers.filter(item => {
+                            try {
+                                return (item.Code.includes(newTicker))
+                            }
+                            catch (error) {
+                                return null
+                            }
+                            
+                            
+                        })
                         data.Name = (results[0].Name)
                         return data
                     })
@@ -127,11 +177,11 @@ export const Currency =()=>{
                 }
                 )
             }
-    }, [tickerList,Data.startDate, Data.endDate, setLivelList, start]);
+    }, [tickerList,Data.startDate, Data.endDate, setLivelList, start, tickers]);
 
     useEffect(() => {
         const intervalID = setInterval(() => {
-            if (!start || !isSorting) {
+            if (tickers !== undefined && tickers !== null &&(!start || !isSorting)) {
                 multiplyData(tickerList).then(downloadedData => {
                     const markup = downloadedData.map(data => {
                         const newTicker = data.code.split('.')[0];
@@ -145,7 +195,7 @@ export const Currency =()=>{
         }, 15000);
     
         return () => clearInterval(intervalID);
-    }, [tickerList, setDownloadedData, start, isSorting]);
+    }, [tickerList, setDownloadedData, start, isSorting, tickers]);
 
     useEffect(()=>{  
         if(!isSorting){

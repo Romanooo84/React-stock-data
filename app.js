@@ -35,7 +35,7 @@ const downloadTickerList = async()=>{
   try {
     tickersList = await tickerListDownload();
     console.log('ticker list downloaded')
-    return
+    return tickersList 
   } catch (error) {
     console.error("Error downloading tickers list:", error);
     return null
@@ -123,11 +123,9 @@ app.get('/news', async (req, res) => {
 });
 
 app.get('/tickers', async (req, res) => {
-
-
+  const tickers= require('./server/opertations/tickers.json')
   try {
-    const data = tickersList;
-    res.json(data);
+    res.json(tickers);
   } catch (error) {
     console.error("Błąd przy pobieraniu danych historycznych:", error);
     res.status(500).json({ error: 'Wystąpił błąd przy pobieraniu danych historycznych' });

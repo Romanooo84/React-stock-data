@@ -4,7 +4,7 @@ import { createDate } from "hooks/createDate";
 import { historicalData as functionHistoricalData} from "hooks/downloadData";
 import { TickerTable } from 'components/TickersTable';
 import { useCustomStyles} from 'hooks/customStyles';
-import tickers from '../data/ticers'
+//import tickers from '../data/ticers'
 import Select from 'react-select';
 import css from '../styles/Details.module.css'
 import DatePicker from 'react-datepicker';
@@ -20,6 +20,7 @@ export const Details = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isDatepickerOpen, setIsDatepickerOpen] = useState(true);
+  const [tickers, setTickers] = useState(null)
 
   const customStyles = useCustomStyles();
 
@@ -40,7 +41,11 @@ const onDateChange = (dates) => {
  if (end!==null){
   setIsDatepickerOpen(true)
  }
-}
+  }
+  
+ useEffect(() => {
+        setTickers(Data.tickers)
+    },[Data.tickers])
 
 useEffect(()=>{
   if (isDatepickerOpen){
@@ -74,13 +79,21 @@ useEffect(() => {
 }, [search])
 
 useEffect(() => {
-  if (search.length > 2) {
-      const results = tickers.filter(item =>
-          item.Name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          item.Type !== 'ETF' &&
-          item.Type !== 'FUND' &&
-          item.Type !== 'BOND' &&
-          item.Type !== 'Mutual Fund'
+  if (search.length > 2 && tickers !== undefined && tickers !== null) {
+      const results = tickers.filter(item =>{
+            try{
+            return (
+                item.Name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                item.Type !== 'ETF' &&
+                item.Type !== 'FUND' &&
+                item.Type !== 'BOND' &&
+                item.Type !== 'Mutual Fund'
+                )
+            }
+            catch (error){
+                return ('')
+            }
+        }
       );
 
       const newOptions = results.map(item => ({
@@ -90,7 +103,7 @@ useEffect(() => {
 
       setOptions(newOptions);
   }
-}, [search, searchTerm]);
+}, [search, searchTerm, tickers]);
 
 useEffect(() => {
   if (isDatepickerOpen===true){

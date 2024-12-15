@@ -80,4 +80,5 @@ export const tickers = async ()=>{
     console.error("Data error:", error);
     return null; 
   }
+  
 }

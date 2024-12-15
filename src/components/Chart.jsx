@@ -4,7 +4,6 @@ import { createDate} from "hooks/createDate";
 import { TickerData } from "./TickerData";
 import { useCustomStyles } from "hooks/customStyles";
 import {chartOptions,  barchartOptions, barVolumeChartOptions } from "data/chartOptions";
-import tickers from '../data/ticers'
 import css from '../styles/Chart.module.css'
 import Select from 'react-select';
 import { MdShowChart } from "react-icons/md";
@@ -39,6 +38,7 @@ export const Chart = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [isDatepickerOpen, setIsDatepickerOpen] = useState(true);
+    const [tickers, setTickers] = useState(null)
 
     
 
@@ -99,7 +99,11 @@ export const Chart = () => {
        if (end!==null){
         setIsDatepickerOpen(true)
        }
-     }
+    }
+    
+    useEffect(() => {
+        setTickers(Data.tickers)
+    },[Data.tickers])
 
      useEffect(()=>{
         if (isDatepickerOpen){
@@ -152,16 +156,22 @@ export const Chart = () => {
     }
 
     useEffect(()=>{
-        if (Data.startDate===null){
-        let beginigEndDate = new Date();
-        let beginigstartDate = new Date(beginigEndDate);
-        beginigstartDate.setDate(beginigstartDate.getDate() - 30);
-        const newTicker = ticker.split('.')[0];
-        let country = ticker.split('.')[1];
-        let results = tickers.filter(item => item.Code.includes(newTicker)); 
-        if (country!=='US'){
+        if (Data.startDate === null && tickers !== undefined && tickers !== null) {
+            let beginigEndDate = new Date();
+            let beginigstartDate = new Date(beginigEndDate);
+            beginigstartDate.setDate(beginigstartDate.getDate() - 30);
+            const newTicker = ticker.split('.')[0];
+            let country = ticker.split('.')[1];
+            let results = tickers.filter(item => {
+                try {
+                    return item.Code.includes(newTicker); // Upewnij się, że zwracasz wynik
+                } catch (error) {
+                    return false; // Pomijamy element, jeśli wystąpił błąd
+                }
+            });
+            if (country !== 'US') {
             results = results.filter(item => item.Exchange.includes(country)); 
-        } else  {
+            } else {
             results = results.filter(item => item.Country.includes('USA'))
         }
             results = results.filter(item => item.Code === (newTicker))
@@ -174,7 +184,7 @@ export const Chart = () => {
             newChart:true
         })
     }
-    }, [ticker,tickerName,updateData,Data.startDate])
+    }, [ticker,tickerName,updateData,Data.startDate, tickers])
 
     useEffect(()=>{
     if (Data.isStartPage){
@@ -377,13 +387,22 @@ export const Chart = () => {
     }, [search])
 
     useEffect(() => {
-    if (search.length > 2) {
-        const results = tickers.filter(item =>
-            item.Name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            item.Type !== 'ETF' &&
-            item.Type !== 'FUND' &&
-            item.Type !== 'BOND' &&
-            item.Type !== 'Mutual Fund'
+    if (search.length > 2 && tickers!==null) {
+        const results = tickers.filter(item => {
+            try{
+            return (
+
+                item.Name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                item.Type !== 'ETF' &&
+                item.Type !== 'FUND' &&
+                item.Type !== 'BOND' &&
+                item.Type !== 'Mutual Fund'
+                )
+            }
+            catch (error){
+                return ('')
+            }
+        }
         );
 
         const newOptions = results.map(item => ({
@@ -393,7 +412,7 @@ export const Chart = () => {
 
         setOptions(newOptions);
     }
-}, [search, searchTerm]);
+}, [search, searchTerm, tickers]);
 
 
     useEffect(()=>{

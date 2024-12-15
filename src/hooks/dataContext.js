@@ -36,7 +36,8 @@ export const DataProvider = ({ children }) => {
       isStartPage: true,
       multiplyList: [],
       tickersHistoricalList:[],
-      aspectRatio:null
+      aspectRatio: null,
+      tickers:null
     });
   }, []);
 

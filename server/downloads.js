@@ -77,7 +77,7 @@ const multipleData = async (data) => {
   }
 
   const listOfExchanges = async ()=>{
-    const url= `https://eodhd.com/api/exchanges-list/?api_token=${token}&fmt=json`
+    const url = `https://eodhd.com/api/exchanges-list/?api_token=${token}&fmt=json`
     try {
       const response = await fetch(url);
       if (!response.ok) {
