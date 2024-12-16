@@ -8,24 +8,25 @@ const tickerListDownload = async () => {
      tempListOfExchanges.push(
         {Code:'INDX'},
         {Type:'N/A'})
-
-    console.log(tempListOfExchanges)
     
     for (let i = 0; i < tempListOfExchanges.length; i++) {
         const exchangeCode = tempListOfExchanges[i].Code;
         tickerList = await listOfTickers(exchangeCode);
-        console.log(i / tempListOfExchanges.length * 100 + '%')
-        tempListofTickers.push(tickerList) ; // Merge arrays
+        const count = Math.round((i / tempListOfExchanges.length) * 100)
+        process.stdout.write("\r"+count+'%')
+        tempListofTickers.push(tickerList) ;
     }
     tempListofTickers = tempListofTickers.flat()
+
     const updateFileWithNewData = (data) => {
-      const filePath = path.join(__dirname, 'tickers.json'); // Ścieżka do pliku
-      
-      // Zamiana obiektu na JSON i zapisanie do pliku
+      const filePath = path.join(__dirname, 'tickers.json'); 
+
       try {
           fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+          console.log('')
           console.log('Plik został zaktualizowany nowymi danymi.');
       } catch (err) {
+          console.log('')
           console.error('Błąd przy zapisywaniu pliku:', err);
       }
     };

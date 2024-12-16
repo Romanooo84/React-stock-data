@@ -34,6 +34,7 @@ const liveData= async (ticker)=>{
 
 const multipleData = async (data) => {
     const tempData=data.split(',')
+    
     let tickerList = [];
     for (let i = 0; i < tempData.length; i++) {
       if (i === 0) {
@@ -43,6 +44,34 @@ const multipleData = async (data) => {
       }
       else {
         tickerList.push(`,${tempData[i]}`);
+      }
+    }
+    const tickers = tickerList.join('');
+    const url= `https://eodhd.com/api/real-time/${tickers}&api_token=${token}&fmt=json`
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const downloadedData = await response.json();
+      return downloadedData;
+    } catch (error) {
+      console.error("Data error:", error);
+      return null; 
+    }
+  };
+
+  const multipleLiveData = async (data) => {
+    
+    let tickerList = [];
+    for (let i = 0; i < data.length; i++) {
+      if (i === 0) {
+        tickerList = [`${data[i]}?s=`];
+      } else if (i === 1)  {
+        tickerList.push(`${data[i]}`);
+      }
+      else {
+        tickerList.push(`,${data[i]}`);
       }
     }
     const tickers = tickerList.join('');
@@ -174,5 +203,6 @@ const multipleData = async (data) => {
     listOfTickers,
     nearObjecDetails,
     NEOList,
-    NEODetails 
+    NEODetails,
+    multipleLiveData
     }
