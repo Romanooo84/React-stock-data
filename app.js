@@ -8,7 +8,7 @@ const {historicalData, liveData, multipleData, newsData, NEOList, nearObjecDetai
 const {countCoorodinates } = require ('./server/opertations/coordinates')
 const {tickerListDownload} = require ('./server/opertations/tickerListDownload')
 const cron = require('node-cron');
-const {fetchMultiplyData}=require('./server/opertations/livedata')
+//const {fetchMultiplyData}=require('./server/opertations/livedata')
 
 const port = '3000' 
 
@@ -17,7 +17,7 @@ const port = '3000'
 let asteroidData = []
 let tickersList = []
 
-fetchMultiplyData()
+//fetchMultiplyData()
 
 const downloadCoorodinates = async ()=>{
   console.log('downloading coordinates')

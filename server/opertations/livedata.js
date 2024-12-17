@@ -5,11 +5,8 @@ let a=0
 let b=0
 
 const list = tickers.map(ticker=> {
-    b++
-    if(ticker!==null){
-        if(ticker.Type="Common Stock"){
-            a++
-        }
+   b++
+    if(ticker!==null && ticker.Type==="Common Stock"){
         let exchange
         ticker.Country==='USA'? exchange='US':exchange=ticker.Exchange
         const code = `${ticker.Code}.${exchange}`
@@ -17,9 +14,6 @@ const list = tickers.map(ticker=> {
     return(code)
 }
 })
-console.log(a)
-console.log(b)
-
 const fetchMultiplyData = async()=>{
     let dataList=[]
     i=0
